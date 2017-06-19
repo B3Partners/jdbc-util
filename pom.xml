@@ -274,12 +274,8 @@
         </repository>
         -->
     </repositories>
-        <distributionManagement>
-        <site>
-            <id>gh-pages</id>
-            <name>github pages site</name>
-            <url>github:http://b3partners.github.io/jdbc-util/</url>
-        </site>
+    <distributionManagement>
+
         <repository>
             <id>repo.b3p.nl</id>
             <name>B3Partners releases repository</name>

@@ -22,6 +22,16 @@
         <test.onlyITs>false</test.onlyITs>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <organization>
+        <name>B3Partners B.V.</name>
+        <url>http://www.b3partners.nl/</url>
+    </organization>
+    <scm>
+        <developerConnection>scm:git:git@github.com:B3Partners/jdbc-util.git</developerConnection>
+        <connection>scm:git:git@github.com:B3Partners/jdbc-util.git</connection>
+        <url>https://github.com/B3Partners/jdbc-util/</url>
+        <tag>HEAD</tag>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -264,4 +274,21 @@
         </repository>
         -->
     </repositories>
+        <distributionManagement>
+        <site>
+            <id>gh-pages</id>
+            <name>github pages site</name>
+            <url>github:http://b3partners.github.io/jdbc-util/</url>
+        </site>
+        <repository>
+            <id>repo.b3p.nl</id>
+            <name>B3Partners releases repository</name>
+            <url>http://repo.b3p.nl/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>repo.b3p.nl</id>
+            <name>B3Partners snapshots repository</name>
+            <url>http://repo.b3p.nl/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

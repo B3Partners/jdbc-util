@@ -37,6 +37,11 @@ public abstract class GeometryJdbcConverter {
 
     public abstract String getGeotoolsDBTypeName();
     
+    
+    public Object convertToNativeGeometryObject(String param) throws ParseException, SQLException {
+        return convertToNativeGeometryObject(wkt.read(param));
+    }
+    
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm, 
             String tableName, String column) {
         Object param = null;

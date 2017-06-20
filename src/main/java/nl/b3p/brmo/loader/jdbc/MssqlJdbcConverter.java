@@ -149,4 +149,9 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     public String getMViewRefreshSQL(String mview) {
         return getMViewsSQL();
     }
+
+    @Override
+    public com.vividsolutions.jts.geom.Geometry convertToJTSGeometryObject(Object nativeObj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

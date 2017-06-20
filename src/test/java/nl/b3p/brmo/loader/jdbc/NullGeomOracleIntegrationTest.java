@@ -14,6 +14,7 @@ import oracle.jdbc.OracleConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.factory.GeoTools;
+import org.geotools.geometry.jts.WKTReader2;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -82,7 +83,9 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
             OracleConnection oc = OracleConnectionUnwrapper.unwrap(connection);
             OracleJdbcConverter c = new OracleJdbcConverter(oc);
             //STRUCT s = (STRUCT) c.convertToNativeGeometryObject(this.testVal);
-            Struct s = (Struct) c.convertToNativeGeometryObject(this.testVal);
+            WKTReader2 r = new WKTReader2();
+            
+            Struct s = (Struct) c.convertToNativeGeometryObject(r.read(this.testVal));
             assertEquals("verwacht een sdo geometry", "MDSYS.SDO_GEOMETRY", s.getSQLTypeName());
             for (Object o : s.getAttributes()) {
                 assertNull("verwacht 'null'", o);

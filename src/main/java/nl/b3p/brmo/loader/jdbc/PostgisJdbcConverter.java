@@ -93,4 +93,19 @@ public class PostgisJdbcConverter extends GeometryJdbcConverter {
     public String getMViewRefreshSQL(String mview) {
         return String.format("REFRESH MATERIALIZED VIEW %s;", mview);
     }
+
+    @Override
+    public Geometry convertToJTSGeometryObject(Object nativeObj) {
+        PGgeometry geom = (PGgeometry)nativeObj;
+        StringBuffer sb = new StringBuffer();
+        if(geom == null){
+            return null;
+        }
+        geom.getGeometry().outerWKT(sb);
+        try {
+            return wkt.read(sb.toString());
+        } catch (ParseException ex) {
+            return null;
+        }
+    }
 }

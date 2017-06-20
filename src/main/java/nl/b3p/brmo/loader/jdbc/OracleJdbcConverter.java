@@ -146,4 +146,9 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
         //return String.format("DBMS_MVIEW.REFRESH('%s','?','',FALSE,TRUE,0,0,0,FALSE,FALSE)", mview);
         return String.format("begin\ndbms_mview.refresh('%s','C');\nend;", mview);
     }
+
+    @Override
+    public Geometry convertToJTSGeometryObject(Object nativeObj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

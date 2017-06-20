@@ -43,7 +43,11 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     }
     
     @Override
-    public Object convertToNativeGeometryObject(String param) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(Geometry g) throws SQLException, ParseException {
+        if(g == null){
+            return gc.toSDO(null, 28992);
+        }
+        String param = g.toText();
         // return param;
         WKTReader reader = new WKTReader(geometryFactory);
         Geometry geom = param == null || param.trim().length() == 0 ? null : reader.read(param);

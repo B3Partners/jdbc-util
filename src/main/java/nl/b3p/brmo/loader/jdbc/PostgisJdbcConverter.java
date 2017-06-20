@@ -1,8 +1,11 @@
 
 package nl.b3p.brmo.loader.jdbc;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.postgis.PGgeometry;
 
 /**
@@ -25,7 +28,11 @@ public class PostgisJdbcConverter extends GeometryJdbcConverter {
     }
    
     @Override
-    public Object convertToNativeGeometryObject(String param) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(Geometry g) throws SQLException, ParseException {
+        if(g == null){
+            return null;
+        }
+        String param = g.toText();
         //return param;
         if (param == null || param.trim().length() == 0) {
             return null;

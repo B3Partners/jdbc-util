@@ -37,7 +37,6 @@ public abstract class GeometryJdbcConverter {
 
     public abstract String getGeotoolsDBTypeName();
     
-    public abstract String getGeomTypeName();
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm, 
             String tableName, String column) {
         Object param = null;

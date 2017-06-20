@@ -84,7 +84,9 @@ public class GeometryJdbcConverterFactory {
                 throw new UnsupportedOperationException("Cannot get/set schema: " + databaseProductName, ex);
             }
             return geomToJdbc;
-        } else {
+        } else if(databaseProductName.contains("HSQL Database Engine")){
+            return new HSQLJdbcConverter();
+        }else{
             throw new UnsupportedOperationException("Unknown database: " + databaseProductName);
         }
     }

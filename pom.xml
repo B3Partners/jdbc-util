@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.b3p</groupId>
     <artifactId>jdbc-util</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDBC Util</name>
     <description>JDBC utilities: Converter for geometries</description>
@@ -282,7 +282,7 @@
             <url>http://repo.b3p.nl/nexus/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
-            <id>repo.b3p.nl</id>
+            <id>repo.b3p.nl_snapshot</id>
             <name>B3Partners snapshots repository</name>
             <url>http://repo.b3p.nl/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>

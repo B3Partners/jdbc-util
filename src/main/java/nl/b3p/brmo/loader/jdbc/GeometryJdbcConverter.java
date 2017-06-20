@@ -1,8 +1,10 @@
 
 package nl.b3p.brmo.loader.jdbc;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import java.math.BigDecimal;
+import com.vividsolutions.jts.io.WKTReader;
 import java.sql.SQLException;
 import java.util.Calendar;
 
@@ -11,11 +13,14 @@ import java.util.Calendar;
  * @author Matthijs Laan
  */
 public abstract class GeometryJdbcConverter {
+    
+    protected final WKTReader wkt= new WKTReader();
     //definieer placeholder als ? wanneer object naar native geometry wordt 
     //geconverteerd
     //defineer placeholder via native wkt-import functie als geometry als 
     //wkt-string wordt doorgegeven
-    public abstract Object convertToNativeGeometryObject(String param) throws SQLException, ParseException;
+    public abstract Object convertToNativeGeometryObject(Geometry param) throws SQLException, ParseException;
+    public abstract Geometry convertToJTSGeometryObject(Object nativeObj);
     public abstract String createPSGeometryPlaceholder() throws SQLException;
     
     public abstract String getSchema();
@@ -32,6 +37,7 @@ public abstract class GeometryJdbcConverter {
 
     public abstract String getGeotoolsDBTypeName();
     
+    public abstract String getGeomTypeName();
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm, 
             String tableName, String column) {
         Object param = null;

@@ -39,7 +39,11 @@ public abstract class GeometryJdbcConverter {
     
     
     public Object convertToNativeGeometryObject(String param) throws ParseException, SQLException {
-        return convertToNativeGeometryObject(wkt.read(param));
+        Geometry o = null;
+        if(param != null){
+            o = wkt.read(param);
+        }
+        return convertToNativeGeometryObject(o);
     }
     
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm, 

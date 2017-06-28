@@ -3,6 +3,8 @@
  */
 package nl.b3p.brmo.loader.jdbc;
 
+import nl.b3p.loader.jdbc.OracleConnectionUnwrapper;
+import nl.b3p.loader.jdbc.OracleJdbcConverter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;

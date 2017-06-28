@@ -1,4 +1,4 @@
-package nl.b3p.brmo.loader.util;
+package nl.b3p.loader.util;
 
 /**
  *

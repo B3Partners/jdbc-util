@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nl.b3p.brmo.loader.jdbc;
+package nl.b3p.loader.jdbc;
 
 import com.vividsolutions.jts.io.ParseException;
 import java.sql.SQLException;

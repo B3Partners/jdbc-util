@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nl.b3p.brmo.loader.jdbc;
+package nl.b3p.loader.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;

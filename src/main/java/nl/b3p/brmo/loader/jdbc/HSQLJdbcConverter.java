@@ -37,10 +37,7 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     
     @Override
     public Object convertToNativeGeometryObject(Geometry param) throws SQLException, ParseException {
-        if(param == null){
-            return null;
-        }
-        return param.toText();
+        return convertToNativeGeometryObject(param, 28992);
     }
 
     @Override
@@ -118,5 +115,13 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     @Override
     public String getGeotoolsDBTypeName() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException, ParseException {
+        if(param == null){
+            return null;
+        }
+        return param.toText();
     }
 }

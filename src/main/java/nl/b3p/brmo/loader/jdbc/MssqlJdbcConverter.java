@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package nl.b3p.brmo.loader.jdbc;
 
@@ -33,10 +49,10 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
         //return "geometry::STGeomFromText(?, 28992)";
         return "?";
     }
-
+    
     @Override
-    public Object convertToNativeGeometryObject(com.vividsolutions.jts.geom.Geometry g) throws SQLException, ParseException {
-        if(g == null){
+    public Object convertToNativeGeometryObject(com.vividsolutions.jts.geom.Geometry g, int srid) throws SQLException, ParseException {
+        if (g == null) {
             return null;
         }
         String param = g.toText();
@@ -44,9 +60,14 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
         if (param == null || param.trim().length() == 0) {
             return null;
         }
-        Geometry geom = Wkt.fromWkt("SRID=28992; " + param);
+        Geometry geom = Wkt.fromWkt("SRID=" +  srid + "; " + param);
         byte[] ret = Encoders.encode(geom);
         return ret;
+    }
+
+    @Override
+    public Object convertToNativeGeometryObject(com.vividsolutions.jts.geom.Geometry g) throws SQLException, ParseException {
+       return convertToNativeGeometryObject(g, 28992);
     }
 
     @Override

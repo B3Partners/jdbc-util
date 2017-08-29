@@ -22,8 +22,6 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import java.sql.SQLException;
 import oracle.jdbc.OracleConnection;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.geotools.data.oracle.sdo.GeometryConverter;
 
 /**
@@ -32,8 +30,6 @@ import org.geotools.data.oracle.sdo.GeometryConverter;
  */
 public class OracleJdbcConverter extends GeometryJdbcConverter {
 
-    private static final Log log = LogFactory.getLog(OracleJdbcConverter.class);
-    
     private GeometryConverter gc;
     private String schema;
 

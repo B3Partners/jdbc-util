@@ -180,7 +180,7 @@
                         <skipTests>${test.onlyITs}</skipTests>
                     </configuration>
                 </plugin>
-                <plugin>                
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven.surefire.version}</version>
@@ -279,10 +279,9 @@
     </build>
     <profiles>
         <profile>
+            <!-- actief voor oa. Jenkins builds -->
             <id>oracle</id>
             <properties>
-                <oracle.jdbc.artifactId>ojdbc7</oracle.jdbc.artifactId>
-                <oracle.jdbc.version>12.1.0.2.0</oracle.jdbc.version>
             </properties>
             <build>
                 <plugins>

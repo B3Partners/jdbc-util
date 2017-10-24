@@ -45,15 +45,15 @@
             <name>B3Partners snapshots repository</name>
             <url>http://repo.b3p.nl/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
-<!--        <site>
+        <site>
             <id>gh-pages</id>
             <name>github pages site</name>
             <url>github:http://b3partners.github.io/jdbc-util/</url>
-        </site>-->
+        </site>
     </distributionManagement>
     <dependencies>
         <!-- gebruik:
-           mvn org.codehaus.mojo:versions-maven-plugin:2.4:display-dependency-updates
+           mvn -U org.codehaus.mojo:versions-maven-plugin:2.5:display-dependency-updates
         om te zoeken naar updates -->
         <dependency>
             <groupId>junit</groupId>
@@ -111,7 +111,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>org.geolatte</groupId>
             <artifactId>geolatte-geom</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -129,7 +129,7 @@
         <pluginManagement>
             <!--
             gebruik:
-                mvn org.codehaus.mojo:versions-maven-plugin:2.4:display-plugin-updates
+                mvn -U org.codehaus.mojo:versions-maven-plugin:2.5:display-plugin-updates
             om te zoeken naar bijgewerkte plugins
             -->
             <plugins>
@@ -266,10 +266,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <!-- java 8 doclint van struikelt over de gegenereerde code; uitzetten! -->
-                    <additionalparam>-Xdoclint:none</additionalparam>
-                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
@@ -279,6 +275,41 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.trajano.wagon</groupId>
+                        <artifactId>wagon-git</artifactId>
+                        <!-- 2.0.4 heeft problemen met accepteren/toevoegen van de RSA fingerprint -->
+                        <version>2.0.3</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <generateSitemap>true</generateSitemap>
+                    <attach>false</attach>
+                    <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                    <locales>nl</locales>
+                    <relativizeDecorationLinks>false</relativizeDecorationLinks>
+                    <reportPlugins>
+                        <plugin>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                        </plugin>
+                        <plugin>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <configuration>
+                            </configuration>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>javadoc-no-fork</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -348,27 +379,9 @@
     </profiles>
     <repositories>
         <repository>
-            <id>Boundless</id>
-            <name>Boundless Maven Repository</name>
-            <url>http://repo.boundlessgeo.com/main/</url>
-        </repository>
-        <repository>
-            <id>GeoSolutions</id>
-            <name>GeoSolutions Maven Repository</name>
-            <url>http://maven.geo-solutions.it/</url>
-        </repository>
-        <repository>
-            <id>OSGeo</id>
-            <name>Open Source Geospatial Foundation Repository</name>
-            <url>http://download.osgeo.org/webdav/geotools/</url>
-        </repository>
-        <repository>
             <id>B3Partners</id>
             <name>Releases hosted by B3Partners</name>
             <url>http://repo.b3p.nl/nexus/content/groups/public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
     </repositories>
 </project>

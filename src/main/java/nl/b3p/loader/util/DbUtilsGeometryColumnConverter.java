@@ -21,21 +21,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import nl.b3p.loader.jdbc.GeometryJdbcConverter;
 import org.apache.commons.dbutils.BeanProcessor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author Meine Toonen meinetoonen@b3partners.nl
  */
-public class DbUtilsGeometryColumnConverter extends BeanProcessor{
-    
-    protected final static Log log = LogFactory.getLog(DbUtilsGeometryColumnConverter.class);
-    private GeometryJdbcConverter gjc;
-    public DbUtilsGeometryColumnConverter(GeometryJdbcConverter gjc){
+public class DbUtilsGeometryColumnConverter extends BeanProcessor {
+
+    private final GeometryJdbcConverter gjc;
+
+    public DbUtilsGeometryColumnConverter(GeometryJdbcConverter gjc) {
         this.gjc = gjc;
     }
-    
+
     @Override
     protected Object processColumn(ResultSet rs, int index, Class<?> propType) throws SQLException {
         if (Geometry.class.isAssignableFrom(propType)) {

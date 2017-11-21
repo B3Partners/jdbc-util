@@ -31,6 +31,17 @@ timestamps {
                 echo "Running integration tests"
                 sh "mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true"
             }
+
+            stage('Publish Test Results') {
+                junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/TEST-*.xml'
+            }
+
+            stage('OWASP Dependency Check') {
+                echo "Uitvoeren OWASP dependency check"
+                dependencyCheckAnalyzer datadir: '', hintsFile: '', includeCsvReports: false, includeHtmlReports: true, includeJsonReports: false, isAutoupdateDisabled: false, outdir: '', scanpath: '**/*.jar,**/pom.xml', skipOnScmChange: false, skipOnUpstreamChange: false, suppressionFile: '', zipExtensions: ''
+
+                dependencyCheckPublisher canComputeNew: false, defaultEncoding: '', healthy: '85', pattern: '**/dependency-check-report.xml', shouldDetectModules: true, unHealthy: ''
+            }
         }
     }
 }

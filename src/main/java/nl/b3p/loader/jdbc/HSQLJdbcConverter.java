@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class HSQLJdbcConverter  extends GeometryJdbcConverter {
 
-    protected final static Log log = LogFactory.getLog(HSQLJdbcConverter.class);
+    protected final static Log LOG = LogFactory.getLog(HSQLJdbcConverter.class);
     
     @Override
     public Object convertToNativeGeometryObject(Geometry param) throws SQLException, ParseException {
@@ -67,7 +67,7 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
             
             return g;
         } catch (IOException | ParseException | SQLException ex) {
-            log.error("Error parsing clob to geometry", ex);
+            LOG.error("Error parsing clob to geometry", ex);
             return null;
         }
     }

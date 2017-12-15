@@ -88,6 +88,11 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     }
 
     @Override
+    public boolean isFKConstraintViolationMessage(String message) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public String buildPaginationSql(String sql, int offset, int limit) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

@@ -39,6 +39,10 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
         //Violation of %ls constraint '%.*ls'. Cannot insert duplicate key in object '%.*ls'.
         return message!=null && message.contains("Cannot insert duplicate key in object");
     }
+    @Override
+    public boolean isFKConstraintViolationMessage(String message) {
+        return message != null && message.startsWith("The INSERT statement conflicted with the FOREIGN KEY constraint");
+    }
 
     @Override
     public String createPSGeometryPlaceholder() throws SQLException {

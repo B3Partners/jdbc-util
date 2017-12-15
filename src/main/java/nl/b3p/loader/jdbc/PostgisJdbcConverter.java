@@ -36,6 +36,11 @@ public class PostgisJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
+    public boolean isFKConstraintViolationMessage(String message) {
+        return message != null && message.startsWith("ERROR: insert or update on table") && message.contains("violates foreign key constraint");
+    }
+
+    @Override
     public String createPSGeometryPlaceholder() throws SQLException {
         //return "ST_GeomFromText(?, 28992)";
         return "?";

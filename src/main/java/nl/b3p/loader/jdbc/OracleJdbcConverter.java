@@ -43,6 +43,11 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
+    public boolean isFKConstraintViolationMessage(String message) {
+        return message != null && message.startsWith("ORA-02291:");
+    }
+
+    @Override
     public String createPSGeometryPlaceholder() throws SQLException {
         // return "SDO_GEOMETRY(?, 28992)";
         return "?";

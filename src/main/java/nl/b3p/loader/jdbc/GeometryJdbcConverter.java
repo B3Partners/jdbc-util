@@ -92,6 +92,14 @@ public abstract class GeometryJdbcConverter {
 
     public abstract boolean isDuplicateKeyViolationMessage(String message);
 
+    /**
+     * bepaal of een melding een contraint violation betreft.
+     *
+     * @param message de melding uit de database
+     * @return {@code true} als de melding een contraint violation betreft
+     */
+    public abstract boolean isFKConstraintViolationMessage(String message);
+
     public abstract String buildPaginationSql(String sql, int offset, int limit);
 
     public abstract StringBuilder buildLimitSql(StringBuilder sql, int limit);

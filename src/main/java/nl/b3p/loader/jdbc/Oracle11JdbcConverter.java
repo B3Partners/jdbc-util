@@ -45,7 +45,20 @@ public class Oracle11JdbcConverter extends OracleJdbcConverter {
      */
     @Override
     public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-        sql.append(" AND ROWNUM <= ").append(limit);
+        int index = -1;
+        String limitPart= " AND ROWNUM <= " + limit;
+        String[] preInsertClauses = {"GROUP BY", "HAVING", "ORDER BY"};
+        for (String preInsertClause : preInsertClauses) {
+            index = sql.indexOf(preInsertClause);
+            if(index != -1){
+                break;
+            }
+        }
+        if(index != -1){
+            sql.insert(index - 1, limitPart);
+        }else{
+            sql.append(" AND ROWNUM <= ").append(limit);
+        }
         return sql;
     }
 }

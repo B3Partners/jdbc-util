@@ -48,17 +48,19 @@ public class Oracle11JdbcConverter extends OracleJdbcConverter {
         int index = -1;
         String limitPart= " AND ROWNUM <= " + limit;
         String[] preInsertClauses = {"GROUP BY", "HAVING", "ORDER BY"};
+        String upperCased = sql.toString().toUpperCase();
         for (String preInsertClause : preInsertClauses) {
-            index = sql.indexOf(preInsertClause);
+            index = upperCased.indexOf(preInsertClause);
             if(index != -1){
                 break;
             }
         }
         if(index != -1){
-            sql.insert(index - 1, limitPart);
+            sql.insert(index -1 , limitPart);
         }else{
-            sql.append(" AND ROWNUM <= ").append(limit);
+            sql.append(limitPart);
         }
         return sql;
+        
     }
 }

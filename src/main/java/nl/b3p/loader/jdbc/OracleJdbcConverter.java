@@ -144,7 +144,7 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
 
     @Override
     public boolean isPmdKnownBroken() {
-        return false;
+        return true;
     }
 
     @Override

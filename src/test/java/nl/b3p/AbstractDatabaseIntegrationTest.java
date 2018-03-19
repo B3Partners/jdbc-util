@@ -74,7 +74,6 @@ public abstract class AbstractDatabaseIntegrationTest {
      *
      * @throws IOException als laden van property file mislukt
      */
-    @Before
     public void loadProps() throws IOException {
         // de `database.properties.file` is in de pom.xml of via commandline ingesteld
         params.load(AbstractDatabaseIntegrationTest.class.getClassLoader()

@@ -19,7 +19,7 @@ timestamps {
 
             stage('Build') {
                 echo "Building branch: ${env.BRANCH_NAME}"
-                sh "mvn install -Dmaven.test.skip=true -B -V -e -fae  -q -Poracle"
+                sh "mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle"
             }
 
             stage('Test') {

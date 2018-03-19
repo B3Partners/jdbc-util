@@ -39,18 +39,11 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
     @Parameterized.Parameters(name = "{index}: testwaarde: '{0}'")
     public static Collection<Object[]> params() {
         return Arrays.asList(new Object[][]{
-            {""}, {null}
+            {""},
+            {null}
         });
     }
 
-    /**
-     * test of de database properties zijn aangegeven, zo niet dan skippen we
-     * alle tests in deze test.
-     */
-    @BeforeClass
-    public static void checkDatabaseIsProvided() {
-        GeoTools.init();
-    }
     private final String testVal;
 
     public NullGeomOracleIntegrationTest(String testVal) {
@@ -83,7 +76,7 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
 
             OracleConnection oc = OracleConnectionUnwrapper.unwrap(connection);
             OracleJdbcConverter c = new OracleJdbcConverter(oc);
-           
+
             Struct s = (Struct) c.convertToNativeGeometryObject(this.testVal);
             assertEquals("verwacht een sdo geometry", "MDSYS.SDO_GEOMETRY", s.getSQLTypeName());
             for (Object o : s.getAttributes()) {

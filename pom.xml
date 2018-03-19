@@ -88,11 +88,6 @@
             <version>${sqlserver.jtds.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-main</artifactId>
-            <version>${geotools.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.geotools.jdbc</groupId>
             <artifactId>gt-jdbc-oracle</artifactId>
             <version>${geotools.version}</version>
@@ -155,7 +150,6 @@
                         </goals>
                         <configuration>
                             <rules>
-
                                 <requireMavenVersion>
                                     <version>3.2.5</version>
                                 </requireMavenVersion>

@@ -16,8 +16,8 @@
  */
 package nl.b3p.loader.jdbc;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;

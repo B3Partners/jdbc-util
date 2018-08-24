@@ -17,7 +17,7 @@
 
 package nl.b3p.loader.jdbc;
 
-import com.vividsolutions.jts.io.ParseException;
+import org.locationtech.jts.io.ParseException;
 import java.sql.SQLException;
 import org.apache.commons.lang3.StringUtils;
 import org.geolatte.geom.Geometry;
@@ -51,7 +51,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     }
     
     @Override
-    public Object convertToNativeGeometryObject(com.vividsolutions.jts.geom.Geometry g, int srid) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g, int srid) throws SQLException, ParseException {
         if (g == null) {
             return null;
         }
@@ -66,7 +66,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
-    public Object convertToNativeGeometryObject(com.vividsolutions.jts.geom.Geometry g) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g) throws SQLException, ParseException {
        return convertToNativeGeometryObject(g, 28992);
     }
 
@@ -172,7 +172,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
-    public com.vividsolutions.jts.geom.Geometry convertToJTSGeometryObject(Object nativeObj) {
+    public org.locationtech.jts.geom.Geometry convertToJTSGeometryObject(Object nativeObj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

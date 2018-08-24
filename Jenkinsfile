@@ -27,9 +27,22 @@ timestamps {
                 sh "mvn -e test -B -Poracle"
             }
 
-            stage('Integration Test') {
-                echo "Running integration tests"
-                sh "mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true"
+            lock('brmo-oracle') {
+              timeout(90) {
+                stage('Prepare Oracle Databases') {
+                    sh "sqlplus -l -S c##jenkins_staging/jenkins_staging@192.168.1.11:1521/ORCL < ./.jenkins/clear-schema.sql"
+                    sh ".jenkins/db-prepare-staging.sh"
+                }
+
+                stage('Integration Test') {
+                    echo "Running integration tests"
+                    sh "mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true"
+                }
+
+                stage('Cleanup Oracle Database') {
+                    sh "sqlplus -l -S c##jenkins_staging/jenkins_staging@192.168.1.11:1521/ORCL < ./.jenkins/clear-schema.sql"
+                }
+              }
             }
 
             stage('Publish Test Results') {

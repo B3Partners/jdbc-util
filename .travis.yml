@@ -1,0 +1,54 @@
+#dist: trusty
+#sudo: required
+language: java
+
+services:
+  - postgresql
+
+jdk:
+  - oraclejdk8
+  - openjdk8
+  - oraclejdk9
+
+cache:
+  directories:
+  - $HOME/.m2
+
+# before_cache:
+
+before_install:
+  # installeer een up-2-date Maven versie
+  - wget https://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip
+  - unzip -qq apache-maven-3.5.4-bin.zip
+  - export M2_HOME=$PWD/apache-maven-3.5.4
+  - export PATH=$M2_HOME/bin:$PATH
+  - mvn -v
+  - export PAGER=cat
+  - psql --version
+  - psql -U postgres -d postgres -c 'SELECT Version();'
+  - psql -U postgres -a -c "CREATE ROLE staging LOGIN PASSWORD 'staging' SUPERUSER CREATEDB;"
+  - psql -U postgres -c 'create database staging;'
+
+install:
+  # install all dependencies + artifacts and create any DB scripts without any testing
+  - mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Ppostgresql
+
+before_script:
+  # set up staging db
+  - psql -U postgres -d staging -f .travis/create-brmo-persistence-postgresql.sql
+
+script:
+  # run unit tests 
+  - mvn -e test -B -Ppostgresql
+  # run integratie tests
+  - mvn -e verify -B -Ppostgresql -T1 -Dtest.onlyITs=true
+
+after_failure:
+  - echo "Hmm... dat is vervelend!"
+
+after_success:
+  # test of de javadoc compliant is met java-8 strict checks
+  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+         travis_wait 30 mvn javadoc:javadoc;
+         travis_wait 30 mvn javadoc:test-javadoc;
+    fi

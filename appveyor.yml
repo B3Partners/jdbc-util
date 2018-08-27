@@ -1,0 +1,59 @@
+version: "{build}-{branch}"
+clone_folder: c:\projects\jdbc-util
+clone_depth: 5
+skip_tags: true
+
+init:
+  - git config --global core.autocrlf input
+  - git config --global core.safecrlf true
+  - cmd: net start %SQL%
+
+environment:
+  # Microsoft SQL Server 2014 Service Pack 2 heeft een EOL van 9-7-2019
+  # Microsoft SQL Server 2016 Service Pack 1 heeft een EOL van 13-7-2021
+  # Microsoft SQL Server 2017 is de jongst-beschikbare release op AppVeyor
+  matrix:
+    - SQL: MSSQL$SQL2014
+      INSTANCENAME: SQL2014
+      JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+    - SQL: MSSQL$SQL2016
+      INSTANCENAME: SQL2016
+      JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+    - SQL: MSSQL$SQL2017
+      INSTANCENAME: SQL2017
+      JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+
+matrix:
+  fast_finish: false
+
+install:
+  - cmd: echo %PATH%
+  - cmd: java -version
+  - cd C:\projects\jdbc-util
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-http-proxy.ps1'))
+  - ps: .\.appveyor\set-maven-proxy.ps1
+  # initial build, no testing
+  - mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Pmssql
+
+build: off
+
+before_test:
+# services worden na install gestart en we hebben gegenereerde sql nodig
+  - cmd: echo "aanmaken en opzetten STAGING DB"
+  - sqlcmd -S (local)\%INSTANCENAME% -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"
+  - dir -w .appveyor\
+  - sqlcmd -S (local)\%INSTANCENAME% -U sa -P Password12! -d "staging" -i .appveyor\create-brmo-persistence-sqlserver.sql
+#
+  - cmd: echo "computer name:" %COMPUTERNAME%
+  - cmd: echo "instance name:" %INSTANCENAME%
+  - ps: .\.appveyor\setting-tcp-ip-ports.ps1
+
+
+test_script:
+  # unit tests
+  - mvn -e test -B -Pmssql
+  # integratie tests
+  - mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true
+
+cache:
+  - C:\Users\appveyor\.m2\repository -> pom.xml

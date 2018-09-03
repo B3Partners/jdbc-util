@@ -2,53 +2,84 @@
 #sudo: required
 language: java
 
-services:
-  - postgresql
+env:
+  global:
+    - MVN_VERSION="3.5.4"
+    - PROFILE="postgresql"
+
+addons:
+  postgresql: 9.6
+  apt:
+    packages:
+    - postgresql-9.6-postgis-2.3
 
 jdk:
   - oraclejdk8
   - openjdk8
   - oraclejdk9
 
-cache:
-  directories:
-  - $HOME/.m2
+matrix:
+  fast_finish: true
+  allow_failures:
+    - oraclejdk9
+  include:
+    - name: "SQL Server 2017"
+      dist: xenial
+      jdk: oraclejdk8
+      sudo: required
+      env:
+        - PROFILE="mssql"
 
 # before_cache:
 
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/downloads
+
 before_install:
   # installeer een up-2-date Maven versie
-  - wget https://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip
-  - unzip -qq apache-maven-3.5.4-bin.zip
-  - export M2_HOME=$PWD/apache-maven-3.5.4
+  - wget --directory-prefix=$HOME/downloads/ --no-clobber https://www-eu.apache.org/dist/maven/maven-3/$MVN_VERSION/binaries/apache-maven-$MVN_VERSION-bin.zip
+  - unzip -qq $HOME/downloads/apache-maven-$MVN_VERSION-bin.zip
+  - export M2_HOME=$PWD/apache-maven-$MVN_VERSION
+  #- wget https://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip
+  #- unzip -qq apache-maven-3.5.4-bin.zip
+  #- export M2_HOME=$PWD/apache-maven-3.5.4
   - export PATH=$M2_HOME/bin:$PATH
   - mvn -v
   - export PAGER=cat
-  - psql --version
-  - psql -U postgres -d postgres -c 'SELECT Version();'
-  - psql -U postgres -a -c "CREATE ROLE staging LOGIN PASSWORD 'staging' SUPERUSER CREATEDB;"
-  - psql -U postgres -c 'create database staging;'
+  - if [ "$PROFILE" == "mssql" ]; then
+      sudo service postgresql stop;
+      sh ".travis/install-mssql.sh";
+    else
+      sh ".travis/install-pgsql.sh";
+    fi
 
 install:
   # install all dependencies + artifacts and create any DB scripts without any testing
-  - mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Ppostgresql
+  - mvn install -Dmaven.test.skip=true -B -V -e -fae -q -P$PROFILE
 
 before_script:
-  # set up staging db
-  - psql -U postgres -d staging -f .travis/create-brmo-persistence-postgresql.sql
+  - if [ "$PROFILE" == "mssql" ]; then
+      sh ".travis/setup-mssql.sh";
+    else
+      sh ".travis/setup-pgsql.sh";
+    fi
 
 script:
   # run unit tests 
-  - mvn -e test -B -Ppostgresql
+  - mvn -e test -B -P$PROFILE
   # run integratie tests
-  - mvn -e verify -B -Ppostgresql -T1 -Dtest.onlyITs=true
+  - mvn -e verify -B -P$PROFILE -T1 -Dtest.onlyITs=true
+  # test of de javadoc en test-javadoc compliant is met java-8 strict checks
+  # altijd doen anders loop je daar met maken van een release tegenaan
+  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+      mvn javadoc:javadoc;
+      mvn javadoc:test-javadoc;
+    fi
 
 after_failure:
   - echo "Hmm... dat is vervelend!"
 
 after_success:
-  # test of de javadoc compliant is met java-8 strict checks
-  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
-         travis_wait 30 mvn javadoc:javadoc;
-         travis_wait 30 mvn javadoc:test-javadoc;
-    fi
+  - echo "Klaar..."

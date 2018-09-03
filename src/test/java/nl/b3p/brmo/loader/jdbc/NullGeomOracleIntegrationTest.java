@@ -62,7 +62,7 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
     }
 
     /**
-     * Test next() methode met klein mutatie bestand.
+     * Test NULL geometrie.
      *
      * @throws Exception if any
      */
@@ -70,9 +70,9 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
     public void testNullGeomXML() throws Exception {
         if (isOracle) {
             Connection connection = DriverManager.getConnection(
-                    params.getProperty("rsgb.jdbc.url"),
-                    params.getProperty("rsgb.user"),
-                    params.getProperty("rsgb.passwd"));
+                    params.getProperty("staging.jdbc.url"),
+                    params.getProperty("staging.user"),
+                    params.getProperty("staging.passwd"));
 
             OracleConnection oc = OracleConnectionUnwrapper.unwrap(connection);
             OracleJdbcConverter c = new OracleJdbcConverter(oc);

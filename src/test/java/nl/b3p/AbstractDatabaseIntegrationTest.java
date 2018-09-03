@@ -90,7 +90,6 @@ public abstract class AbstractDatabaseIntegrationTest {
         isPostgis = "postgis".equalsIgnoreCase(params.getProperty("dbtype"));
 
         try {
-            Class rsgbDriverClass = Class.forName(params.getProperty("rsgb.jdbc.driverClassName"));
             Class stagingDriverClass = Class.forName(params.getProperty("staging.jdbc.driverClassName"));
         } catch (ClassNotFoundException ex) {
             LOG.error("Database driver niet gevonden.", ex);

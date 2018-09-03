@@ -29,9 +29,9 @@ import org.junit.Test;
  *
  * @author Meine Toonen
  */
-public class LimitSqlIntegrationTest extends AbstractDatabaseIntegrationTest {
+public class LimitSqlOracleIntegrationTest extends AbstractDatabaseIntegrationTest {
 
-    private static final Log LOG = LogFactory.getLog(LimitSqlIntegrationTest.class);
+    private static final Log LOG = LogFactory.getLog(LimitSqlOracleIntegrationTest.class);
 
     @Before
     @Override
@@ -39,6 +39,10 @@ public class LimitSqlIntegrationTest extends AbstractDatabaseIntegrationTest {
         loadProps();
     }
 
+    /**
+     * moet op Oracle 12 en hoger passeren.
+     * @throws SQLException soms
+     */
     @Test
     public void checkLimitQuery() throws SQLException {
         Connection c = DriverManager.getConnection(
@@ -64,6 +68,10 @@ public class LimitSqlIntegrationTest extends AbstractDatabaseIntegrationTest {
         }
     }
 
+    /**
+     * moet op Oracle 11 en hoger passeren.
+     * @throws SQLException soms
+     */
     @Test
     public void checkLimitQueryOracle11() throws SQLException {
         if (isOracle) {

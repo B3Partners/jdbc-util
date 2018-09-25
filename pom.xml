@@ -17,7 +17,7 @@
         <oracle.jdbc.groupId>com.oracle.jdbc</oracle.jdbc.groupId>
         <oracle.jdbc.version>12.2.0.1</oracle.jdbc.version>
         <oracle.jdbc.artifactId>ojdbc8_g</oracle.jdbc.artifactId>
-        <geotools.version>20-RC</geotools.version>
+        <geotools.version>20.0</geotools.version>
         <sqlserver.jtds.version>1.3.1</sqlserver.jtds.version>
         <postgresql.jdbc.version>42.2.5</postgresql.jdbc.version>
         <postgresql.postgis-jdbc.version>2.2.1</postgresql.postgis-jdbc.version>
@@ -56,7 +56,7 @@
     </distributionManagement>
     <dependencies>
         <!-- gebruik:
-           mvn -U org.codehaus.mojo:versions-maven-plugin:2.5:display-dependency-updates
+           mvn -U org.codehaus.mojo:versions-maven-plugin:2.7:display-dependency-updates
         om te zoeken naar updates -->
         <dependency>
             <groupId>junit</groupId>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
-            <version>1.16.0-RC1</version>
+            <version>1.16.0</version>
         </dependency>
         <dependency>
             <groupId>commons-dbutils</groupId>
@@ -125,7 +125,7 @@
         <dependency>
             <groupId>org.geolatte</groupId>
             <artifactId>geolatte-geom</artifactId>
-            <version>1.3.0</version>
+            <version>1.4.0</version>
         </dependency>
         <dependency>
             <groupId>nl.b3p</groupId>
@@ -139,7 +139,7 @@
         <plugins>
             <!--
             gebruik:
-                mvn -U org.codehaus.mojo:versions-maven-plugin:2.5:display-plugin-updates
+                mvn -U org.codehaus.mojo:versions-maven-plugin:2.7:display-plugin-updates
             om te zoeken naar bijgewerkte plugins
             -->
             <plugin>

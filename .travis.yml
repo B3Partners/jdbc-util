@@ -29,6 +29,11 @@ matrix:
       sudo: required
       env:
         - PROFILE="mssql"
+    - name: "HSQLDB"
+      jdk: oraclejdk8
+      sudo: required
+      env:
+      - PROFILE="hsqldb"
 
 # before_cache:
 
@@ -51,6 +56,8 @@ before_install:
   - if [ "$PROFILE" == "mssql" ]; then
       sudo service postgresql stop;
       sh ".travis/install-mssql.sh";
+    elif [ "$PROFILE" == "hsqldb" ]; then
+      sudo service postgresql stop;
     else
       sh ".travis/install-pgsql.sh";
     fi
@@ -62,6 +69,8 @@ install:
 before_script:
   - if [ "$PROFILE" == "mssql" ]; then
       sh ".travis/setup-mssql.sh";
+    elif [ "$PROFILE" == "hsqldb" ]; then
+      sh ".travis/setup-hsqldb.sh";
     else
       sh ".travis/setup-pgsql.sh";
     fi

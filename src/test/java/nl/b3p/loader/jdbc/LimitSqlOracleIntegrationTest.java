@@ -1,9 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2016 B3Partners B.V.
  */
-package nl.b3p.brmo.loader.jdbc;
+package nl.b3p.loader.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,10 +9,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import nl.b3p.AbstractDatabaseIntegrationTest;
-import nl.b3p.loader.jdbc.GeometryJdbcConverter;
-import nl.b3p.loader.jdbc.GeometryJdbcConverterFactory;
-import nl.b3p.loader.jdbc.Oracle11JdbcConverter;
-import nl.b3p.loader.jdbc.OracleConnectionUnwrapper;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;

@@ -56,6 +56,11 @@ public abstract class AbstractDatabaseIntegrationTest {
     protected boolean isPostgis;
 
     /**
+     * {@code true} als we met een HSQLDB database bezig zijn.
+     */
+    protected boolean isHSQLDB;
+
+    /**
      * logging rule.
      */
     @Rule
@@ -88,6 +93,7 @@ public abstract class AbstractDatabaseIntegrationTest {
         isOracle = "oracle".equalsIgnoreCase(params.getProperty("dbtype"));
         isMsSQL = "jtds-sqlserver".equalsIgnoreCase(params.getProperty("dbtype"));
         isPostgis = "postgis".equalsIgnoreCase(params.getProperty("dbtype"));
+        isHSQLDB = "hsqldb".equalsIgnoreCase(params.getProperty("dbtype"));
 
         try {
             Class stagingDriverClass = Class.forName(params.getProperty("staging.jdbc.driverClassName"));

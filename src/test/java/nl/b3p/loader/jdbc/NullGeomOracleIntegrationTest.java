@@ -1,10 +1,8 @@
 /*
  * Copyright (C) 2016 B3Partners B.V.
  */
-package nl.b3p.brmo.loader.jdbc;
+package nl.b3p.loader.jdbc;
 
-import nl.b3p.loader.jdbc.OracleConnectionUnwrapper;
-import nl.b3p.loader.jdbc.OracleJdbcConverter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,10 +13,9 @@ import nl.b3p.AbstractDatabaseIntegrationTest;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.geotools.factory.GeoTools;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertNull;
 import org.junit.runner.RunWith;

@@ -25,6 +25,7 @@ matrix:
   include:
     - name: "SQL Server 2017"
       dist: xenial
+      group: edge
       jdk: oraclejdk8
       sudo: required
       env:

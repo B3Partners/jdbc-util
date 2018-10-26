@@ -136,7 +136,7 @@
         <dependency>
             <groupId>nl.b3p</groupId>
             <artifactId>brmo-test-util</artifactId>
-            <version>1.6.0</version>
+            <version>1.6.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

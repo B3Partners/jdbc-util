@@ -119,7 +119,8 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
 
     @Override
     public String getGeotoolsDBTypeName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // no hsqldb datastore in geotools
+        return null;
     }
 
     @Override

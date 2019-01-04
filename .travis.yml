@@ -4,7 +4,7 @@ language: java
 
 env:
   global:
-    - MVN_VERSION="3.5.4"
+    - MVN_VERSION="3.6.0"
     - PROFILE="postgresql"
 
 addons:
@@ -16,25 +16,28 @@ addons:
 jdk:
   - oraclejdk8
   - openjdk8
-  - oraclejdk9
+  # door gebruik van javax.xml.bind.DatatypeConverter.parseDateTime in GeometryJdbcConverter#61 is bouwen
+  # op dit moment niet mogelijk met java 11
+  # https://github.com/B3Partners/jdbc-util/issues/36
+  #- oraclejdk11
 
 matrix:
   fast_finish: true
   allow_failures:
-    - oraclejdk9
+    - oraclejdk11
   include:
     - name: "SQL Server 2017"
       dist: xenial
       group: edge
-      jdk: oraclejdk8
+      jdk: openjdk8
       sudo: required
       env:
         - PROFILE="mssql"
     - name: "HSQLDB"
-      jdk: oraclejdk8
+      jdk: openjdk8
       sudo: required
       env:
-      - PROFILE="hsqldb"
+        - PROFILE="hsqldb"
 
 # before_cache:
 
@@ -48,15 +51,16 @@ before_install:
   - wget --directory-prefix=$HOME/downloads/ --no-clobber https://www-eu.apache.org/dist/maven/maven-3/$MVN_VERSION/binaries/apache-maven-$MVN_VERSION-bin.zip
   - unzip -qq $HOME/downloads/apache-maven-$MVN_VERSION-bin.zip
   - export M2_HOME=$PWD/apache-maven-$MVN_VERSION
-  #- wget https://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip
-  #- unzip -qq apache-maven-3.5.4-bin.zip
-  #- export M2_HOME=$PWD/apache-maven-3.5.4
   - export PATH=$M2_HOME/bin:$PATH
   - mvn -v
   - export PAGER=cat
+  # hack voor travis xenial images, zie: https://github.com/travis-ci/travis-ci/issues/10290
+  #                                 openjdk8 installatie mislukt
   - if [ "$PROFILE" == "mssql" ]; then
       sudo service postgresql stop;
       sh ".travis/install-mssql.sh";
+      PATH=$(echo "$PATH" | sed -e 's/:\/usr\/local\/lib\/jvm\/openjdk11\/bin//');
+      JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64;
     elif [ "$PROFILE" == "hsqldb" ]; then
       sudo service postgresql stop;
     else
@@ -87,9 +91,3 @@ script:
       mvn javadoc:javadoc;
       mvn javadoc:test-javadoc;
     fi
-
-after_failure:
-  - echo "Hmm... dat is vervelend!"
-
-after_success:
-  - echo "Klaar..."

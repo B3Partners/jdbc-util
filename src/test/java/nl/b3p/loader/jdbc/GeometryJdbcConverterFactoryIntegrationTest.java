@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -46,6 +48,30 @@ public class GeometryJdbcConverterFactoryIntegrationTest extends AbstractDatabas
                 assertThat("Onjuiste geometry converter gekregen.", conv, instanceOf(PostgisJdbcConverter.class));
             } else if (isHSQLDB) {
                 assertThat("Onjuiste geometry converter gekregen.", conv, instanceOf(HSQLJdbcConverter.class));
+            } else {
+                fail("Onbekende (en niet ondersteunde) database");
+            }
+        } catch (SQLException | UnsupportedOperationException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void testGetGeotoolsDBTypeName() {
+        try (Connection c = DriverManager.getConnection(
+                params.getProperty("staging.jdbc.url"),
+                params.getProperty("staging.user"),
+                params.getProperty("staging.passwd"))) {
+
+            String actual = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c).getGeotoolsDBTypeName();
+            if (isMsSQL) {
+                assertEquals("Onjuiste database smaak gekregen.", "jtds-sqlserver", actual);
+            } else if (isOracle) {
+                assertEquals("Onjuiste database smaak gekregen.", "oracle", actual);
+            } else if (isPostgis) {
+                assertEquals("Onjuiste database smaak gekregen.", "postgis", actual);
+            } else if (isHSQLDB) {
+                assertNull("Onjuiste database smaak gekregen.", actual);
             } else {
                 fail("Onbekende (en niet ondersteunde) database");
             }

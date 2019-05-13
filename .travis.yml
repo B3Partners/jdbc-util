@@ -14,7 +14,6 @@ addons:
     - postgresql-9.6-postgis-2.3
 
 jdk:
-  - oraclejdk8
   - openjdk8
   # door gebruik van javax.xml.bind.DatatypeConverter.parseDateTime in GeometryJdbcConverter#61 is bouwen
   # op dit moment niet mogelijk met java 11
@@ -87,7 +86,7 @@ script:
   - mvn -e verify -B -P$PROFILE -T1 -Dtest.onlyITs=true
   # test of de javadoc en test-javadoc compliant is met java-8 strict checks
   # altijd doen anders loop je daar met maken van een release tegenaan
-  - if [ "$TRAVIS_JDK_VERSION" == oraclejdk8 ]; then
+  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
       mvn javadoc:javadoc;
       mvn javadoc:test-javadoc;
     fi

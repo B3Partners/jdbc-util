@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.b3p</groupId>
     <artifactId>jdbc-util</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDBC Util</name>
     <description>JDBC utilities: Converter for geometries</description>
     <properties>
         <java.version>1.8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <test.onlyITs>false</test.onlyITs>        
+        <test.onlyITs>false</test.onlyITs>
         <oracle.jdbc.groupId>com.oracle.jdbc</oracle.jdbc.groupId>
         <oracle.jdbc.version>18.3.0.0</oracle.jdbc.version>
         <oracle.jdbc.artifactId>ojdbc8_g</oracle.jdbc.artifactId>
-        <geotools.version>20.3</geotools.version>
+        <geotools.version>21.1</geotools.version>
+        <jaxb.api.version>2.3.2</jaxb.api.version>
+        <jaxb.impl.version>2.3.2</jaxb.impl.version>
         <sqlserver.jtds.version>1.3.1</sqlserver.jtds.version>
         <postgresql.jdbc.version>42.2.5</postgresql.jdbc.version>
         <postgresql.postgis-jdbc.version>2.3.0</postgresql.postgis-jdbc.version>
@@ -178,6 +181,24 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>toolchain</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <toolchains>
+                        <jdk>
+                            <version>${java.version}</version>
+                        </jdk>
+                    </toolchains>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>3.0.0-M2</version>
                 <executions>
@@ -191,9 +212,6 @@
                                 <requireMavenVersion>
                                     <version>3.2.5</version>
                                 </requireMavenVersion>
-                                <requireJavaVersion>
-                                    <version>${java.version}</version>
-                                </requireJavaVersion>
                             </rules>
                         </configuration>
                     </execution>
@@ -249,7 +267,7 @@
                     <includes>
                         <include>**/*IntegrationTest.java</include>
                     </includes>
-                    <systemPropertyVariables />
+                    <systemPropertyVariables/>
                     <trimStackTrace>false</trimStackTrace>
                     <useFile>false</useFile>
                     <skipTests>!${test.onlyITs}</skipTests>
@@ -279,7 +297,7 @@
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.1.0</version>
-            </plugin>                   
+            </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
@@ -374,7 +392,7 @@
         <profile>
             <!-- actief voor oa. Jenkins builds -->
             <id>oracle</id>
-            <properties />
+            <properties/>
             <build>
                 <plugins>
                     <plugin>
@@ -404,7 +422,8 @@
                                 <database.properties.file>postgis.properties</database.properties.file>
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
-                            <excludedGroups>nl.b3p.brmo.test.util.database.PostgreSQLDriverBasedFailures</excludedGroups>
+                            <excludedGroups>nl.b3p.brmo.test.util.database.PostgreSQLDriverBasedFailures
+                            </excludedGroups>
                             <excludes>
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
@@ -452,6 +471,54 @@
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>java11</id>
+            <activation>
+                <jdk>11</jdk>
+            </activation>
+            <properties>
+                <java.version>11</java.version>
+                <maven.compiler.source>${java.version}</maven.compiler.source>
+                <maven.compiler.target>${java.version}</maven.compiler.target>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>jakarta.xml.bind</groupId>
+                    <artifactId>jakarta.xml.bind-api</artifactId>
+                    <version>${jaxb.api.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jaxb</groupId>
+                    <artifactId>jaxb-runtime</artifactId>
+                    <version>${jaxb.impl.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.0.0-M2</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-versions</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireMavenVersion>
+                                            <version>3.6.0</version>
+                                        </requireMavenVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

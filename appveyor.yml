@@ -22,6 +22,9 @@ environment:
     - SQL: MSSQL$SQL2017
       INSTANCENAME: SQL2017
       JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+    - SQL: MSSQL$SQL2017
+      INSTANCENAME: SQL2017
+      JAVA_HOME: C:\Program Files\Java\jdk11
 
 matrix:
   fast_finish: false
@@ -33,7 +36,7 @@ install:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-http-proxy.ps1'))
   - ps: .\.appveyor\set-maven-proxy.ps1
   # initial build, no testing
-  - mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Pmssql
+  - mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Pmssql --global-toolchains .appveyor/toolchains.xml
 
 build: off
 
@@ -51,9 +54,9 @@ before_test:
 
 test_script:
   # unit tests
-  - mvn -e test -B -Pmssql
+  - mvn -e test -B -Pmssql --global-toolchains .appveyor/toolchains.xml
   # integratie tests
-  - mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true
+  - mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true --global-toolchains .appveyor/toolchains.xml
 
 cache:
   - C:\Users\appveyor\.m2\repository -> pom.xml

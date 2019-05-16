@@ -30,7 +30,7 @@ timestamps {
             lock('brmo-oracle') {
               timeout(90) {
                 stage('Prepare Oracle Databases') {
-                    sh "sqlplus -l -S c##jenkins_staging/jenkins_staging@192.168.1.11:1521/ORCL < ./.jenkins/clear-schema.sql"
+                    sh "sqlplus -l -S jenkins_staging/jenkins_staging@192.168.1.11:1521/ORCL < ./.jenkins/clear-schema.sql"
                     sh ".jenkins/db-prepare-staging.sh"
                 }
 
@@ -40,7 +40,7 @@ timestamps {
                 }
 
                 stage('Cleanup Oracle Database') {
-                    sh "sqlplus -l -S c##jenkins_staging/jenkins_staging@192.168.1.11:1521/ORCL < ./.jenkins/clear-schema.sql"
+                    sh "sqlplus -l -S jenkins_staging/jenkins_staging@192.168.1.11:1521/ORCL < ./.jenkins/clear-schema.sql"
                 }
               }
             }

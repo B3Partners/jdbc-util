@@ -4,7 +4,7 @@ language: java
 
 env:
   global:
-    - MVN_VERSION="3.6.0"
+    - MVN_VERSION="3.6.1"
     - PROFILE="postgresql"
 
 addons:
@@ -15,15 +15,10 @@ addons:
 
 jdk:
   - openjdk8
-  # door gebruik van javax.xml.bind.DatatypeConverter.parseDateTime in GeometryJdbcConverter#61 is bouwen
-  # op dit moment niet mogelijk met java 11
-  # https://github.com/B3Partners/jdbc-util/issues/36
-  #- oraclejdk11
+  - openjdk11
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - oraclejdk11
   include:
     - name: "SQL Server 2017"
       dist: xenial
@@ -51,7 +46,7 @@ before_install:
   - unzip -qq $HOME/downloads/apache-maven-$MVN_VERSION-bin.zip
   - export M2_HOME=$PWD/apache-maven-$MVN_VERSION
   - export PATH=$M2_HOME/bin:$PATH
-  - mvn -v
+  - mvn -v --global-toolchains .travis/toolchains.xml
   - export PAGER=cat
   # hack voor travis xenial images, zie: https://github.com/travis-ci/travis-ci/issues/10290
   #                                 openjdk8 installatie mislukt
@@ -68,7 +63,7 @@ before_install:
 
 install:
   # install all dependencies + artifacts and create any DB scripts without any testing
-  - mvn install -Dmaven.test.skip=true -B -V -e -fae -q -P$PROFILE
+  - mvn install -Dmaven.test.skip=true --global-toolchains .travis/toolchains.xml -B -V -e -fae -q -P$PROFILE
 
 before_script:
   - if [ "$PROFILE" == "mssql" ]; then
@@ -81,12 +76,12 @@ before_script:
 
 script:
   # run unit tests 
-  - mvn -e test -B -P$PROFILE
+  - mvn -e test -B --global-toolchains .travis/toolchains.xml -P$PROFILE
   # run integratie tests
-  - mvn -e verify -B -P$PROFILE -T1 -Dtest.onlyITs=true
+  - mvn -e verify -B --global-toolchains .travis/toolchains.xml -P$PROFILE -T1 -Dtest.onlyITs=true
   # test of de javadoc en test-javadoc compliant is met java-8 strict checks
   # altijd doen anders loop je daar met maken van een release tegenaan
   - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
-      mvn javadoc:javadoc;
-      mvn javadoc:test-javadoc;
+      mvn javadoc:javadoc --global-toolchains .travis/toolchains.xml;
+      mvn javadoc:test-javadoc --global-toolchains .travis/toolchains.xml;
     fi

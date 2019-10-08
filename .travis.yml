@@ -1,10 +1,8 @@
-#dist: trusty
-#sudo: required
 language: java
 
 env:
   global:
-    - MVN_VERSION="3.6.1"
+    - MVN_VERSION="3.6.2"
     - PROFILE="postgresql"
 
 addons:
@@ -85,3 +83,6 @@ script:
       mvn javadoc:javadoc --global-toolchains .travis/toolchains.xml;
       mvn javadoc:test-javadoc --global-toolchains .travis/toolchains.xml;
     fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

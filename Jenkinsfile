@@ -47,7 +47,7 @@ timestamps {
 
             stage('Publish Test Results') {
                 junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/TEST-*.xml'
-                jacoco buildOverBuild: true, classPattern: '**/target/classes', deltaBranchCoverage: '10', deltaClassCoverage: '10', deltaComplexityCoverage: '10', deltaInstructionCoverage: '', deltaLineCoverage: '10', deltaMethodCoverage: '10'
+                jacoco classPattern: '**/target/classes', execPattern: '**/target/**.exec'
             }
 
             stage('OWASP Dependency Check') {

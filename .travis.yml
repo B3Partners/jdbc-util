@@ -16,7 +16,7 @@ services:
   - postgresql
 
 jdk:
-  - openjdk8
+#  - openjdk8
   - openjdk11
 
 matrix:
@@ -30,10 +30,16 @@ matrix:
       env:
         - PROFILE="mssql"
     - name: "HSQLDB"
-      jdk: openjdk8
+      jdk: openjdk11
       sudo: required
       env:
         - PROFILE="hsqldb"
+    - name: "OpenJDK8"
+      dist: xenial
+      jdk: openjdk8
+      sudo: required
+      env:
+        - PROFILE="postgresql"
 
 # before_cache:
 
@@ -83,7 +89,7 @@ script:
   - mvn -e verify -B --global-toolchains .travis/toolchains.xml -P$PROFILE -T1 -Dtest.onlyITs=true
   # test of de javadoc en test-javadoc compliant is met java-8 strict checks
   # altijd doen anders loop je daar met maken van een release tegenaan
-  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
+  - if [ "$TRAVIS_JDK_VERSION" == openjdk11 ]; then
       mvn javadoc:javadoc --global-toolchains .travis/toolchains.xml;
       mvn javadoc:test-javadoc --global-toolchains .travis/toolchains.xml;
     fi

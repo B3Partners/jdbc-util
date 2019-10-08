@@ -25,7 +25,7 @@ public class InsertGeometryIntegrationTest extends AbstractDatabaseIntegrationTe
     private final int srid = 28992;
     private final String geomName = "test";
     private final String ewktString = "epsg:28992;POLYGON((0 0, 10 0, 5 5, 0 0))";
-    private final String insertStatement = "INSERT INTO geometries (geom, naam) VALUES (?";
+    private final String insertStatement = "INSERT INTO geometries (geom, naam) VALUES (";
     private Geometry geom = null;
 
     @Before
@@ -50,7 +50,6 @@ public class InsertGeometryIntegrationTest extends AbstractDatabaseIntegrationTe
             ps.setObject(1, o);
             ps.setString(2, geomName + 1);
             assertEquals("", 1, ps.executeUpdate());
-            c.commit();
         } catch (SQLException sqle) {
             fail("Insert failed, msg: " + sqle.getLocalizedMessage());
         }
@@ -70,7 +69,6 @@ public class InsertGeometryIntegrationTest extends AbstractDatabaseIntegrationTe
             ps.setObject(1, o);
             ps.setString(2, geomName + 2);
             assertEquals("", 1, ps.executeUpdate());
-            c.commit();
         } catch (SQLException sqle) {
             fail("Insert failed, msg: " + sqle.getLocalizedMessage());
         }

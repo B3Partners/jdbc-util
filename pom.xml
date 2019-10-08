@@ -263,6 +263,7 @@
                         <exclude>**/*IntegrationTest.java</exclude>
                     </excludes>
                     <skipTests>${test.onlyITs}</skipTests>
+                    <argLine>${surefireArgLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -277,7 +278,7 @@
                     <useFile>false</useFile>
                     <skipTests>!${test.onlyITs}</skipTests>
                     <skipITs>!${test.onlyITs}</skipITs>
-                    <argLine>${surefireArgLine}</argLine>
+                    <argLine>${failsafeArgLine}</argLine>
                 </configuration>
                 <executions>
                     <execution>
@@ -363,9 +364,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <configuration>
-                    <destFile>target/jacoco.exec</destFile>
-                </configuration>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
@@ -387,10 +385,16 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>jacoco-site</id>
-                        <phase>package</phase>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
                             <goal>report-integration</goal>
                         </goals>
                     </execution>

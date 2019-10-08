@@ -9,7 +9,6 @@ import nl.b3p.AbstractDatabaseIntegrationTest;
 
 import nl.b3p.brmo.test.util.database.HSQLDBDriverBasedFailures;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.locationtech.jts.geom.Geometry;
@@ -64,6 +63,25 @@ public class InsertGeometryIntegrationTest extends AbstractDatabaseIntegrationTe
 
             GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
             Object o = conv.convertToNativeGeometryObject(geom, srid);
+
+            PreparedStatement ps = c.prepareStatement(insertStatement + conv.createPSGeometryPlaceholder() + ", ?)");
+            ps.setObject(1, o);
+            ps.setString(2, geomName + 2);
+            assertEquals("", 1, ps.executeUpdate());
+        } catch (SQLException sqle) {
+            fail("Insert failed, msg: " + sqle.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void testGeometryInsertFromString() throws ParseException {
+        try (Connection c = DriverManager.getConnection(
+                params.getProperty("staging.jdbc.url"),
+                params.getProperty("staging.user"),
+                params.getProperty("staging.passwd"))) {
+
+            GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
+            Object o = conv.convertToNativeGeometryObject(wktString);
 
             PreparedStatement ps = c.prepareStatement(insertStatement + conv.createPSGeometryPlaceholder() + ", ?)");
             ps.setObject(1, o);

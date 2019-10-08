@@ -21,6 +21,7 @@ import org.locationtech.jts.io.ParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.sql.Clob;
 import java.sql.SQLException;
 import org.apache.commons.io.IOUtils;
@@ -42,12 +43,12 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
 
     @Override
     public String createPSGeometryPlaceholder() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "?";
     }
 
     @Override
     public String getGeomTypeName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -60,7 +61,7 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
             }
             InputStream in = c.getAsciiStream();
             StringWriter w = new StringWriter();
-            IOUtils.copy(in, w);
+            IOUtils.copy(in, w, Charset.defaultCharset());
             Geometry g;
             
             g = wkt.read(w.toString());
@@ -79,12 +80,12 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
 
     @Override
     public String getSchema() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean isDuplicateKeyViolationMessage(String message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -94,27 +95,27 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
 
     @Override
     public String buildPaginationSql(String sql, int offset, int limit) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public boolean useSavepoints() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public String getMViewsSQL() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public String getMViewRefreshSQL(String mview) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

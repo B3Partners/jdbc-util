@@ -7,6 +7,7 @@ init:
   - git config --global core.autocrlf input
   - git config --global core.safecrlf true
   - cmd: net start %SQL%
+  - choco install codecov
 
 environment:
   # Microsoft SQL Server 2016 Service Pack 1 heeft een EOL van 13-7-2021
@@ -53,6 +54,7 @@ test_script:
   - mvn -e test -B -Pmssql --global-toolchains .appveyor/toolchains.xml
   # integratie tests
   - mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true --global-toolchains .appveyor/toolchains.xml
+  - codecov -v -f target/site/jacoco-it/jacoco.xml target/site/jacoco/jacoco.xml
 
 cache:
   - C:\Users\appveyor\.m2\repository -> pom.xml

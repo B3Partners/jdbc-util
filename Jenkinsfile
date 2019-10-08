@@ -48,6 +48,7 @@ timestamps {
             stage('Publish Test Results') {
                 junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/TEST-*.xml'
                 jacoco classPattern: '**/target/classes', execPattern: '**/target/**.exec'
+                sh "curl -s https://codecov.io/bash | bash"
             }
 
             stage('OWASP Dependency Check') {

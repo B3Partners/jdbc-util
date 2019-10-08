@@ -1,17 +1,22 @@
-#dist: trusty
-#sudo: required
 language: java
-
+# ubuntu 16.04 LTS
+dist: xenial
 env:
   global:
-    - MVN_VERSION="3.6.1"
+    - MVN_VERSION="3.6.2"
     - PROFILE="postgresql"
 
 addons:
-  postgresql: 9.6
+  postgresql: "10"
   apt:
     packages:
-    - postgresql-9.6-postgis-2.3
+      - postgresql-10
+      - postgresql-client-10
+      - postgresql-10-postgis-2.5
+      - postgresql-10-postgis-2.5-scripts
+
+services:
+  - postgresql
 
 jdk:
   - openjdk8
@@ -85,3 +90,6 @@ script:
       mvn javadoc:javadoc --global-toolchains .travis/toolchains.xml;
       mvn javadoc:test-javadoc --global-toolchains .travis/toolchains.xml;
     fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

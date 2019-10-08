@@ -28,6 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
     </properties>
     <organization>
         <name>B3Partners B.V.</name>
@@ -159,6 +160,11 @@
                         <format>ALL</format>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -209,7 +215,7 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.2.5</version>
+                                    <version>3.3.9</version>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -257,6 +263,7 @@
                         <exclude>**/*IntegrationTest.java</exclude>
                     </excludes>
                     <skipTests>${test.onlyITs}</skipTests>
+                    <argLine>${surefireArgLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -271,6 +278,7 @@
                     <useFile>false</useFile>
                     <skipTests>!${test.onlyITs}</skipTests>
                     <skipITs>!${test.onlyITs}</skipITs>
+                    <argLine>${failsafeArgLine}</argLine>
                 </configuration>
                 <executions>
                     <execution>
@@ -353,6 +361,45 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>failsafeArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <reporting>
@@ -385,6 +432,24 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <dataFileIncludes>
+                        <dataFileInclude>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFileInclude>
+                        <dataFileInclude>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFileInclude>
+                    </dataFileIncludes>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
         </plugins>
     </reporting>
     <profiles>
@@ -403,6 +468,8 @@
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
                             <excludedGroups>nl.b3p.brmo.test.util.database.OracleDriverBasedFailures</excludedGroups>
+                            <useFile>false</useFile>
+                            <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -421,11 +488,12 @@
                                 <database.properties.file>postgis.properties</database.properties.file>
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
-                            <excludedGroups>nl.b3p.brmo.test.util.database.PostgreSQLDriverBasedFailures
-                            </excludedGroups>
+                            <excludedGroups>nl.b3p.brmo.test.util.database.PostgreSQLDriverBasedFailures</excludedGroups>
                             <excludes>
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
+                            <useFile>false</useFile>
+                            <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -448,6 +516,8 @@
                             <excludes>
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
+                            <useFile>false</useFile>
+                            <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -469,6 +539,8 @@
                             <excludes>
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
+                            <useFile>false</useFile>
+                            <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>
                 </plugins>

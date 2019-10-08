@@ -104,8 +104,8 @@ CREATE TABLE job(
 
 create table geometries (
     id bigserial not null,
-    datum datetime,
+    datum timestamp,
     naam varchar(255),
-    geom geometry(MultiPolygon,28992),
+    geom geometry(Polygon,28992),
     primary key (id)
 );

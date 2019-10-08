@@ -1,6 +1,6 @@
 language: java
-dist: bionic
-
+# ubuntu 16.04 LTS
+dist: xenial
 env:
   global:
     - MVN_VERSION="3.6.2"
@@ -10,13 +10,16 @@ addons:
   postgresql: "10"
   apt:
     packages:
-    - postgresql-10-postgis-2.5
+      - postgresql-10
+      - postgresql-client-10
+      - postgresql-10-postgis-2.5
+      - postgresql-10-postgis-2.5-scripts
 
 services:
   - postgresql
 
 jdk:
-#  - openjdk8
+  - openjdk8
   - openjdk11
 
 matrix:
@@ -30,16 +33,10 @@ matrix:
       env:
         - PROFILE="mssql"
     - name: "HSQLDB"
-      jdk: openjdk11
-      sudo: required
-      env:
-        - PROFILE="hsqldb"
-    - name: "OpenJDK8"
-      dist: xenial
       jdk: openjdk8
       sudo: required
       env:
-        - PROFILE="postgresql"
+        - PROFILE="hsqldb"
 
 # before_cache:
 
@@ -89,7 +86,7 @@ script:
   - mvn -e verify -B --global-toolchains .travis/toolchains.xml -P$PROFILE -T1 -Dtest.onlyITs=true
   # test of de javadoc en test-javadoc compliant is met java-8 strict checks
   # altijd doen anders loop je daar met maken van een release tegenaan
-  - if [ "$TRAVIS_JDK_VERSION" == openjdk11 ]; then
+  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
       mvn javadoc:javadoc --global-toolchains .travis/toolchains.xml;
       mvn javadoc:test-javadoc --global-toolchains .travis/toolchains.xml;
     fi

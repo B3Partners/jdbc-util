@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PostgisJdbcConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JDBC Util</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.loader.jdbc</a> &gt; <span class="el_source">PostgisJdbcConverter.java</span></div><h1>PostgisJdbcConverter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 B3Partners B.V.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+
+package nl.b3p.loader.jdbc;
+
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import java.sql.SQLException;
+import org.postgis.PGgeometry;
+
+/**
+ *
+ * @author Matthijs Laan
+ */
+<span class="nc" id="L29">public class PostgisJdbcConverter extends GeometryJdbcConverter {</span>
+
+<span class="nc" id="L31">    private String schema = null;</span>
+
+    @Override
+    public boolean isDuplicateKeyViolationMessage(String message) {
+<span class="nc bnc" id="L35" title="All 4 branches missed.">        return message!=null &amp;&amp; message.startsWith(&quot;ERROR: duplicate key value violates unique constraint&quot;);</span>
+    }
+
+    @Override
+    public boolean isFKConstraintViolationMessage(String message) {
+<span class="nc bnc" id="L40" title="All 6 branches missed.">        return message != null &amp;&amp; message.startsWith(&quot;ERROR: insert or update on table&quot;) &amp;&amp; message.contains(&quot;violates foreign key constraint&quot;);</span>
+    }
+
+    @Override
+    public String createPSGeometryPlaceholder() throws SQLException {
+        //return &quot;ST_GeomFromText(?, 28992)&quot;;
+<span class="nc" id="L46">        return &quot;?&quot;;</span>
+    }
+   
+    @Override
+    public Object convertToNativeGeometryObject(Geometry g) throws SQLException, ParseException {
+<span class="nc" id="L51">      return convertToNativeGeometryObject(g, 28992);</span>
+    }
+    
+    @Override
+    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException, ParseException {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if(g == null){</span>
+<span class="nc" id="L57">            return null;</span>
+        }
+<span class="nc" id="L59">        String param = g.toText();</span>
+<span class="nc bnc" id="L60" title="All 4 branches missed.">        if (param == null || param.trim().length() == 0) {</span>
+<span class="nc" id="L61">            return null;</span>
+        }
+<span class="nc" id="L63">        return new PGgeometry(&quot;SRID=&quot; + srid + &quot;;&quot; + param);</span>
+    }
+
+    @Override
+    public String getSchema() {
+<span class="nc" id="L68">        return schema;</span>
+    }
+
+    public void setSchema(String schema) {
+<span class="nc" id="L72">        this.schema = schema;</span>
+<span class="nc" id="L73">    }</span>
+
+    @Override
+    public String getGeomTypeName() {
+<span class="nc" id="L77">        return &quot;geometry&quot;;</span>
+    }
+    
+    @Override
+    public String buildPaginationSql(String sql, int offset, int limit) {
+<span class="nc" id="L82">        StringBuilder builder = new StringBuilder(sql);</span>
+<span class="nc" id="L83">        builder.append(&quot; LIMIT &quot;);</span>
+<span class="nc" id="L84">        builder.append(limit);</span>
+<span class="nc" id="L85">        builder.append(&quot; OFFSET &quot;);</span>
+<span class="nc" id="L86">        builder.append(offset);</span>
+<span class="nc" id="L87">        return builder.toString();</span>
+    }
+
+    @Override
+    public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
+<span class="nc" id="L92">        String s = buildPaginationSql(sql.toString(), 0, limit);</span>
+<span class="nc" id="L93">        return new StringBuilder(s);</span>
+    }
+
+    @Override
+    public boolean useSavepoints() {
+<span class="nc" id="L98">        return true;</span>
+    }
+
+     @Override
+    public boolean isPmdKnownBroken() {
+<span class="nc" id="L103">        return false;</span>
+    }
+    @Override
+    public String getGeotoolsDBTypeName() {
+<span class="nc" id="L107">        return &quot;postgis&quot;;</span>
+    }
+
+    @Override
+    public String getMViewsSQL() {
+<span class="nc" id="L112">        return &quot;SELECT oid::regclass::text FROM pg_class WHERE relkind = 'm'&quot;;</span>
+    }
+
+    @Override
+    public String getMViewRefreshSQL(String mview) {
+<span class="nc" id="L117">        return String.format(&quot;REFRESH MATERIALIZED VIEW %s;&quot;, mview);</span>
+    }
+
+    @Override
+    public Geometry convertToJTSGeometryObject(Object nativeObj) {
+<span class="nc" id="L122">        PGgeometry geom = (PGgeometry)nativeObj;</span>
+<span class="nc" id="L123">        StringBuffer sb = new StringBuffer();</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if(geom == null){</span>
+<span class="nc" id="L125">            return null;</span>
+        }
+<span class="nc" id="L127">        geom.getGeometry().outerWKT(sb);</span>
+        try {
+<span class="nc" id="L129">            return wkt.read(sb.toString());</span>
+<span class="nc" id="L130">        } catch (ParseException ex) {</span>
+<span class="nc" id="L131">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

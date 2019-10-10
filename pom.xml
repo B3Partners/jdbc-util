@@ -34,6 +34,10 @@
         <name>B3Partners B.V.</name>
         <url>http://www.b3partners.nl/</url>
     </organization>
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/B3Partners/jdbc-util/issues</url>
+    </issueManagement>
     <scm>
         <developerConnection>scm:git:git@github.com:B3Partners/jdbc-util.git</developerConnection>
         <connection>scm:git:git@github.com:B3Partners/jdbc-util.git</connection>

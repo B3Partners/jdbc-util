@@ -17,20 +17,22 @@
 
 package nl.b3p.loader.jdbc;
 
-import org.locationtech.jts.io.ParseException;
-import java.sql.SQLException;
+import com.microsoft.sqlserver.jdbc.Geometry;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.apache.commons.lang3.StringUtils;
-import org.geolatte.geom.Geometry;
-import org.geolatte.geom.codec.Wkt;
-import org.geolatte.geom.codec.db.sqlserver.Encoders;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.locationtech.jts.io.ParseException;
+
+import java.sql.SQLException;
 
 
 /**
- *
  * @author Matthijs Laan
+ * @author mprins
  */
 public class MssqlJdbcConverter extends GeometryJdbcConverter {
-
+    private final static Log LOG = LogFactory.getLog(MssqlJdbcConverter.class);
     private String schema = "dbo";
     // a query that returns empty result any time any place
     private static final String NOT_IMPLEMENTED_DUMMY_SQL = "select 1 where 1 = 2";
@@ -39,8 +41,9 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     public boolean isDuplicateKeyViolationMessage(String message) {
         //Error Code: 2627
         //Violation of %ls constraint '%.*ls'. Cannot insert duplicate key in object '%.*ls'.
-        return message!=null && message.contains("Cannot insert duplicate key in object");
+        return message != null && message.contains("Cannot insert duplicate key in object");
     }
+
     @Override
     public boolean isFKConstraintViolationMessage(String message) {
         return message != null && message.startsWith("The INSERT statement conflicted with the FOREIGN KEY constraint");
@@ -51,7 +54,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
         //return "geometry::STGeomFromText(?, 28992)";
         return "?";
     }
-    
+
     @Override
     public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g, int srid) throws SQLException, ParseException {
         if (g == null) {
@@ -62,14 +65,12 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
         if (param == null || param.trim().length() == 0) {
             return null;
         }
-        Geometry geom = Wkt.fromWkt("SRID=" +  srid + "; " + param);
-        byte[] ret = Encoders.encode(geom);
-        return ret;
+        return Geometry.STGeomFromText(param, srid);
     }
 
     @Override
     public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g) throws SQLException, ParseException {
-       return convertToNativeGeometryObject(g, 28992);
+        return convertToNativeGeometryObject(g, 28992);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     public String getGeomTypeName() {
         return "geometry";
     }
-    
+
     /*
     QUERY USING "ROW_NUMBER"
     DECLARE @PageNumber AS INT, @RowspPage AS INT
@@ -140,17 +141,13 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
 
     @Override
     public boolean isPmdKnownBroken() {
-        //return true; // microsoft driver
-        return false; // jtds driver
+        return false;
     }
 
     @Override
     public String getGeotoolsDBTypeName() {
         // see: http://docs.geotools.org/stable/userguide/library/jdbc/sqlserver.html
-        final String name = "jtds-sqlserver";
-        // we gebruiken altijd jtds, maar anders.. 
-        // if(...){name = "sqlserver"}
-        return name;
+        return "sqlserver";
     }
 
     /**
@@ -178,6 +175,17 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
 
     @Override
     public org.locationtech.jts.geom.Geometry convertToJTSGeometryObject(Object nativeObj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        org.locationtech.jts.geom.Geometry jts = null;
+        if (nativeObj == null) {
+            return jts;
+        } else if (Geometry.class.isAssignableFrom(nativeObj.getClass())) {
+            try {
+                jts = wkt.read(((Geometry) nativeObj).STAsText());
+                jts.setSRID(((Geometry) nativeObj).getSrid());
+            } catch (ParseException | SQLServerException e) {
+                LOG.error("Error converting SQL Server to JTS geometry", e);
+            }
+        }
+        return jts;
     }
 }

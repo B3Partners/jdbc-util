@@ -45,28 +45,37 @@ import org.apache.commons.logging.LogFactory;
         // Sometimes isWrapperFor() does not work for certain JDBC drivers. The
         // MetaData connection is always unwrapped, trick learned from Spring's
         // org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor
-<span class="nc" id="L48">        Connection mdC = c.getMetaData().getConnection();</span>
-<span class="nc" id="L49">        LOG.trace(&quot;MetaData connection class: &quot; + mdC.getClass().getName());</span>
+<span class="nc" id="L48">        Connection metadataConnection = c.getMetaData().getConnection();</span>
+<span class="nc" id="L49">        LOG.trace(&quot;MetaData connection class: &quot; + metadataConnection.getClass().getName());</span>
 
 <span class="nc" id="L51">        JtdsConnection oc = null;</span>
 
         try {
-<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (mdC.isWrapperFor(JtdsConnection.class)) {</span>
-<span class="nc" id="L55">                oc = mdC.unwrap(JtdsConnection.class);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if (metadataConnection.isWrapperFor(JtdsConnection.class)) {</span>
+<span class="nc" id="L55">                oc = metadataConnection.unwrap(JtdsConnection.class);</span>
             }
 <span class="nc" id="L57">        } catch (AbstractMethodError e) {</span>
 <span class="nc" id="L58">            LOG.trace(&quot;Connection ondersteund geen 'isWrapperFor' of 'unwrap' - dit is verwacht voor een DelegatingConnection|PoolableConnection.&quot;);</span>
 <span class="nc" id="L59">        }</span>
 <span class="nc bnc" id="L60" title="All 2 branches missed.">        if (oc == null) {</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (mdC instanceof JtdsConnection) {</span>
-<span class="nc" id="L62">                oc = (JtdsConnection) mdC;</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">            } else if (mdC instanceof PoolableConnection) {</span>
-<span class="nc" id="L64">                oc = (JtdsConnection) ((DelegatingConnection) mdC).getDelegate();</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (metadataConnection instanceof JtdsConnection) {</span>
+<span class="nc" id="L62">                LOG.trace(&quot;Cast naar JtdsConnection&quot;);</span>
+<span class="nc" id="L63">                oc = (JtdsConnection) metadataConnection;</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            } else if (metadataConnection instanceof PoolableConnection) {</span>
+<span class="nc" id="L65">                LOG.trace(&quot;Cast naar JtdsConnection via cast naar dbcp DelegatingConnection&quot;);</span>
+<span class="nc" id="L66">                oc = (JtdsConnection) ((DelegatingConnection) metadataConnection).getDelegate();</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            } else if (metadataConnection instanceof org.apache.tomcat.dbcp.dbcp.PoolableConnection) {</span>
+<span class="nc" id="L68">                LOG.trace(&quot;Cast naar JtdsConnection via cast naar tomcat DelegatingConnection&quot;);</span>
+<span class="nc" id="L69">                oc = (JtdsConnection) ((org.apache.tomcat.dbcp.dbcp.DelegatingConnection) metadataConnection).getDelegate();</span>
             } else {
-<span class="nc" id="L66">                throw new SQLException(&quot;Kan connectie niet unwrappen naar JtdsConnection!&quot;);</span>
+<span class="nc" id="L71">                throw new SQLException(</span>
+                        &quot;Kan connectie niet unwrappen naar JtdsConnection van meta connectie: &quot;
+<span class="nc" id="L73">                        + metadataConnection.getClass().getName()</span>
+<span class="nc" id="L74">                        + &quot;, connection: &quot; + c.getClass().getName()</span>
+                );
             }
         }
-<span class="nc" id="L69">        return oc;</span>
+<span class="nc" id="L78">        return oc;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

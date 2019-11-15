@@ -42,14 +42,23 @@ import org.apache.commons.logging.LogFactory;
         OracleConnection oc;
 
 <span class="nc bnc" id="L44" title="All 2 branches missed.">        if(c.isWrapperFor(OracleConnection.class)) {</span>
-<span class="nc" id="L45">            oc = c.unwrap(OracleConnection.class);</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        } else if(mdC instanceof OracleConnection) {</span>
-<span class="nc" id="L47">            oc = (OracleConnection)mdC;</span>
+<span class="nc" id="L45">            LOG.trace(&quot;Unwrap Connection voor OracleConnection&quot;);</span>
+<span class="nc" id="L46">            oc = c.unwrap(OracleConnection.class);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        } else if(mdC instanceof OracleConnection) {</span>
+<span class="nc" id="L48">            LOG.trace(&quot;Cast MetaData Connection naar OracleConnection&quot;);</span>
+<span class="nc" id="L49">            oc = (OracleConnection)mdC;</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp.PoolableConnection) {</span>
+<span class="nc" id="L51">            LOG.trace(&quot;Cast naar OracleConnection via cast naar tomcat DelegatingConnection&quot;);</span>
+<span class="nc" id="L52">            oc = (OracleConnection) ((org.apache.tomcat.dbcp.dbcp.DelegatingConnection) mdC).getDelegate();</span>
         } else {
-<span class="nc" id="L49">            throw new SQLException(&quot;Kan connectie niet unwrappen naar OracleConnection!&quot;);</span>
+<span class="nc" id="L54">            throw new SQLException(</span>
+                    &quot;Kan connectie niet unwrappen naar OracleConnection van meta connectie: &quot;
+<span class="nc" id="L56">                            + mdC.getClass().getName()</span>
+<span class="nc" id="L57">                            + &quot;, connection: &quot; + c.getClass().getName()</span>
+            );
         }
 
-<span class="nc" id="L52">        return oc;</span>
+<span class="nc" id="L61">        return oc;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

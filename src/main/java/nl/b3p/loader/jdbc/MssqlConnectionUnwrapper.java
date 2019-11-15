@@ -45,25 +45,34 @@ public class MssqlConnectionUnwrapper {
         // Sometimes isWrapperFor() does not work for certain JDBC drivers. The
         // MetaData connection is always unwrapped, trick learned from Spring's
         // org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor
-        Connection mdC = c.getMetaData().getConnection();
-        LOG.trace("MetaData connection class: " + mdC.getClass().getName());
+        Connection metadataConnection = c.getMetaData().getConnection();
+        LOG.trace("MetaData connection class: " + metadataConnection.getClass().getName());
 
         JtdsConnection oc = null;
 
         try {
-            if (mdC.isWrapperFor(JtdsConnection.class)) {
-                oc = mdC.unwrap(JtdsConnection.class);
+            if (metadataConnection.isWrapperFor(JtdsConnection.class)) {
+                oc = metadataConnection.unwrap(JtdsConnection.class);
             }
         } catch (AbstractMethodError e) {
             LOG.trace("Connection ondersteund geen 'isWrapperFor' of 'unwrap' - dit is verwacht voor een DelegatingConnection|PoolableConnection.");
         }
         if (oc == null) {
-            if (mdC instanceof JtdsConnection) {
-                oc = (JtdsConnection) mdC;
-            } else if (mdC instanceof PoolableConnection) {
-                oc = (JtdsConnection) ((DelegatingConnection) mdC).getDelegate();
+            if (metadataConnection instanceof JtdsConnection) {
+                LOG.trace("Cast naar JtdsConnection");
+                oc = (JtdsConnection) metadataConnection;
+            } else if (metadataConnection instanceof PoolableConnection) {
+                LOG.trace("Cast naar JtdsConnection via cast naar dbcp DelegatingConnection");
+                oc = (JtdsConnection) ((DelegatingConnection) metadataConnection).getDelegate();
+            } else if (metadataConnection instanceof org.apache.tomcat.dbcp.dbcp.PoolableConnection) {
+                LOG.trace("Cast naar JtdsConnection via cast naar tomcat DelegatingConnection");
+                oc = (JtdsConnection) ((org.apache.tomcat.dbcp.dbcp.DelegatingConnection) metadataConnection).getDelegate();
             } else {
-                throw new SQLException("Kan connectie niet unwrappen naar JtdsConnection!");
+                throw new SQLException(
+                        "Kan connectie niet unwrappen naar JtdsConnection van meta connectie: "
+                        + metadataConnection.getClass().getName()
+                        + ", connection: " + c.getClass().getName()
+                );
             }
         }
         return oc;

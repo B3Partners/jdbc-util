@@ -135,6 +135,18 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-dbcp</artifactId>
+            <version>7.0.96</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>org.apache.tomcat</artifactId>
+                    <groupId>tomcat-util</groupId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>nl.b3p</groupId>
             <artifactId>brmo-test-util</artifactId>
             <version>1.6.3p1</version>

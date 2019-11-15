@@ -86,6 +86,26 @@
             <version>${geotools.version}</version>
         </dependency>
         <dependency>
+            <!-- transitieve dep van gt-jdbc-oracle, kan verwijderd worden bij/na upgrade van geotools >22.0 -->
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-referencing</artifactId>
+            <version>${geotools.version}</version>
+            <exclusions>
+                <!--
+                workaround voor https://osgeo-org.atlassian.net/projects/GEOT/issues/GEOT-6379
+                deze gt-referencing dependency mag weg na upgrade naar geotools to 22.1
+                -->
+                <exclusion>
+                    <groupId>javax</groupId>
+                    <artifactId>javaee-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.axis</groupId>
+                    <artifactId>axis</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
             <version>${dbutils.version}</version>
@@ -132,6 +152,18 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.5.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-dbcp</artifactId>
+            <version>7.0.96</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>org.apache.tomcat</artifactId>
+                    <groupId>tomcat-util</groupId>
+                </exclusion>
+            </exclusions>
             <scope>provided</scope>
         </dependency>
         <dependency>

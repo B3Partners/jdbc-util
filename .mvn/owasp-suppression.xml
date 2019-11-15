@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-   <suppress>
-      <notes><![CDATA[
-      file name: postgis-jdbc-2.3.0.jar
-      ]]></notes>
-      <packageUrl regex="true">^pkg:maven/net\.postgis/postgis\-jdbc@.*$</packageUrl>
-      <cpe>cpe:/a:postgis_project:postgis</cpe>
-   </suppress>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <suppress>
+        <notes><![CDATA[
+             Negeer meldingen mbt postgis-jdbc jar, hebben allemaal betrekking op de database engine ]]>
+        </notes>
+        <gav regex="true">^net\.postgis:postgis-jdbc:.*$</gav>
+        <cpe>cpe:/a:postgis:postgis</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+             Negeer meldingen mbt tomcat-api-7.0.96.jar omdat we geen tomcat mee leveren en deze
+                     alleen voor bepaalde deployments geldt.            ]]>
+        </notes>
+        <filePath regex="true">.*\btomcat-dbcp-7\.0\.96\.jar</filePath>
+        <cve>CVE-2016-5425</cve>
+        <cve>CVE-2017-6056</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+            file name: tomcat-util-7.0.96.jar   ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-util@.*$</packageUrl>
+        <cpe>cpe:/a:apache:tomcat</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+            file name: tomcat-api-7.0.96.jar   ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-api@.*$</packageUrl>
+        <cpe>cpe:/a:apache:tomcat</cpe>
+    </suppress>
 </suppressions>

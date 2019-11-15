@@ -42,11 +42,20 @@ public class OracleConnectionUnwrapper {
         OracleConnection oc;
 
         if(c.isWrapperFor(OracleConnection.class)) {
+            LOG.trace("Unwrap Connection voor OracleConnection");
             oc = c.unwrap(OracleConnection.class);
         } else if(mdC instanceof OracleConnection) {
+            LOG.trace("Cast MetaData Connection naar OracleConnection");
             oc = (OracleConnection)mdC;
+        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp.PoolableConnection) {
+            LOG.trace("Cast naar OracleConnection via cast naar tomcat DelegatingConnection");
+            oc = (OracleConnection) ((org.apache.tomcat.dbcp.dbcp.DelegatingConnection) mdC).getDelegate();
         } else {
-            throw new SQLException("Kan connectie niet unwrappen naar OracleConnection!");
+            throw new SQLException(
+                    "Kan connectie niet unwrappen naar OracleConnection van meta connectie: "
+                            + mdC.getClass().getName()
+                            + ", connection: " + c.getClass().getName()
+            );
         }
 
         return oc;

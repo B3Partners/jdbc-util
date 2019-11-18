@@ -16,6 +16,7 @@
  */
 package nl.b3p.loader.jdbc;
 
+import org.hsqldb.jdbc.JDBCClob;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
 
         try {
-            Clob c = (Clob)nativeObj;
+            Clob c = (Clob) nativeObj;
             if(c == null){
                 return null;
             }
@@ -134,6 +135,6 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
         if(param == null){
             return null;
         }
-        return param.toText();
+        return new JDBCClob(param.toText());
     }
 }

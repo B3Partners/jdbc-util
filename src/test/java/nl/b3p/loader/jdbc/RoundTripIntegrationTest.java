@@ -20,8 +20,10 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.fail;
 
-// mislukt op hsqldb, die is niet round-trip safe voor geometrie
-//@Category(HSQLDBDriverBasedFailures.class)
+/**
+ * test of de converters round-trip safe zijn, dus JTS-input naar native naar JTS-output moet gelijk blijven.
+ * @author mark
+ */
 public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {
     private static final Log LOG = LogFactory.getLog(RoundTripIntegrationTest.class);
     private final String wktString = "POLYGON((0 0, 10 0, 5 5, 0 0))";
@@ -47,7 +49,7 @@ public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {
             Object nativeGeometryObject = conv.convertToNativeGeometryObject(testJtsGeometry, srid);
             assertNotNull("native geom mag niet 'null' zijn", nativeGeometryObject);
             assertEquals(testJtsGeometry, conv.convertToJTSGeometryObject(nativeGeometryObject));
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException | ParseException | NullPointerException e) {
             LOG.error(e);
             fail(e.getLocalizedMessage());
         }
@@ -63,7 +65,7 @@ public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {
             Object nativeGeometryObject = conv.convertToNativeGeometryObject((String) null);
             LOG.debug("nativeGeometryObject: " + nativeGeometryObject);
             assertEquals("verwacht 'null' na round-trip", null, conv.convertToJTSGeometryObject(nativeGeometryObject));
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException | ParseException | NullPointerException e) {
             LOG.error(e);
             fail(e.getLocalizedMessage());
         }

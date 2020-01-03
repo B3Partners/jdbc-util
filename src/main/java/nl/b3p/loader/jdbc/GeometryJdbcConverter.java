@@ -30,6 +30,7 @@ import java.util.Calendar;
  *
  * @author Matthijs Laan
  * @author Meine Toonen
+ * @author mprins
  */
 public abstract class GeometryJdbcConverter {
 
@@ -111,6 +112,25 @@ public abstract class GeometryJdbcConverter {
     public abstract String getMViewsSQL();
 
     public abstract String getMViewRefreshSQL(String mview);
+
+    /**
+     * Gets a statement to use in a {@link java.sql.PreparedStatement } to restart a sequence.
+     *
+     * @param seqName name of sequence
+     * @return SQL statement specific for the flavour of database
+     */
+    public String getUpdateSequenceSQL(String seqName, long nextVal) {
+        // supported for postgres, ms sql, hsqldb, (18+) oracle
+        return String.format("ALTER SEQUENCE %s RESTART WITH %d", seqName , nextVal);
+    }
+
+    /**
+     * get the database flavour specific SQL statement to get the next value from a sequence.
+     *
+     * @param seqName name of sequence
+     * @return SQL statement specific for the flavour of database
+     */
+    public abstract String getSelectNextValueFromSequenceSQL(String seqName);
 
     public abstract String getGeotoolsDBTypeName();
 

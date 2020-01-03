@@ -562,6 +562,15 @@
         <profile>
             <id>hsqldb</id>
             <build>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test/resources/unittest-hsqldb/test</directory>
+                        <targetPath>${project.build.directory}/unittest-hsqldb/test</targetPath>
+                    </testResource>
+                </testResources>
                 <plugins>
                     <plugin>
                         <artifactId>maven-failsafe-plugin</artifactId>

@@ -109,3 +109,5 @@ create table geometries (
     geom geometry(Polygon,28992),
     primary key (id)
 );
+
+CREATE SEQUENCE testing_seq MINVALUE 1;

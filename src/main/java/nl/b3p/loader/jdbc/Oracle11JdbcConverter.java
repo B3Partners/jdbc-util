@@ -21,9 +21,10 @@ import oracle.jdbc.OracleConnection;
 
 /**
  * Oracle 11g specifieke overrides.
- *
+ * @deprecated Oracle 11 is EOL; niet meer gebruiken.
  * @author mprins
  */
+@Deprecated
 public class Oracle11JdbcConverter extends OracleJdbcConverter {
 
     public Oracle11JdbcConverter(OracleConnection oc) throws SQLException {
@@ -62,5 +63,9 @@ public class Oracle11JdbcConverter extends OracleJdbcConverter {
         }
         return sql;
         
+    }
+
+    public String getUpdateSequenceSQL(String seqName, long nextVal){
+        throw new UnsupportedOperationException("Not supported.");
     }
 }

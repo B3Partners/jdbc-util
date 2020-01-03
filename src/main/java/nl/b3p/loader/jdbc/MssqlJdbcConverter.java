@@ -32,6 +32,8 @@ import org.geolatte.geom.codec.db.sqlserver.Encoders;
 public class MssqlJdbcConverter extends GeometryJdbcConverter {
 
     private String schema = "dbo";
+    // a query that returns empty result any time any place
+    private static final String NOT_IMPLEMENTED_DUMMY_SQL = "select 1 where 1 = 2";
 
     @Override
     public boolean isDuplicateKeyViolationMessage(String message) {
@@ -157,9 +159,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
      * @return een dummy query omdat mssql geen materialized views kent.
      */
     @Override
-    public String getMViewsSQL() {
-        return "select 1 from brmo_metadata where 1 = 2";
-    }
+    public String getMViewsSQL() { return NOT_IMPLEMENTED_DUMMY_SQL; }
 
     /**
      * return een dummy query omdat mssql geen materialized views kent.
@@ -168,7 +168,12 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
      */
     @Override
     public String getMViewRefreshSQL(String mview) {
-        return getMViewsSQL();
+        return NOT_IMPLEMENTED_DUMMY_SQL;
+    }
+
+    @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+        return String.format("SELECT NEXT VALUE FOR %s", seqName);
     }
 
     @Override

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-echo "nothing to do"
+echo "Done with Maven plugin"

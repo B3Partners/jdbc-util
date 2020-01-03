@@ -119,6 +119,11 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     }
 
     @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+        return "CALL NEXT VALUE FOR " + seqName;
+    }
+
+    @Override
     public String getGeotoolsDBTypeName() {
         // no hsqldb datastore in geotools
         return null;

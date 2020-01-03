@@ -135,3 +135,5 @@ insert into user_sdo_geom_metadata values('geometries', 'geom', MDSYS.SDO_DIM_AR
 	MDSYS.SDO_DIM_ELEMENT('Y', 304000, 620000, .1)),
 	28992
 );
+
+CREATE SEQUENCE testing_seq MINVALUE 1;

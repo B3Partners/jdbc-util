@@ -1,0 +1,29 @@
+name: SQL Server CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        # os: [ubuntu-latest, windows-latest, macos-latest]
+        java: [1.8, 11]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java }}
+    - name: Start Docker for MSS SQL
+      run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -e 'MSSQL_PID=Developer' -p 1433:1433 --name msssql -d docker pull mcr.microsoft.com/mssql/server:2017-latest
+    - name: setup MS SQL database
+      run: |
+        sqlcmd -S 127.0.0.1 -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"
+        sqlcmd -S 127.0.0.1 -U sa -P Password12! -d "staging" -i .appveyor\create-brmo-persistence-sqlserver.sql
+    - name: Unit Test with Maven
+      run: mvn -e -B test -Pmssql
+    - name: Integration Test with Maven
+      run: mvn -e test -B -Pmssql -T1 -Dtest.onlyITs=true

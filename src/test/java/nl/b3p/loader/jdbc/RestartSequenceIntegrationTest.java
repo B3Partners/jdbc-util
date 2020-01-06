@@ -42,7 +42,11 @@ public class RestartSequenceIntegrationTest extends AbstractDatabaseIntegrationT
             int updated = run.update(c, converter.getUpdateSequenceSQL(
                     params.getProperty("staging.sequence.name", "testing_seq"), 99999)
             );
-            assertEquals("expected 0 rows to be updated", 0, updated);
+            if (converter instanceof Oracle12JdbcConverter ){
+                assertEquals("expected 1 rows to be updated", 1, updated);
+            } else {
+                assertEquals("expected 0 rows to be updated", 0, updated);
+            }
 
             Number seqVal = run.query(c, converter.getSelectNextValueFromSequenceSQL(
                     params.getProperty("staging.sequence.name", "testing_seq")),

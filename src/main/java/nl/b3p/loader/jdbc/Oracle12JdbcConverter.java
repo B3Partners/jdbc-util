@@ -16,7 +16,9 @@ public class Oracle12JdbcConverter extends OracleJdbcConverter {
     }
 
     /**
-     * Gets a statement to use in a prepared statement to restart a sequence. This assumes no other interactions are going on with the sequence.
+     * Gets a statement to use in a prepared statement to restart a sequence.
+     * This assumes no other interactions are going on with the sequence;
+     * <em>can only be used to increase the value of the sequence, not decrease.</em>
      *
      * @param seqName name of sequence
      * @return SQL statement specific for the flavour of database

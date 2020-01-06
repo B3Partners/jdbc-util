@@ -7,17 +7,14 @@ import java.sql.SQLException;
 
 import nl.b3p.AbstractDatabaseIntegrationTest;
 
-import nl.b3p.brmo.test.util.database.HSQLDBDriverBasedFailures;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 
 import static org.junit.Assert.*;
 
-@Category(HSQLDBDriverBasedFailures.class)
 public class InsertGeometryIntegrationTest extends AbstractDatabaseIntegrationTest {
 
     private final String wktString = "POLYGON((0 0, 10 0, 5 5, 0 0))";

@@ -166,6 +166,11 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
         return String.format("begin\ndbms_mview.refresh('%s','C');\nend;", mview);
     }
 
+    @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+        return String.format("SELECT %s.nextval FROM dual", seqName);
+    }
+
     /**
      * de geotools converter is niet round-trip safe, er treed een NPE op als een
      * 'lege' geometrie wordt aangeboden:
@@ -179,11 +184,6 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
      * @param nativeObj uit de database
      * @return jts geom of {@code null}
      */
-    @Override
-    public String getSelectNextValueFromSequenceSQL(String seqName) {
-        return String.format("SELECT %s.nextval FROM dual", seqName);
-    }
-
     @Override
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
         org.locationtech.jts.geom.Geometry jts = null;

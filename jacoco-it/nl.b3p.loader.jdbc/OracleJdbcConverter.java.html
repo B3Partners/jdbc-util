@@ -70,25 +70,24 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
 <span class="nc" id="L70">        return convertToNativeGeometryObject(g, 28992);</span>
     }
 
-
     /**
      * @return the schema
      */
     @Override
     public String getSchema() {
-<span class="nc" id="L79">        return schema;</span>
+<span class="nc" id="L78">        return schema;</span>
     }
 
     /**
      * @param schema the schema to set
      */
     public void setSchema(String schema) {
-<span class="nc" id="L86">        this.schema = schema;</span>
-<span class="nc" id="L87">    }</span>
+<span class="nc" id="L85">        this.schema = schema;</span>
+<span class="nc" id="L86">    }</span>
 
     @Override
     public String getGeomTypeName() {
-<span class="nc" id="L91">        return &quot;SDO_GEOMETRY&quot;;</span>
+<span class="nc" id="L90">        return &quot;SDO_GEOMETRY&quot;;</span>
     }
     
     
@@ -99,24 +98,24 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     */
     @Override
     public String buildPaginationSql(String sql, int offset, int limit) {
-<span class="nc" id="L102">        StringBuilder builder = new StringBuilder();</span>
+<span class="nc" id="L101">        StringBuilder builder = new StringBuilder();</span>
 
-<span class="nc" id="L104">        builder.append(&quot;select * from (&quot;);</span>
-<span class="nc" id="L105">        builder.append(&quot;select /*+ FIRST_ROWS(n) */&quot;);</span>
-<span class="nc" id="L106">        builder.append(&quot; a.*, ROWNUM rnum from (&quot;);</span>
+<span class="nc" id="L103">        builder.append(&quot;select * from (&quot;);</span>
+<span class="nc" id="L104">        builder.append(&quot;select /*+ FIRST_ROWS(n) */&quot;);</span>
+<span class="nc" id="L105">        builder.append(&quot; a.*, ROWNUM rnum from (&quot;);</span>
 
-<span class="nc" id="L108">        builder.append(sql);</span>
+<span class="nc" id="L107">        builder.append(sql);</span>
 
-<span class="nc" id="L110">        builder.append(&quot; ) a where ROWNUM &lt;=&quot;);</span>
+<span class="nc" id="L109">        builder.append(&quot; ) a where ROWNUM &lt;=&quot;);</span>
 
-<span class="nc" id="L112">        builder.append(offset + limit);</span>
+<span class="nc" id="L111">        builder.append(offset + limit);</span>
 
-<span class="nc" id="L114">        builder.append(&quot; )&quot;);</span>
+<span class="nc" id="L113">        builder.append(&quot; )&quot;);</span>
 
-<span class="nc" id="L116">        builder.append(&quot; where rnum  &gt; &quot;);</span>
-<span class="nc" id="L117">        builder.append(offset);</span>
+<span class="nc" id="L115">        builder.append(&quot; where rnum  &gt; &quot;);</span>
+<span class="nc" id="L116">        builder.append(offset);</span>
 
-<span class="nc" id="L119">        return builder.toString();</span>
+<span class="nc" id="L118">        return builder.toString();</span>
     }
 
     /**
@@ -133,39 +132,44 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
      */
     @Override
     public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-<span class="nc" id="L136">        sql.append(&quot; FETCH FIRST &quot;).append(limit).append(&quot; ROWS ONLY&quot;);</span>
-<span class="nc" id="L137">        return sql;</span>
+<span class="nc" id="L135">        sql.append(&quot; FETCH FIRST &quot;).append(limit).append(&quot; ROWS ONLY&quot;);</span>
+<span class="nc" id="L136">        return sql;</span>
     }
 
     @Override
     public boolean useSavepoints() {
-<span class="nc" id="L142">        return false;</span>
+<span class="nc" id="L141">        return false;</span>
     }
 
     @Override
     public boolean isPmdKnownBroken() {
-<span class="nc" id="L147">        return true;</span>
+<span class="nc" id="L146">        return true;</span>
     }
 
     @Override
     public String getGeotoolsDBTypeName() {
-<span class="nc" id="L152">        return &quot;oracle&quot;;</span>
+<span class="nc" id="L151">        return &quot;oracle&quot;;</span>
     }
 
     @Override
     public String getMViewsSQL() {
-<span class="nc" id="L157">        return &quot;SELECT MVIEW_NAME FROM ALL_MVIEWS&quot;;</span>
+<span class="nc" id="L156">        return &quot;SELECT MVIEW_NAME FROM ALL_MVIEWS&quot;;</span>
     }
 
     @Override
     public String getMViewRefreshSQL(String mview) {
         //return String.format(&quot;DBMS_MVIEW.REFRESH('%s','?','',FALSE,TRUE,0,0,0,FALSE,FALSE)&quot;, mview);
-<span class="nc" id="L163">        return String.format(&quot;begin\ndbms_mview.refresh('%s','C');\nend;&quot;, mview);</span>
+<span class="nc" id="L162">        return String.format(&quot;begin\ndbms_mview.refresh('%s','C');\nend;&quot;, mview);</span>
+    }
+
+    @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+<span class="nc" id="L167">        return String.format(&quot;SELECT %s.nextval FROM dual&quot;, seqName);</span>
     }
 
     @Override
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
-<span class="nc" id="L168">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;); //To change body of generated methods, choose Tools | Templates.</span>
+<span class="nc" id="L172">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;); //To change body of generated methods, choose Tools | Templates.</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

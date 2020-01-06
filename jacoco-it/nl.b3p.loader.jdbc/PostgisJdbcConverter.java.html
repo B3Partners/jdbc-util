@@ -118,17 +118,22 @@ import org.postgis.PGgeometry;
     }
 
     @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+<span class="nc" id="L122">        return String.format(&quot;SELECT nextval('%s')&quot;, seqName);</span>
+    }
+
+    @Override
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
-<span class="nc" id="L122">        PGgeometry geom = (PGgeometry)nativeObj;</span>
-<span class="nc" id="L123">        StringBuffer sb = new StringBuffer();</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">        if(geom == null){</span>
-<span class="nc" id="L125">            return null;</span>
+<span class="nc" id="L127">        PGgeometry geom = (PGgeometry)nativeObj;</span>
+<span class="nc" id="L128">        StringBuffer sb = new StringBuffer();</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if(geom == null){</span>
+<span class="nc" id="L130">            return null;</span>
         }
-<span class="nc" id="L127">        geom.getGeometry().outerWKT(sb);</span>
+<span class="nc" id="L132">        geom.getGeometry().outerWKT(sb);</span>
         try {
-<span class="nc" id="L129">            return wkt.read(sb.toString());</span>
-<span class="nc" id="L130">        } catch (ParseException ex) {</span>
-<span class="nc" id="L131">            return null;</span>
+<span class="nc" id="L134">            return wkt.read(sb.toString());</span>
+<span class="nc" id="L135">        } catch (ParseException ex) {</span>
+<span class="nc" id="L136">            return null;</span>
         }
     }
 }

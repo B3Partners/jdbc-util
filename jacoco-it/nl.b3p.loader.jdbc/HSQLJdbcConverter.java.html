@@ -119,17 +119,22 @@ import org.apache.commons.logging.LogFactory;
     }
 
     @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+<span class="nc" id="L123">        return &quot;CALL NEXT VALUE FOR &quot; + seqName;</span>
+    }
+
+    @Override
     public String getGeotoolsDBTypeName() {
         // no hsqldb datastore in geotools
-<span class="nc" id="L124">        return null;</span>
+<span class="nc" id="L129">        return null;</span>
     }
 
     @Override
     public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException, ParseException {
-<span class="nc bnc" id="L129" title="All 2 branches missed.">        if(param == null){</span>
-<span class="nc" id="L130">            return null;</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if(param == null){</span>
+<span class="nc" id="L135">            return null;</span>
         }
-<span class="nc" id="L132">        return param.toText();</span>
+<span class="nc" id="L137">        return param.toText();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

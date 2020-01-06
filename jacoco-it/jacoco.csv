@@ -1,13 +1,14 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-JDBC Util,nl.b3p.loader.util,DbUtilsGeometryColumnConverter,25,0,2,0,7,0,3,0,2,0
-JDBC Util,nl.b3p.loader.jdbc,OracleJdbcConverter,159,0,14,0,36,0,24,0,17,0
-JDBC Util,nl.b3p.loader.jdbc,Oracle11JdbcConverter,75,0,6,0,14,0,5,0,2,0
+JDBC Util,nl.b3p.loader.jdbc,Oracle11JdbcConverter,80,0,6,0,15,0,6,0,3,0
 JDBC Util,nl.b3p.loader.jdbc,ColumnMetadata,308,0,24,0,60,0,36,0,24,0
-JDBC Util,nl.b3p.loader.jdbc,HSQLJdbcConverter,103,0,4,0,29,0,19,0,17,0
-JDBC Util,nl.b3p.loader.jdbc,MssqlConnectionUnwrapper,109,0,10,0,25,0,8,0,3,0
-JDBC Util,nl.b3p.loader.jdbc,GeometryJdbcConverter,134,0,12,0,31,0,11,0,4,0
-JDBC Util,nl.b3p.loader.jdbc,GeometryJdbcConverterFactory,199,0,16,0,48,0,11,0,3,0
-JDBC Util,nl.b3p.loader.jdbc,PostgisJdbcConverter,154,0,18,0,37,0,26,0,17,0
+JDBC Util,nl.b3p.loader.jdbc,HSQLJdbcConverter,112,0,4,0,30,0,20,0,18,0
+JDBC Util,nl.b3p.loader.jdbc,Oracle12JdbcConverter,18,0,0,0,4,0,2,0,2,0
 JDBC Util,nl.b3p.loader.jdbc,OracleConnectionUnwrapper,104,0,6,0,19,0,6,0,3,0
-JDBC Util,nl.b3p.loader.jdbc,MssqlJdbcConverter,142,0,16,0,36,0,25,0,17,0
+JDBC Util,nl.b3p.loader.jdbc,MssqlJdbcConverter,150,0,16,0,37,0,26,0,18,0
+JDBC Util,nl.b3p.loader.jdbc,OracleJdbcConverter,168,0,14,0,37,0,25,0,18,0
+JDBC Util,nl.b3p.loader.jdbc,MssqlConnectionUnwrapper,109,0,10,0,25,0,8,0,3,0
+JDBC Util,nl.b3p.loader.jdbc,GeometryJdbcConverter,148,0,12,0,32,0,12,0,5,0
+JDBC Util,nl.b3p.loader.jdbc,GeometryJdbcConverterFactory,224,0,20,0,55,0,13,0,3,0
+JDBC Util,nl.b3p.loader.jdbc,PostgisJdbcConverter,163,0,18,0,38,0,27,0,18,0
 JDBC Util,nl.b3p.loader.jdbc,LongColumnListHandler,52,0,4,0,17,0,7,0,5,0
+JDBC Util,nl.b3p.loader.util,DbUtilsGeometryColumnConverter,25,0,2,0,7,0,3,0,2,0

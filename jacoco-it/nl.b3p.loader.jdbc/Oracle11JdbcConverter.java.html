@@ -21,14 +21,15 @@ import oracle.jdbc.OracleConnection;
 
 /**
  * Oracle 11g specifieke overrides.
- *
+ * @deprecated Oracle 11 is EOL; niet meer gebruiken.
  * @author mprins
  */
+@Deprecated
 public class Oracle11JdbcConverter extends OracleJdbcConverter {
 
     public Oracle11JdbcConverter(OracleConnection oc) throws SQLException {
-<span class="nc" id="L30">        super(oc);</span>
-<span class="nc" id="L31">    }</span>
+<span class="nc" id="L31">        super(oc);</span>
+<span class="nc" id="L32">    }</span>
 
     /**
      * Oracle 11 specifieke versie om aantal rijen van een insert/select te
@@ -45,23 +46,27 @@ public class Oracle11JdbcConverter extends OracleJdbcConverter {
      */
     @Override
     public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-<span class="nc" id="L48">        int index = -1;</span>
-<span class="nc" id="L49">        String limitPart= &quot; AND ROWNUM &lt;= &quot; + limit;</span>
-<span class="nc" id="L50">        String[] preInsertClauses = {&quot;GROUP BY&quot;, &quot;HAVING&quot;, &quot;ORDER BY&quot;};</span>
-<span class="nc" id="L51">        String upperCased = sql.toString().toUpperCase();</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (String preInsertClause : preInsertClauses) {</span>
-<span class="nc" id="L53">            index = upperCased.indexOf(preInsertClause);</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">            if(index != -1){</span>
-<span class="nc" id="L55">                break;</span>
+<span class="nc" id="L49">        int index = -1;</span>
+<span class="nc" id="L50">        String limitPart= &quot; AND ROWNUM &lt;= &quot; + limit;</span>
+<span class="nc" id="L51">        String[] preInsertClauses = {&quot;GROUP BY&quot;, &quot;HAVING&quot;, &quot;ORDER BY&quot;};</span>
+<span class="nc" id="L52">        String upperCased = sql.toString().toUpperCase();</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for (String preInsertClause : preInsertClauses) {</span>
+<span class="nc" id="L54">            index = upperCased.indexOf(preInsertClause);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            if(index != -1){</span>
+<span class="nc" id="L56">                break;</span>
             }
         }
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        if(index != -1){</span>
-<span class="nc" id="L59">            sql.insert(index -1 , limitPart);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if(index != -1){</span>
+<span class="nc" id="L60">            sql.insert(index -1 , limitPart);</span>
         }else{
-<span class="nc" id="L61">            sql.append(limitPart);</span>
+<span class="nc" id="L62">            sql.append(limitPart);</span>
         }
-<span class="nc" id="L63">        return sql;</span>
+<span class="nc" id="L64">        return sql;</span>
         
+    }
+
+    public String getUpdateSequenceSQL(String seqName, long nextVal){
+<span class="nc" id="L69">        throw new UnsupportedOperationException(&quot;Not supported.&quot;);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

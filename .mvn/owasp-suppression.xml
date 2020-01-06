@@ -11,16 +11,16 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-             Negeer meldingen mbt tomcat-api-7.0.96.jar omdat we geen tomcat mee leveren en deze
+             Negeer meldingen mbt tomcat-dbcp-7.0.96.jar omdat we geen tomcat mee leveren en deze
                      alleen voor bepaalde deployments geldt.            ]]>
         </notes>
-        <filePath regex="true">.*\btomcat-dbcp-7\.0\.96\.jar</filePath>
+        <filePath regex="true">.*\btomcat-dbcp-7\.0\.99\.jar</filePath>
         <cve>CVE-2016-5425</cve>
         <cve>CVE-2017-6056</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-            file name: tomcat-util-7.0.96.jar   ]]>
+            file name: tomcat-util-7.0.99.jar   ]]>
         </notes>
         <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-util@.*$</packageUrl>
         <cpe>cpe:/a:apache:tomcat</cpe>
@@ -31,5 +31,13 @@
         </notes>
         <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-api@.*$</packageUrl>
         <cpe>cpe:/a:apache:tomcat</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: log4j-1.2.17.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/log4j/log4j@.*$</packageUrl>
+        <!-- we don't use SocketAppenders -->
+        <cve>CVE-2019-17571</cve>
     </suppress>
 </suppressions>

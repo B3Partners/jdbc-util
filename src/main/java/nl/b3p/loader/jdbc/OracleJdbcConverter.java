@@ -70,7 +70,6 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
         return convertToNativeGeometryObject(g, 28992);
     }
 
-
     /**
      * @return the schema
      */
@@ -161,6 +160,11 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     public String getMViewRefreshSQL(String mview) {
         //return String.format("DBMS_MVIEW.REFRESH('%s','?','',FALSE,TRUE,0,0,0,FALSE,FALSE)", mview);
         return String.format("begin\ndbms_mview.refresh('%s','C');\nend;", mview);
+    }
+
+    @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+        return String.format("SELECT %s.nextval FROM dual", seqName);
     }
 
     @Override

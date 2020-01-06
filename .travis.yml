@@ -3,7 +3,7 @@ language: java
 dist: xenial
 env:
   global:
-    - MVN_VERSION="3.6.2"
+    - MVN_VERSION="3.6.3"
     - PROFILE="postgresql"
 
 addons:

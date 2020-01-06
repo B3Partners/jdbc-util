@@ -118,6 +118,11 @@ public class PostgisJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+        return String.format("SELECT nextval('%s')", seqName);
+    }
+
+    @Override
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
         PGgeometry geom = (PGgeometry)nativeObj;
         StringBuffer sb = new StringBuffer();

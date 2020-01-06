@@ -18,7 +18,8 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Start Docker for MSS SQL
-      run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -e 'MSSQL_PID=Developer' -p 1433:1433 --name msssql -d docker pull mcr.microsoft.com/mssql/server:2017-latest
+      run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -e 'MSSQL_PID=Developer' -p 1433:1433 --name msssql -d docker pull microsoft/mssql-server-windows-developer
+      # mcr.microsoft.com/mssql/server:2017-latest 
     - name: setup MS SQL database
       run: |
         sqlcmd -S 127.0.0.1 -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"

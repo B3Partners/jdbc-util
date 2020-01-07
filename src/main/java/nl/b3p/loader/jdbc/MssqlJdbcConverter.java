@@ -34,8 +34,11 @@ import java.sql.SQLException;
 public class MssqlJdbcConverter extends GeometryJdbcConverter {
     private final static Log LOG = LogFactory.getLog(MssqlJdbcConverter.class);
     private String schema = "dbo";
-    // a query that returns empty result any time any place
-    private static final String NOT_IMPLEMENTED_DUMMY_SQL = "select 1 where 1 = 2";
+    // a select query that returns empty result any time any place
+    private static final String NOT_IMPLEMENTED_DUMMY_SQL_SELECT = "select 1 where 1 = 2";
+    // an update / delete query that returns 0 results for update
+    private static final String NOT_IMPLEMENTED_DUMMY_SQL_UPDATE = "while 1 = 0 break";
+
 
     @Override
     public boolean isDuplicateKeyViolationMessage(String message) {
@@ -153,20 +156,18 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     /**
      * return een dummy query omdat mssql geen materialized views kent.
      *
-     * @return een dummy query omdat mssql geen materialized views kent.
+     * @return een dummy select query omdat mssql geen materialized views kent.
      */
     @Override
-    public String getMViewsSQL() { return NOT_IMPLEMENTED_DUMMY_SQL; }
+    public String getMViewsSQL() { return NOT_IMPLEMENTED_DUMMY_SQL_SELECT; }
 
     /**
      * return een dummy query omdat mssql geen materialized views kent.
      *
-     * @return een dummy query omdat mssql geen materialized views kent.
+     * @return een dummy update query omdat mssql geen materialized views kent.
      */
     @Override
-    public String getMViewRefreshSQL(String mview) {
-        return NOT_IMPLEMENTED_DUMMY_SQL;
-    }
+    public String getMViewRefreshSQL(String mview) { return NOT_IMPLEMENTED_DUMMY_SQL_UPDATE; }
 
     @Override
     public String getSelectNextValueFromSequenceSQL(String seqName) {

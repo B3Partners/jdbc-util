@@ -17,13 +17,16 @@ jobs:
       uses: actions/setup-java@v1.3.0
       with:
         java-version: ${{ matrix.java }}
-    - name: Start Docker for MS SQL
+    - name: Install
       # developer: There is not enough space on the disk.
       #run: docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-developer:latest
-      run: docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
+      #run: docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
+      run: |
+        choco install -v sqlserver-cmdlineutils
+        ls "C:\Program Files\"
+        docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
     - name: setup database
       run: |
-        choco install sqlserver-cmdlineutils
         sqlcmd -S 127.0.0.1 -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"
         sqlcmd -S 127.0.0.1 -U sa -P Password12! -d "staging" -i .appveyor\create-brmo-persistence-sqlserver.sql
     - name: Unit Test with Maven

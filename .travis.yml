@@ -1,6 +1,5 @@
 language: java
-# ubuntu 16.04 LTS
-dist: xenial
+
 env:
   global:
     - MVN_VERSION="3.6.3"
@@ -22,19 +21,22 @@ jdk:
   - openjdk8
   - openjdk11
 
-matrix:
+jobs:
   fast_finish: true
   include:
     - name: "SQL Server 2017"
       dist: xenial
-      group: edge
       jdk: openjdk8
-      sudo: required
       env:
         - PROFILE="mssql"
+        - MSSQL="2017"
+    - name: "SQL Server 2019 (docker)"
+      jdk: openjdk11
+      env:
+        - PROFILE="mssql"
+        - MSSQL="2019"
     - name: "HSQLDB"
       jdk: openjdk8
-      sudo: required
       env:
         - PROFILE="hsqldb"
 
@@ -55,11 +57,14 @@ before_install:
   - export PAGER=cat
   # hack voor travis xenial images, zie: https://github.com/travis-ci/travis-ci/issues/10290
   #                                 openjdk8 installatie mislukt
-  - if [ "$PROFILE" == "mssql" ]; then
+  - if [ "$PROFILE" == "mssql" ] && [ "$MSSQL" == "2017" ]; then
       sudo service postgresql stop;
       sh ".travis/install-mssql.sh";
       PATH=$(echo "$PATH" | sed -e 's/:\/usr\/local\/lib\/jvm\/openjdk11\/bin//');
       JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64;
+    elif [ "$PROFILE" == "mssql" ] && [ "$MSSQL" == "2019" ]; then
+      sudo service postgresql stop;
+      docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it mcr.microsoft.com/mssql/server:2019-latest;
     elif [ "$PROFILE" == "hsqldb" ]; then
       sudo service postgresql stop;
     else

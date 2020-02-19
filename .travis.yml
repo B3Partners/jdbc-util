@@ -1,4 +1,5 @@
 language: java
+os: linux
 
 env:
   global:
@@ -30,7 +31,7 @@ jobs:
       env:
         - PROFILE="mssql"
         - MSSQL="2017"
-    - name: "SQL Server 2019 (docker)"
+    - name: "SQL Server 2019"
       jdk: openjdk11
       env:
         - PROFILE="mssql"
@@ -57,14 +58,14 @@ before_install:
   - export PAGER=cat
   # hack voor travis xenial images, zie: https://github.com/travis-ci/travis-ci/issues/10290
   #                                 openjdk8 installatie mislukt
-  - if [ "$PROFILE" == "mssql" ] && [ "$MSSQL" == "2017" ]; then
+  - if [ "$PROFILE" == "mssql" ]; then
       sudo service postgresql stop;
-      sh ".travis/install-mssql.sh";
-      PATH=$(echo "$PATH" | sed -e 's/:\/usr\/local\/lib\/jvm\/openjdk11\/bin//');
-      JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64;
-    elif [ "$PROFILE" == "mssql" ] && [ "$MSSQL" == "2019" ]; then
-      sudo service postgresql stop;
-      docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it mcr.microsoft.com/mssql/server:2019-latest;
+      if [ "$MSSQL" == "2019" ]; then
+        sh ".travis/install-mssql2019.sh";
+      else
+        sh ".travis/install-mssql.sh";
+        PATH=$(echo "$PATH" | sed -e 's/:\/usr\/local\/lib\/jvm\/openjdk11\/bin//');
+        JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64;
     elif [ "$PROFILE" == "hsqldb" ]; then
       sudo service postgresql stop;
     else

@@ -23,8 +23,9 @@ jobs:
       #run: docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
       run: |
         choco install -v sqlserver-cmdlineutils
-        ls "C:\Program Files\"
+        ls "C:\Program Files\Microsoft SQL Server"
         docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
+        refreshenv
     - name: setup database
       run: |
         sqlcmd -S 127.0.0.1 -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"

@@ -34,8 +34,8 @@ jobs:
           docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
       - name: setup database
         run: |
-          "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD" -S 127.0.0.1 -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"
-          "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD" -S 127.0.0.1 -U sa -P Password12! -d "staging" -i .appveyor\create-brmo-persistence-sqlserver.sql
+          cmd: "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD" -S 127.0.0.1 -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"
+          cmd: "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD" -S 127.0.0.1 -U sa -P Password12! -d "staging" -i .appveyor\create-brmo-persistence-sqlserver.sql
       - name: Unit Test with Maven
         run: mvn -e -B test -Pmssql
       - name: Integration Test with Maven

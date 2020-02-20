@@ -26,12 +26,12 @@ jobs:
         choco install sqlserver-cmdlineutils
         echo %PATH%
         refreshenv
-        set PATH=%PATH%;"C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\150\Tools\Binn"
+        set PATH=%PATH%;"C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn"
         echo %PATH%
         ls "C:\Program Files\Microsoft SQL Server\Client SDK"
         ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC"
-        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\150"
-        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\150\Tools"
+        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170"
+        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools"
         docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
     - name: setup database
       run: |

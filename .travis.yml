@@ -66,6 +66,7 @@ before_install:
         sh ".travis/install-mssql.sh";
         PATH=$(echo "$PATH" | sed -e 's/:\/usr\/local\/lib\/jvm\/openjdk11\/bin//');
         JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64;
+      fi
     elif [ "$PROFILE" == "hsqldb" ]; then
       sudo service postgresql stop;
     else

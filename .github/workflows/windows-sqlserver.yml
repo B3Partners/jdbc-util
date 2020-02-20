@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-
+   # need win2016 for this docker image
     runs-on: windows-2016
     strategy:
       matrix:
@@ -12,7 +12,7 @@ jobs:
         java: [1.8]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2.0.0
     - name: Set up JDK
       uses: actions/setup-java@v1.3.0
       with:
@@ -23,12 +23,16 @@ jobs:
       #run: docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
       run: |
         echo %PATH%
-        choco install -v sqlserver-cmdlineutils
-        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\150\Tools\Binn"
-        docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
+        choco install sqlserver-cmdlineutils
+        echo %PATH%
         refreshenv
         set PATH=%PATH%;"C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\150\Tools\Binn"
         echo %PATH%
+        ls "C:\Program Files\Microsoft SQL Server\Client SDK"
+        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC"
+        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\150"
+        ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\150\Tools"
+        docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
     - name: setup database
       run: |
         sqlcmd -S 127.0.0.1 -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"

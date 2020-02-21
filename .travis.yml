@@ -32,6 +32,7 @@ jobs:
         - PROFILE="mssql"
         - MSSQL="2017"
     - name: "SQL Server 2019"
+      dist: xenial
       jdk: openjdk11
       env:
         - PROFILE="mssql"

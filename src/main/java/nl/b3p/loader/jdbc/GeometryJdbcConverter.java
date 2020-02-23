@@ -117,10 +117,15 @@ public abstract class GeometryJdbcConverter {
      * Gets a statement to use in a {@link java.sql.PreparedStatement } to restart a sequence.
      *
      * @param seqName name of sequence
+     * @param nextVal the value to restart the sequence, some systems
+     *                require this to be larger than the next value of the sequence.
      * @return SQL statement specific for the flavour of database
      */
     public String getUpdateSequenceSQL(String seqName, long nextVal) {
-        // supported for postgres, ms sql, hsqldb
+        // supported for postgres, ms sql, hsqldb, NB return values vary
+        // https://www.postgresql.org/docs/11/sql-altersequence.html
+        // https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-sequence-transact-sql?view=sql-server-ver15
+
         return String.format("ALTER SEQUENCE %s RESTART WITH %d", seqName , nextVal);
     }
 

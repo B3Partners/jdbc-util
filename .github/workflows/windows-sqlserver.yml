@@ -12,24 +12,30 @@ jobs:
         java: [1.8]
 
     steps:
-      - uses: actions/checkout@v2.0.0
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
       - name: Set up JDK
         uses: actions/setup-java@v1.3.0
         with:
           java-version: ${{ matrix.java }}
+
       - name: Setup SQLServer
         # sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -Q "CREATE LOGIN sa WITH PASSWORD = 'Password12!';"
-        env:
-          INSTANCENAME: MSSQLLocalDB
+        # ps .\.appveyor\set-maven-proxy.ps1
+        #env:
+        #  INSTANCENAME: MSSQLLocalDB
         run: |
           SqlLocalDB start MSSQLLocalDB
           SqlLocalDB info MSSQLLocalDB
-          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "create database staging;"
-          sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
-          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "EXEC sp_password NULL, 'Password12!', 'sa';"
-          .\.appveyor\set-maven-proxy.ps1
+          sqlcmd -j -S "(localdb)\MSSQLLocalDB" -Q "create database staging;"
+          sqlcmd -j -S "(localdb)\MSSQLLocalDB" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
+          sqlcmd -j -S "(localdb)\MSSQLLocalDB" -Q "EXEC sp_password NULL, 'Password12!', 'sa';"
           SqlLocalDB info MSSQLLocalDB
+          sqlcmd -j -S "(localdb)\MSSQLLocalDB" -Q "SELECT NEXT VALUE FOR testing_seq;"
+
       - name: Unit Test with Maven
         run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
+
       - name: Integration Test with Maven
-        run: mvn -e verify -B -Pmssql -T1 -D"test.onlyITs=true" --global-toolchains ".github\windows-toolchains.xml"
+        run: mvn -e verify -B -Pgh-mssql -T1 -D"test.onlyITs=true" --global-toolchains ".github\windows-toolchains.xml"

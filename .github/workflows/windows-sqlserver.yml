@@ -28,4 +28,4 @@ jobs:
       - name: Unit Test with Maven
         run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
       - name: Integration Test with Maven
-        run: mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true --global-toolchains .github\windows-toolchains.xml
+        run: mvn -e verify -B -Pmssql -T1 -D"test.onlyITs=true" --global-toolchains ".github\windows-toolchains.xml"

@@ -4,8 +4,7 @@ on: [push]
 
 jobs:
   build:
-    # need win2016 for this docker image
-    runs-on: windows-2016
+    runs-on: windows-2019
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     strategy:
       matrix:
@@ -18,27 +17,13 @@ jobs:
         uses: actions/setup-java@v1.3.0
         with:
           java-version: ${{ matrix.java }}
-      - name: Install
-        # developer: There is not enough space on the disk.
-        #run: docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-developer:latest
-        # ls "C:\Program Files\Microsoft SQL Server\Client SDK"
-        # ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC"
+      - name: Setup SQLServer
         run: |
-          $env:Path
-          choco install sqlserver-cmdlineutils
-          echo ${env:PATH}
-          refreshenv
-          $env:Path += ";C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn"
-          refreshenv
-          echo ${env:PATH}
-          ls "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn"
-          docker run -d -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password12!' -it microsoft/mssql-server-windows-express:latest
-      - name: setup database
-        shell: cmd
-        run: |
-          echo %PATH%
-          "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD" -S "127.0.0.1" -U sa -P "Password12!" -Q "CREATE DATABASE staging" -d "master"
-          "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD" -S 127.0.0.1 -U sa -P 'Password12!' -d 'staging' -i '.appveyor\create-brmo-persistence-sqlserver.sql'
+          SqlLocalDB start MSSQLLocalDB
+          SqlLocalDB info MSSQLLocalDB
+          sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "create database staging;"
+          sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -Q "CREATE LOGIN sa WITH PASSWORD = 'Password12!';"
+          sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
       - name: Unit Test with Maven
         run: mvn -e -B test -Pmssql
       - name: Integration Test with Maven

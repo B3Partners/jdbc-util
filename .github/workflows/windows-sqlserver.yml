@@ -19,12 +19,16 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Setup SQLServer
         # sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -Q "CREATE LOGIN sa WITH PASSWORD = 'Password12!';"
+        env:
+          INSTANCENAME: MSSQLLocalDB
         run: |
           SqlLocalDB start MSSQLLocalDB
           SqlLocalDB info MSSQLLocalDB
           sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "create database staging;"
           sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
           sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "EXEC sp_password NULL, 'Password12!', 'sa';"
+          .\.appveyor\set-maven-proxy.ps1
+          SqlLocalDB info MSSQLLocalDB
       - name: Unit Test with Maven
         run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
       - name: Integration Test with Maven

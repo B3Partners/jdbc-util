@@ -26,6 +26,6 @@ jobs:
           sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
           sqlcmd -S "(localdb)\MSSQLLocalDB" -Q "EXEC sp_password NULL, 'Password12!', 'sa';"
       - name: Unit Test with Maven
-        run: mvn -e -B test -Pmssql
+        run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
       - name: Integration Test with Maven
-        run: mvn -e test -B -Pmssql -T1 -Dtest.onlyITs=true
+        run: mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true --global-toolchains .github\windows-toolchains.xml

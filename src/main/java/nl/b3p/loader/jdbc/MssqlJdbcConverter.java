@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.locationtech.jts.io.ParseException;
-
 import java.sql.SQLException;
 
 
@@ -64,11 +63,17 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
             return null;
         }
         String param = g.toText();
-        // return param;
+        // geotools
+        // import org.geotools.geometry.jts.WKTWriter2;
+        // import org.locationtech.jts.io.WKTWriter;
+        // String param = (new WKTWriter2(2)).write(g);
         if (param == null || param.trim().length() == 0) {
             return null;
         }
-        return Geometry.STGeomFromText(param, srid);
+        LOG.trace("Converted geom WKT: " + param + ", SRID: " + srid);
+        Geometry sqlGeom = Geometry.STGeomFromText(param, srid);
+        LOG.trace("mssql geom: " + sqlGeom);
+        return sqlGeom;
     }
 
     @Override

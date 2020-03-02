@@ -202,6 +202,6 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     }
 
     public String getUpdateSequenceSQL(String seqName, long nextVal){
-        throw new UnsupportedOperationException("Not supported.");
+        throw new UnsupportedOperationException("Update sequence not supported for this database version.");
     }
 }

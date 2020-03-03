@@ -20,6 +20,10 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
+
+      - name: Unit Test with Maven
+        run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
+
       - name: Setup SQLServer
         # sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -Q "CREATE LOGIN sa WITH PASSWORD = 'Password12!';"
         # ps .\.appveyor\set-maven-proxy.ps1
@@ -33,9 +37,6 @@ jobs:
           sqlcmd -j -r1 -S "(localdb)\MSSQLLocalDB" -Q "EXEC sp_password NULL, 'Password12!', 'sa';"
           SqlLocalDB info MSSQLLocalDB
           sqlcmd -j -r1 -S "(localdb)\MSSQLLocalDB" -d "staging" -Q "SELECT NEXT VALUE FOR testing_seq;"
-
-      - name: Unit Test with Maven
-        run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
 
       - name: Integration Test with Maven
         run: |

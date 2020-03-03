@@ -14,20 +14,20 @@
              Negeer meldingen mbt tomcat-dbcp-7.0.96.jar omdat we geen tomcat mee leveren en deze
                      alleen voor bepaalde deployments geldt.            ]]>
         </notes>
-        <filePath regex="true">.*\btomcat-dbcp-7\.0\.99\.jar</filePath>
+        <filePath regex="true">.*\btomcat-dbcp-7\.0\.100\.jar</filePath>
         <cve>CVE-2016-5425</cve>
         <cve>CVE-2017-6056</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-            file name: tomcat-util-7.0.99.jar   ]]>
+            file name: tomcat-util-*.jar   ]]>
         </notes>
         <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-util@.*$</packageUrl>
         <cpe>cpe:/a:apache:tomcat</cpe>
     </suppress>
     <suppress>
         <notes><![CDATA[
-            file name: tomcat-api-7.0.96.jar   ]]>
+            file name: tomcat-api-*.jar   ]]>
         </notes>
         <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-api@.*$</packageUrl>
         <cpe>cpe:/a:apache:tomcat</cpe>

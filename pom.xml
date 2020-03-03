@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.b3p</groupId>
     <artifactId>jdbc-util</artifactId>
-    <version>4.5-SNAPSHOT</version>
+    <version>4.5</version>
     <packaging>jar</packaging>
     <name>JDBC Util</name>
     <description>JDBC utilities: Converter for geometries</description>
@@ -40,7 +40,7 @@
         <developerConnection>scm:git:git@github.com:B3Partners/jdbc-util.git</developerConnection>
         <connection>scm:git:git@github.com:B3Partners/jdbc-util.git</connection>
         <url>https://github.com/B3Partners/jdbc-util/</url>
-        <tag>HEAD</tag>
+        <tag>jdbc-util-4.5</tag>
     </scm>
     <distributionManagement>
         <repository>

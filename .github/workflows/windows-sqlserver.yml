@@ -38,4 +38,6 @@ jobs:
         run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
 
       - name: Integration Test with Maven
-        run: mvn -e verify -B -Pgh-mssql -T1 -D"test.onlyITs=true" --global-toolchains ".github\windows-toolchains.xml"
+        run: |
+          SqlLocalDB info MSSQLLocalDB
+          mvn -e verify -B -Pgh-mssql -T1 -D"test.onlyITs=true" --global-toolchains ".github\windows-toolchains.xml"

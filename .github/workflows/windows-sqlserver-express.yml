@@ -1,0 +1,65 @@
+name: Windows SQL Server Express CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-2019
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    env:
+      INSTANCENAME: SQLEXPRESS
+    strategy:
+      matrix:
+        # java: [1.8, 11]
+        java: [1.8]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1.3.0
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Cache
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Unit Test with Maven
+        run: mvn -e -B test -Pmssql --global-toolchains .github\windows-toolchains.xml
+
+      - name: Setup SQLServer
+        # sqlcmd -S "(localdb)\MSSQLLocalDB" -d "staging" -Q "CREATE LOGIN sa WITH PASSWORD = 'Password12!';"
+        # ps: .\.appveyor\setting-tcp-ip-ports.ps1
+        #
+        #  Restart-Service -Force "MSSQL$SQLEXPRESS"
+        run: |
+          netsh advfirewall set allprofiles state off
+          choco install sql-server-express -d --install-arguments="/TCPENABLED=1"
+          refreshenv
+          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -Q "create database staging;"
+          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
+          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -Q "EXEC sp_password NULL, 'Password12!', 'sa';"
+          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -d "staging" -Q "SELECT NEXT VALUE FOR testing_seq;"
+          netstat -abn
+          & '.\.appveyor\setting-tcp-ip-ports.ps1'
+          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -Q "EXEC xp_readerrorlog 0, 1, N'Server is listening on';"
+          netstat -abn
+          $server="localhost"; $port=1433; echo ((new-object Net.Sockets.TcpClient).Connect($server,$port)) "$server is listening on TCP port $port";
+
+      - name: Integration Test with Maven
+        run: |
+          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -d "staging" -Q "SELECT NEXT VALUE FOR testing_seq;"
+          $server="localhost"; $port=1433; echo ((new-object Net.Sockets.TcpClient).Connect($server,$port)) "$server is listening on TCP port $port";
+          netstat -abn
+          mvn -e verify -B -Pmssql -T1 -D"test.onlyITs=true" --global-toolchains ".github\windows-toolchains.xml"
+
+      - name: Code coverage reporting
+        run: |
+          choco install codecov
+          codecov -v -f target/site/jacoco-it/jacoco.xml target/site/jacoco/jacoco.xml

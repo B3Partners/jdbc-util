@@ -24,7 +24,7 @@
         <dbutils.version>1.7</dbutils.version>
         <maven.surefire.version>3.0.0-M4</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     </properties>

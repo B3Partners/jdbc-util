@@ -7,7 +7,7 @@ jobs:
     runs-on: windows-2019
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
-      INSTANCENAME: SQLEXPRESS
+      INSTANCENAME: SQL2019
     strategy:
       matrix:
         # java: [1.8, 11]
@@ -36,20 +36,20 @@ jobs:
       - name: Setup SQLServer
         # sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -Q "EXEC sp_password NULL, 'Password12!', 'sa';"
         #  netstat -abn
+                #  netsh advfirewall set allprofiles state off
+        #  choco install sql-server-express -d --install-arguments="/TCPENABLED=1 /SAPWD='Password12!' /SECURITYMODE='SQL'"
+        #  refreshenv
         run: |
-          netsh advfirewall set allprofiles state off
-          choco install sql-server-express -d --install-arguments="/TCPENABLED=1 /SAPWD='Password12!' /SECURITYMODE='SQL'"
-          refreshenv
-          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -Q "create database staging;"
-          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
-          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -d "staging" -Q "SELECT NEXT VALUE FOR testing_seq;"
+          sqlcmd -j -r1 -S "(local)\SQL2019" -Q "create database staging;"
+          sqlcmd -j -r1 -S "(local)\SQL2019" -d "staging" -i ".appveyor\create-brmo-persistence-sqlserver.sql"
+          sqlcmd -j -r1 -S "(local)\SQL2019" -d "staging" -Q "SELECT NEXT VALUE FOR testing_seq;"
           & '.\.appveyor\setting-tcp-ip-ports.ps1'
-          sqlcmd -j -r1 -S "(local)\SQLEXPRESS" -Q "EXEC xp_readerrorlog 0, 1, N'Server is listening on';"
+          sqlcmd -j -r1 -S "(local)\SQL2019" -Q "EXEC xp_readerrorlog 0, 1, N'Server is listening on';"
           $server="localhost"; $port=1433; echo ((new-object Net.Sockets.TcpClient).Connect($server,$port)) "$server is listening on TCP port $port";
 
       - name: Integration Test with Maven
         run: |
-          sqlcmd -j -r1 -S "localhost" -U "sa" -P "Password12!" -d "staging" -Q "SELECT NEXT VALUE FOR testing_seq AS testvalue;"
+          sqlcmd -j -r1 -S "localhost" -U "sa" -P "P@ssword!!" -d "staging" -Q "SELECT NEXT VALUE FOR testing_seq AS testvalue;"
           $server="localhost"; $port=1433; echo ((new-object Net.Sockets.TcpClient).Connect($server,$port)) "$server is listening on TCP port $port";
           mvn -e verify -B -Pmssql -T1 -D"test.onlyITs=true" --global-toolchains ".github\windows-toolchains.xml"
 

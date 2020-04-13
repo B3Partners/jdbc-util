@@ -15,6 +15,7 @@
         ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-dbcp@.*$</packageUrl>
         <cve>CVE-2016-5425</cve>
+        <cve>CVE-2017-6056</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[

@@ -106,7 +106,7 @@ create table geometries (
     id bigserial not null,
     datum timestamp,
     naam varchar(255),
-    geom geometry(Polygon,28992),
+    geom geometry(MultiPolygon,28992),
     primary key (id)
 );
 

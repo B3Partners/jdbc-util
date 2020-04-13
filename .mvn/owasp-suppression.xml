@@ -11,10 +11,10 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-             Negeer meldingen mbt tomcat-dbcp-7.0.96.jar omdat we geen tomcat mee leveren en deze
+             Negeer meldingen mbt tomcat-dbcp-7.0.103.jar omdat we geen tomcat mee leveren en deze
                      alleen voor bepaalde deployments geldt.            ]]>
         </notes>
-        <filePath regex="true">.*\btomcat-dbcp-7\.0\.100\.jar</filePath>
+        <filePath regex="true">^pkg:maven/org\.apache\.tomcat/tomcat\-dbcp-7\@.*$</filePath>
         <cve>CVE-2016-5425</cve>
         <cve>CVE-2017-6056</cve>
     </suppress>

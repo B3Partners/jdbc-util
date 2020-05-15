@@ -19,12 +19,12 @@ timestamps {
 
             stage('Build') {
                 echo "Building branch: ${env.BRANCH_NAME}"
-                sh "mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle"
+                sh "mvn install --global-toolchains .jenkins/toolchains.xml -Dmaven.test.skip=true -B -V -e -fae -q -Poracle"
             }
 
             stage('Test') {
                 echo "Running unit tests"
-                sh "mvn -e test -B -Poracle"
+                sh "mvn -e test --global-toolchains .jenkins/toolchains.xml -B -Poracle"
             }
 
             lock('brmo-oracle') {
@@ -37,7 +37,7 @@ timestamps {
 
                     stage('Integration Test') {
                         echo "Running integration tests"
-                        sh "mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true"
+                        sh "mvn -e verify --global-toolchains .jenkins/toolchains.xml -B -Poracle -T1 -Dtest.onlyITs=true"
                     }
 
                     stage('Cleanup Oracle Database') {
@@ -54,7 +54,7 @@ timestamps {
 
             stage('OWASP Dependency Check') {
                 echo "Uitvoeren OWASP dependency check"
-                sh "mvn org.owasp:dependency-check-maven:check"
+                sh "mvn org.owasp:dependency-check-maven:check --global-toolchains .jenkins/toolchains.xml"
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml', failedNewCritical: 1, failedNewHigh: 1, failedTotalCritical: 1, failedTotalHigh: 3, unstableTotalHigh: 2
             }
         }

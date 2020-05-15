@@ -56,62 +56,70 @@ import org.apache.commons.logging.LogFactory;
 <span class="nc bnc" id="L56" title="All 2 branches missed.">        } else if (databaseProductName.contains(&quot;Oracle&quot;)) {</span>
 <span class="nc" id="L57">            boolean oracle11 = false;</span>
 <span class="nc" id="L58">            boolean oracle12 = false;</span>
+<span class="nc" id="L59">            boolean oracle18 = false;</span>
             try {
-<span class="nc bnc" id="L60" title="All 2 branches missed.">                oracle11 = (conn.getMetaData().getDatabaseMajorVersion() == 11);</span>
-<span class="nc" id="L61">            } catch (SQLException ex) {</span>
-<span class="nc" id="L62">                LOG.warn(&quot;Uitlezen database versie is mislukt.&quot;, ex);</span>
-<span class="nc" id="L63">            }</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                oracle11 = (conn.getMetaData().getDatabaseMajorVersion() == 11);</span>
+<span class="nc" id="L62">            } catch (SQLException ex) {</span>
+<span class="nc" id="L63">                LOG.warn(&quot;Uitlezen database versie is mislukt.&quot;, ex);</span>
+<span class="nc" id="L64">            }</span>
             try {
-<span class="nc bnc" id="L65" title="All 2 branches missed.">                oracle12 = (conn.getMetaData().getDatabaseMajorVersion() == 12);</span>
-<span class="nc" id="L66">            } catch (SQLException ex) {</span>
-<span class="nc" id="L67">                LOG.warn(&quot;Uitlezen database versie is mislukt.&quot;, ex);</span>
-<span class="nc" id="L68">            }</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                oracle12 = (conn.getMetaData().getDatabaseMajorVersion() == 12);</span>
+<span class="nc" id="L67">            } catch (SQLException ex) {</span>
+<span class="nc" id="L68">                LOG.warn(&quot;Uitlezen database versie is mislukt.&quot;, ex);</span>
+<span class="nc" id="L69">            }</span>
             try {
-<span class="nc" id="L70">                OracleConnection oc = OracleConnectionUnwrapper.unwrap(conn);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                oracle18 = (conn.getMetaData().getDatabaseMajorVersion() == 18);</span>
+<span class="nc" id="L72">            } catch (SQLException ex) {</span>
+<span class="nc" id="L73">                LOG.warn(&quot;Uitlezen database versie is mislukt.&quot;, ex);</span>
+<span class="nc" id="L74">            }</span>
+            try {
+<span class="nc" id="L76">                OracleConnection oc = OracleConnectionUnwrapper.unwrap(conn);</span>
                 OracleJdbcConverter geomToJdbc;
-<span class="nc bnc" id="L72" title="All 2 branches missed.">                if (oracle11) {</span>
-<span class="nc" id="L73">                    geomToJdbc = new Oracle11JdbcConverter(oc);</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">                }else if(oracle12){</span>
-<span class="nc" id="L75">                    geomToJdbc = new Oracle12JdbcConverter(oc);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                if (oracle11) {</span>
+<span class="nc" id="L79">                    geomToJdbc = new Oracle11JdbcConverter(oc);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                }else if(oracle12){</span>
+<span class="nc" id="L81">                    geomToJdbc = new Oracle12JdbcConverter(oc);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                }else if(oracle18){</span>
+<span class="nc" id="L83">                    geomToJdbc = new Oracle18JdbcConverter(oc);</span>
                 } else {
-<span class="nc" id="L77">                    geomToJdbc = new OracleJdbcConverter(oc);</span>
+<span class="nc" id="L85">                    geomToJdbc = new OracleJdbcConverter(oc);</span>
                 }
-<span class="nc" id="L79">                geomToJdbc.setSchema(oc.getCurrentSchema());</span>
-<span class="nc" id="L80">                return geomToJdbc;</span>
-<span class="nc" id="L81">            } catch (SQLException ex) {</span>
-<span class="nc" id="L82">                throw new UnsupportedOperationException(&quot;Cannot get connection: &quot; + databaseProductName, ex);</span>
+<span class="nc" id="L87">                geomToJdbc.setSchema(oc.getCurrentSchema());</span>
+<span class="nc" id="L88">                return geomToJdbc;</span>
+<span class="nc" id="L89">            } catch (SQLException ex) {</span>
+<span class="nc" id="L90">                throw new UnsupportedOperationException(&quot;Cannot get connection: &quot; + databaseProductName, ex);</span>
             }
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        } else if (databaseProductName.contains(&quot;Microsoft SQL Server&quot;)) {</span>
-<span class="nc" id="L85">            MssqlJdbcConverter geomToJdbc = new MssqlJdbcConverter();</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        } else if (databaseProductName.contains(&quot;Microsoft SQL Server&quot;)) {</span>
+<span class="nc" id="L93">            MssqlJdbcConverter geomToJdbc = new MssqlJdbcConverter();</span>
             try {
-<span class="nc" id="L87">                JtdsConnection c = MssqlConnectionUnwrapper.unwrap(conn);</span>
+<span class="nc" id="L95">                JtdsConnection c = MssqlConnectionUnwrapper.unwrap(conn);</span>
 
                 // jTDS driver heeft geen getSchema implementatie...
                 // ResultSetHandler&lt;String&gt; resultHandler = new BeanHandler&lt;&gt;(String.class);
                 // String schema = new QueryRunner(geomToJdbc.isPmdKnownBroken()).query(c, &quot;SELECT SCHEMA_NAME()&quot;, resultHandler);
                 String schema;
-<span class="nc" id="L93">                try (Statement s = c.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY)) {</span>
+<span class="nc" id="L101">                try (Statement s = c.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY)) {</span>
                     // HACK we moeten een keer heen en weer anders is er geen resultaat...
-<span class="nc" id="L95">                    ResultSet rs = s.executeQuery(&quot;SELECT SCHEMA_NAME();&quot;);</span>
-<span class="nc" id="L96">                    rs.last();</span>
-<span class="nc" id="L97">                    int numberOfRows = rs.getRow();</span>
-<span class="nc" id="L98">                    rs.first();</span>
-<span class="nc" id="L99">                    schema = rs.getString(1);</span>
-<span class="nc" id="L100">                    rs.close();</span>
+<span class="nc" id="L103">                    ResultSet rs = s.executeQuery(&quot;SELECT SCHEMA_NAME();&quot;);</span>
+<span class="nc" id="L104">                    rs.last();</span>
+<span class="nc" id="L105">                    int numberOfRows = rs.getRow();</span>
+<span class="nc" id="L106">                    rs.first();</span>
+<span class="nc" id="L107">                    schema = rs.getString(1);</span>
+<span class="nc" id="L108">                    rs.close();</span>
                 }
 
-<span class="nc bnc" id="L103" title="All 4 branches missed.">                if (schema != null &amp;&amp; !schema.isEmpty()) {</span>
-<span class="nc" id="L104">                    geomToJdbc.setSchema(schema);</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">                if (schema != null &amp;&amp; !schema.isEmpty()) {</span>
+<span class="nc" id="L112">                    geomToJdbc.setSchema(schema);</span>
                 }
 
-<span class="nc" id="L107">            } catch (SQLException | AbstractMethodError ex) {</span>
-<span class="nc" id="L108">                throw new UnsupportedOperationException(&quot;Cannot get/set schema: &quot; + databaseProductName, ex);</span>
-<span class="nc" id="L109">            }</span>
-<span class="nc" id="L110">            return geomToJdbc;</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        } else if(databaseProductName.contains(&quot;HSQL Database Engine&quot;)){</span>
-<span class="nc" id="L112">            return new HSQLJdbcConverter();</span>
+<span class="nc" id="L115">            } catch (SQLException | AbstractMethodError ex) {</span>
+<span class="nc" id="L116">                throw new UnsupportedOperationException(&quot;Cannot get/set schema: &quot; + databaseProductName, ex);</span>
+<span class="nc" id="L117">            }</span>
+<span class="nc" id="L118">            return geomToJdbc;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        } else if(databaseProductName.contains(&quot;HSQL Database Engine&quot;)){</span>
+<span class="nc" id="L120">            return new HSQLJdbcConverter();</span>
         }else{
-<span class="nc" id="L114">            throw new UnsupportedOperationException(&quot;Unknown database: &quot; + databaseProductName);</span>
+<span class="nc" id="L122">            throw new UnsupportedOperationException(&quot;Unknown database: &quot; + databaseProductName);</span>
         }
     }
 }

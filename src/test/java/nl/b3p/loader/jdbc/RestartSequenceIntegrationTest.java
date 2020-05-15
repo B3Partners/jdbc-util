@@ -14,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -42,7 +41,9 @@ public class RestartSequenceIntegrationTest extends AbstractDatabaseIntegrationT
             int updated = run.update(c, converter.getUpdateSequenceSQL(
                     params.getProperty("staging.sequence.name", "testing_seq"), 99999)
             );
-            if (converter instanceof Oracle12JdbcConverter ){
+            if (converter instanceof Oracle18JdbcConverter) {
+                assertEquals("expected 0 rows to be updated", 0, updated);
+            } else if (converter instanceof Oracle12JdbcConverter) {
                 assertEquals("expected 1 rows to be updated", 1, updated);
             } else {
                 assertEquals("expected 0 rows to be updated", 0, updated);

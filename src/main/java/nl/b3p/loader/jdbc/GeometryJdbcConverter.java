@@ -120,7 +120,7 @@ public abstract class GeometryJdbcConverter {
      * @return SQL statement specific for the flavour of database
      */
     public String getUpdateSequenceSQL(String seqName, long nextVal) {
-        // supported for postgres, ms sql, hsqldb, (18+) oracle
+        // supported for postgres, ms sql, hsqldb
         return String.format("ALTER SEQUENCE %s RESTART WITH %d", seqName , nextVal);
     }
 

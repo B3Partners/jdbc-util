@@ -171,4 +171,8 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public String getUpdateSequenceSQL(String seqName, long nextVal){
+        throw new UnsupportedOperationException("Not supported.");
+    }
 }

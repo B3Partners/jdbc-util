@@ -56,6 +56,7 @@ public class GeometryJdbcConverterFactory {
         } else if (databaseProductName.contains("Oracle")) {
             boolean oracle11 = false;
             boolean oracle12 = false;
+            boolean oracle18 = false;
             try {
                 oracle11 = (conn.getMetaData().getDatabaseMajorVersion() == 11);
             } catch (SQLException ex) {
@@ -67,12 +68,19 @@ public class GeometryJdbcConverterFactory {
                 LOG.warn("Uitlezen database versie is mislukt.", ex);
             }
             try {
+                oracle18 = (conn.getMetaData().getDatabaseMajorVersion() == 18);
+            } catch (SQLException ex) {
+                LOG.warn("Uitlezen database versie is mislukt.", ex);
+            }
+            try {
                 OracleConnection oc = OracleConnectionUnwrapper.unwrap(conn);
                 OracleJdbcConverter geomToJdbc;
                 if (oracle11) {
                     geomToJdbc = new Oracle11JdbcConverter(oc);
                 }else if(oracle12){
                     geomToJdbc = new Oracle12JdbcConverter(oc);
+                }else if(oracle18){
+                    geomToJdbc = new Oracle18JdbcConverter(oc);
                 } else {
                     geomToJdbc = new OracleJdbcConverter(oc);
                 }

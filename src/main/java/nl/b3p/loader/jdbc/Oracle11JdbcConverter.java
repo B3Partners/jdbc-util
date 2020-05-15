@@ -64,8 +64,4 @@ public class Oracle11JdbcConverter extends OracleJdbcConverter {
         return sql;
         
     }
-
-    public String getUpdateSequenceSQL(String seqName, long nextVal){
-        throw new UnsupportedOperationException("Not supported.");
-    }
 }

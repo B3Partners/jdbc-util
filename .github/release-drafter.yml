@@ -25,7 +25,7 @@ categories:
       - regression
   - title: 📖 Documentation updates
     label: documentation
-  - title: 📦 Dependency updates
+  - title: 🔨 Dependency updates
     label: dependencies
   - title: 🚦 Tests
     labels:

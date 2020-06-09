@@ -17,19 +17,23 @@
 
 package nl.b3p.loader.jdbc;
 
+import oracle.jdbc.OracleConnection;
+import oracle.sql.STRUCT;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.geotools.data.oracle.sdo.GeometryConverter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
+
 import java.sql.SQLException;
-import oracle.jdbc.OracleConnection;
-import org.geotools.data.oracle.sdo.GeometryConverter;
 
 /**
  *
  * @author Matthijs Laan
  */
 public class OracleJdbcConverter extends GeometryJdbcConverter {
-
+    protected final static Log LOG = LogFactory.getLog(OracleJdbcConverter.class);
     private GeometryConverter gc;
     private String schema;
 
@@ -167,12 +171,37 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
         return String.format("SELECT %s.nextval FROM dual", seqName);
     }
 
+    /**
+     * de geotools converter is niet round-trip safe, er treed een NPE op als een
+     * 'lege' geometrie wordt aangeboden:
+     * <pre>
+     *    at org.geotools.data.oracle.sdo.SDO.ETYPE(SDO.java:1681)
+     *    at org.geotools.data.oracle.sdo.SDO.create(SDO.java:1933)
+     * 	  at org.geotools.data.oracle.sdo.GeometryConverter.asGeometry(GeometryConverter.java:121)
+     * </pre>
+     * dat is een bug in geotools.
+     *
+     * @param nativeObj uit de database
+     * @return jts geom of {@code null}
+     */
     @Override
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        org.locationtech.jts.geom.Geometry jts = null;
+        if (nativeObj == null) {
+            return jts;
+        } else if (STRUCT.class.isAssignableFrom(nativeObj.getClass())) {
+            try {
+                jts = gc.asGeometry((STRUCT) nativeObj);
+            } catch (SQLException | NullPointerException e) {
+                LOG.error("Error parsing Oracle STRUCT to geometry", e);
+            }
+        } else {
+            LOG.error("Native Oracle object can not be converted to JTS geometry");
+        }
+        return jts;
     }
 
     public String getUpdateSequenceSQL(String seqName, long nextVal){
-        throw new UnsupportedOperationException("Not supported.");
+        throw new UnsupportedOperationException("Update sequence not supported for this database version.");
     }
 }

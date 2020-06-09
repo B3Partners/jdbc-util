@@ -65,7 +65,7 @@ public class GeometryJdbcConverterFactoryIntegrationTest extends AbstractDatabas
 
             String actual = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c).getGeotoolsDBTypeName();
             if (isMsSQL) {
-                assertEquals("Onjuiste database smaak gekregen.", "jtds-sqlserver", actual);
+                assertEquals("Onjuiste database smaak gekregen.", "sqlserver", actual);
             } else if (isOracle) {
                 assertEquals("Onjuiste database smaak gekregen.", "oracle", actual);
             } else if (isPostgis) {

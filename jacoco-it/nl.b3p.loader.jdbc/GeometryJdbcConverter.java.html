@@ -117,11 +117,16 @@ import java.util.Calendar;
      * Gets a statement to use in a {@link java.sql.PreparedStatement } to restart a sequence.
      *
      * @param seqName name of sequence
+     * @param nextVal the value to restart the sequence, some systems
+     *                require this to be larger than the next value of the sequence.
      * @return SQL statement specific for the flavour of database
      */
     public String getUpdateSequenceSQL(String seqName, long nextVal) {
-        // supported for postgres, ms sql, hsqldb
-<span class="nc" id="L124">        return String.format(&quot;ALTER SEQUENCE %s RESTART WITH %d&quot;, seqName , nextVal);</span>
+        // supported for postgres, ms sql, hsqldb, NB return values vary
+        // https://www.postgresql.org/docs/11/sql-altersequence.html
+        // https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-sequence-transact-sql?view=sql-server-ver15
+
+<span class="nc" id="L129">        return String.format(&quot;ALTER SEQUENCE %s RESTART WITH %d&quot;, seqName , nextVal);</span>
     }
 
     /**
@@ -135,19 +140,19 @@ import java.util.Calendar;
     public abstract String getGeotoolsDBTypeName();
 
     public Object convertToNativeGeometryObject(String param) throws ParseException, SQLException {
-<span class="nc" id="L138">        Geometry o = null;</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">        if (param != null) {</span>
-<span class="nc" id="L140">            o = wkt.read(param);</span>
+<span class="nc" id="L143">        Geometry o = null;</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (param != null) {</span>
+<span class="nc" id="L145">            o = wkt.read(param);</span>
         }
-<span class="nc" id="L142">        return convertToNativeGeometryObject(o);</span>
+<span class="nc" id="L147">        return convertToNativeGeometryObject(o);</span>
     }
 
     public Object createNativePoint(double lat, double lon, int srid) throws SQLException, ParseException {
-<span class="nc bnc" id="L146" title="All 4 branches missed.">        if (lat == 0 || lon == 0) {</span>
-<span class="nc" id="L147">            return null;</span>
+<span class="nc bnc" id="L151" title="All 4 branches missed.">        if (lat == 0 || lon == 0) {</span>
+<span class="nc" id="L152">            return null;</span>
         }
-<span class="nc" id="L149">        Point p = gf.createPoint(new Coordinate(lon, lat));</span>
-<span class="nc" id="L150">        return convertToNativeGeometryObject(p, srid);</span>
+<span class="nc" id="L154">        Point p = gf.createPoint(new Coordinate(lon, lat));</span>
+<span class="nc" id="L155">        return convertToNativeGeometryObject(p, srid);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

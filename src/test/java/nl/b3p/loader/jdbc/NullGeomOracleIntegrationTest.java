@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import nl.b3p.AbstractDatabaseIntegrationTest;
 import oracle.jdbc.OracleConnection;
+import oracle.jdbc.OracleStruct;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -74,7 +75,7 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
             OracleConnection oc = OracleConnectionUnwrapper.unwrap(connection);
             OracleJdbcConverter c = new OracleJdbcConverter(oc);
 
-            Struct s = (Struct) c.convertToNativeGeometryObject(this.testVal);
+            OracleStruct s = (OracleStruct) c.convertToNativeGeometryObject(this.testVal);
             assertEquals("verwacht een sdo geometry", "MDSYS.SDO_GEOMETRY", s.getSQLTypeName());
             for (Object o : s.getAttributes()) {
                 assertNull("verwacht 'null'", o);

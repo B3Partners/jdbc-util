@@ -18,7 +18,7 @@
 package nl.b3p.loader.jdbc;
 
 import oracle.jdbc.OracleConnection;
-import oracle.sql.STRUCT;
+import oracle.jdbc.OracleStruct;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.oracle.sdo.GeometryConverter;
@@ -189,11 +189,11 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
 <span class="nc" id="L189">        org.locationtech.jts.geom.Geometry jts = null;</span>
 <span class="nc bnc" id="L190" title="All 2 branches missed.">        if (nativeObj == null) {</span>
 <span class="nc" id="L191">            return jts;</span>
-<span class="nc bnc" id="L192" title="All 2 branches missed.">        } else if (STRUCT.class.isAssignableFrom(nativeObj.getClass())) {</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">        } else if (OracleStruct.class.isAssignableFrom(nativeObj.getClass())) {</span>
             try {
-<span class="nc" id="L194">                jts = gc.asGeometry((STRUCT) nativeObj);</span>
+<span class="nc" id="L194">                jts = gc.asGeometry((OracleStruct) nativeObj);</span>
 <span class="nc" id="L195">            } catch (SQLException | NullPointerException e) {</span>
-<span class="nc" id="L196">                LOG.error(&quot;Error parsing Oracle STRUCT to geometry&quot;, e);</span>
+<span class="nc" id="L196">                LOG.error(&quot;Error parsing OracleStruct to geometry&quot;, e);</span>
 <span class="nc" id="L197">            }</span>
         } else {
 <span class="nc" id="L199">            LOG.error(&quot;Native Oracle object can not be converted to JTS geometry&quot;);</span>

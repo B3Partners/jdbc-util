@@ -18,7 +18,7 @@
 package nl.b3p.loader.jdbc;
 
 import oracle.jdbc.OracleConnection;
-import oracle.sql.STRUCT;
+import oracle.jdbc.OracleStruct;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.geotools.data.oracle.sdo.GeometryConverter;
@@ -189,11 +189,11 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
         org.locationtech.jts.geom.Geometry jts = null;
         if (nativeObj == null) {
             return jts;
-        } else if (STRUCT.class.isAssignableFrom(nativeObj.getClass())) {
+        } else if (OracleStruct.class.isAssignableFrom(nativeObj.getClass())) {
             try {
-                jts = gc.asGeometry((STRUCT) nativeObj);
+                jts = gc.asGeometry((OracleStruct) nativeObj);
             } catch (SQLException | NullPointerException e) {
-                LOG.error("Error parsing Oracle STRUCT to geometry", e);
+                LOG.error("Error parsing OracleStruct to geometry", e);
             }
         } else {
             LOG.error("Native Oracle object can not be converted to JTS geometry");

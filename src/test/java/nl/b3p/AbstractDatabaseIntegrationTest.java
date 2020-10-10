@@ -3,16 +3,17 @@
  */
 package nl.b3p;
 
-import java.io.IOException;
-import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.After;
-import static org.junit.Assume.assumeNotNull;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
+
+import java.io.IOException;
+import java.util.Properties;
+
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 /**
  * Utility om database properties te laden en methods te loggen.
@@ -27,9 +28,9 @@ public abstract class AbstractDatabaseIntegrationTest {
      * test of de database properties zijn aangegeven, zo niet dan skippen we
      * alle tests in deze test.
      */
-    @BeforeClass
+    @BeforeAll
     public static void checkDatabaseIsProvided() {
-        assumeNotNull("Verwacht database omgeving te zijn aangegeven.", System.getProperty("database.properties.file"));
+        assumeFalse(null == System.getProperty("database.properties.file"), "Verwacht database omgeving te zijn aangegeven.");
     }
 
     /**
@@ -60,18 +61,13 @@ public abstract class AbstractDatabaseIntegrationTest {
      */
     protected boolean isHSQLDB;
 
-    /**
-     * logging rule.
-     */
-    @Rule
-    public TestName name = new TestName();
 
     /**
      * subklassen dienen zelf een setup te hebben.
      *
      * @throws Exception if any
      */
-    @Before
+    @BeforeEach
     abstract public void setUp() throws Exception;
 
     /**
@@ -96,7 +92,7 @@ public abstract class AbstractDatabaseIntegrationTest {
         isHSQLDB = "hsqldb".equalsIgnoreCase(params.getProperty("dbtype"));
 
         try {
-            Class stagingDriverClass = Class.forName(params.getProperty("staging.jdbc.driverClassName"));
+            Class.forName(params.getProperty("staging.jdbc.driverClassName"));
         } catch (ClassNotFoundException ex) {
             LOG.error("Database driver niet gevonden.", ex);
         }
@@ -105,17 +101,17 @@ public abstract class AbstractDatabaseIntegrationTest {
     /**
      * Log de naam van de test als deze begint.
      */
-    @Before
-    public void startTest() {
-        LOG.info("==== Start test methode: " + name.getMethodName());
+    @BeforeEach
+    public void startTest(TestInfo testInfo) {
+        LOG.info("==== Start test methode: " + testInfo.getDisplayName());
     }
 
     /**
      * Log de naam van de test als deze eindigt.
      */
-    @After
-    public void endTest() {
-        LOG.info("==== Einde test methode: " + name.getMethodName());
-    }
 
+    @AfterEach
+    public void endTest(TestInfo testInfo) {
+        LOG.info("==== Einde test methode: " + testInfo.getDisplayName());
+    }
 }

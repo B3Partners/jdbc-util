@@ -6,8 +6,8 @@ package nl.b3p.loader.jdbc;
 import nl.b3p.AbstractDatabaseIntegrationTest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
@@ -16,9 +16,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * test of de converters round-trip safe zijn, dus JTS-input naar native naar JTS-output moet gelijk blijven.
@@ -30,7 +28,7 @@ public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {
     private final int srid = 28992;
     private Geometry testJtsGeometry = null;
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         loadProps();
@@ -47,7 +45,7 @@ public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {
                 params.getProperty("staging.passwd"))) {
             GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
             Object nativeGeometryObject = conv.convertToNativeGeometryObject(testJtsGeometry, srid);
-            assertNotNull("native geom mag niet 'null' zijn", nativeGeometryObject);
+            assertNotNull(nativeGeometryObject, "native geom mag niet 'null' zijn");
             assertEquals(testJtsGeometry, conv.convertToJTSGeometryObject(nativeGeometryObject));
         } catch (SQLException | ParseException | NullPointerException e) {
             LOG.error(e);
@@ -64,7 +62,7 @@ public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {
             GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
             Object nativeGeometryObject = conv.convertToNativeGeometryObject((String) null);
             LOG.debug("nativeGeometryObject: " + nativeGeometryObject);
-            assertEquals("verwacht 'null' na round-trip", null, conv.convertToJTSGeometryObject(nativeGeometryObject));
+            assertEquals(null, conv.convertToJTSGeometryObject(nativeGeometryObject), "verwacht 'null' na round-trip");
         } catch (SQLException | ParseException | NullPointerException e) {
             LOG.error(e);
             fail(e.getLocalizedMessage());

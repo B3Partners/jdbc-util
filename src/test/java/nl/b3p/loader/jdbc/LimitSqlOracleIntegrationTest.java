@@ -3,11 +3,6 @@
  */
 package nl.b3p.loader.jdbc;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 import nl.b3p.AbstractDatabaseIntegrationTest;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.dbutils.DbUtils;
@@ -15,9 +10,16 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
@@ -27,7 +29,7 @@ public class LimitSqlOracleIntegrationTest extends AbstractDatabaseIntegrationTe
 
     private static final Log LOG = LogFactory.getLog(LimitSqlOracleIntegrationTest.class);
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         loadProps();
@@ -44,7 +46,7 @@ public class LimitSqlOracleIntegrationTest extends AbstractDatabaseIntegrationTe
                 params.getProperty("staging.user"),
                 params.getProperty("staging.passwd"));
 
-        String q = "Select * from bericht where id > 0 order by id";
+        String q = "select * from bericht where id > 0 order by id";
         GeometryJdbcConverter converter = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
         String finalquery = converter.buildLimitSql(new StringBuilder(q), 10).toString();
         LOG.info("Final query" + finalquery);
@@ -93,5 +95,4 @@ public class LimitSqlOracleIntegrationTest extends AbstractDatabaseIntegrationTe
             }
         }
     }
-
 }

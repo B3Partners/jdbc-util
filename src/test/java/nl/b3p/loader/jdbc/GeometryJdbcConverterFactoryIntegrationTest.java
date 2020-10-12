@@ -4,8 +4,9 @@
 package nl.b3p.loader.jdbc;
 
 import nl.b3p.AbstractDatabaseIntegrationTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,9 +14,8 @@ import java.sql.SQLException;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * testcases voor {@link GeometryJdbcConverterFactory}. Gebruik
@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
  */
 public class GeometryJdbcConverterFactoryIntegrationTest extends AbstractDatabaseIntegrationTest {
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         loadProps();
@@ -65,13 +65,13 @@ public class GeometryJdbcConverterFactoryIntegrationTest extends AbstractDatabas
 
             String actual = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c).getGeotoolsDBTypeName();
             if (isMsSQL) {
-                assertEquals("Onjuiste database smaak gekregen.", "sqlserver", actual);
+                assertEquals("sqlserver", actual, "Onjuiste database smaak gekregen.");
             } else if (isOracle) {
-                assertEquals("Onjuiste database smaak gekregen.", "oracle", actual);
+                assertEquals("oracle", actual, "Onjuiste database smaak gekregen.");
             } else if (isPostgis) {
-                assertEquals("Onjuiste database smaak gekregen.", "postgis", actual);
+                assertEquals("postgis", actual, "Onjuiste database smaak gekregen.");
             } else if (isHSQLDB) {
-                assertNull("Onjuiste database smaak gekregen.", actual);
+                Assertions.assertNull(actual, "Onjuiste database smaak gekregen.");
             } else {
                 fail("Onbekende (en niet ondersteunde) database");
             }

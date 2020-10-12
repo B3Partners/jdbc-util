@@ -3,24 +3,23 @@
  */
 package nl.b3p.loader.jdbc;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Struct;
-import java.util.Arrays;
-import java.util.Collection;
 import nl.b3p.AbstractDatabaseIntegrationTest;
 import oracle.jdbc.OracleConnection;
 import oracle.jdbc.OracleStruct;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertNull;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * gebruik
@@ -29,31 +28,16 @@ import org.junit.runners.Parameterized;
  *
  * @author mprins
  */
-@RunWith(Parameterized.class)
 public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTest {
 
     private static final Log LOG = LogFactory.getLog(NullGeomOracleIntegrationTest.class);
-
-    @Parameterized.Parameters(name = "{index}: testwaarde: '{0}'")
-    public static Collection<Object[]> params() {
-        return Arrays.asList(new Object[][]{
-            {""},
-            {null}
-        });
-    }
-
-    private final String testVal;
-
-    public NullGeomOracleIntegrationTest(String testVal) {
-        this.testVal = testVal;
-    }
 
     /**
      * set up test object.
      *
      * @throws IOException als laden van property file mislukt
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         loadProps();
@@ -64,8 +48,11 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
      *
      * @throws Exception if any
      */
-    @Test
-    public void testNullGeomXML() throws Exception {
+    @DisplayName("test null geometrie XML")
+    @ParameterizedTest(name = "#{index} - waarde: {0}")
+    @NullAndEmptySource
+    @ValueSource(strings = {"", " ", "   "})
+    public void testNullGeomXML(String testVal) throws Exception {
         if (isOracle) {
             Connection connection = DriverManager.getConnection(
                     params.getProperty("staging.jdbc.url"),
@@ -75,10 +62,10 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
             OracleConnection oc = OracleConnectionUnwrapper.unwrap(connection);
             OracleJdbcConverter c = new OracleJdbcConverter(oc);
 
-            OracleStruct s = (OracleStruct) c.convertToNativeGeometryObject(this.testVal);
-            assertEquals("verwacht een sdo geometry", "MDSYS.SDO_GEOMETRY", s.getSQLTypeName());
+            OracleStruct s = (OracleStruct) c.convertToNativeGeometryObject(testVal);
+            assertEquals("MDSYS.SDO_GEOMETRY", s.getSQLTypeName(), "verwacht een sdo geometry");
             for (Object o : s.getAttributes()) {
-                assertNull("verwacht 'null'", o);
+                assertNull(o, "verwacht 'null'");
             }
         }
     }

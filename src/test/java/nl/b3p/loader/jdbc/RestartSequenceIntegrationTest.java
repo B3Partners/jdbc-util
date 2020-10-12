@@ -6,15 +6,15 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author mprins
@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 public class RestartSequenceIntegrationTest extends AbstractDatabaseIntegrationTest {
     private static final Log LOG = LogFactory.getLog(RestartSequenceIntegrationTest.class);
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         loadProps();
@@ -43,20 +43,20 @@ public class RestartSequenceIntegrationTest extends AbstractDatabaseIntegrationT
             );
             LOG.info("Update query returned: " + updated + " voor " + converter);
             if (converter instanceof MssqlJdbcConverter) {
-                assertEquals("expected -1 rows to be updated", -1, updated);
+                assertEquals(-1, updated, "expected -1 rows to be updated");
             } else if (converter instanceof Oracle18JdbcConverter) {
-                assertEquals("expected 0 rows to be updated", 0, updated);
+                assertEquals(0, updated, "expected 0 rows to be updated");
             }  else if (converter instanceof Oracle12JdbcConverter ) {
-                assertEquals("expected 1 rows to be updated", 1, updated);
+                assertEquals(1, updated, "expected 1 rows to be updated");
             } else {
-                assertEquals("expected 0 rows to be updated", 0, updated);
+                assertEquals(0, updated, "expected 0 rows to be updated");
             }
 
             Number seqVal = run.query(c, converter.getSelectNextValueFromSequenceSQL(
                     params.getProperty("staging.sequence.name", "testing_seq")),
                     new ScalarHandler<>()
             );
-            assertEquals("next value should be 99999", 99999L, seqVal.longValue());
+            assertEquals(99999L, seqVal.longValue(), "next value should be 99999");
         } catch (SQLException e) {
             fail(e.getLocalizedMessage());
         } finally {

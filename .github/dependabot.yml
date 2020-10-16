@@ -11,12 +11,14 @@ updates:
   - mprins
   - mtoonen
   ignore:
-  - dependency-name: com.microsoft.sqlserver:mssql-jdbc
-    versions:
-    - "> 8.3.1.jre8.pre.preview, < 8.4"
   - dependency-name: org.apache.tomcat:tomcat-dbcp
     versions:
-    - ">= 8.a, < 9"
-  - dependency-name: org.apache.tomcat:tomcat-dbcp
-    versions:
-    - ">= 9.a, < 10"
+    - ">= 8.a"
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "weekly"
+    day: saturday
+    timezone: Europe/Amsterdam
+  labels:
+  - "build infrastructure"

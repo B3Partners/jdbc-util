@@ -42,7 +42,7 @@ before_test:
   - cmd: echo "aanmaken en opzetten STAGING DB"
   - sqlcmd -S (local)\%INSTANCENAME% -U sa -P Password12! -Q "CREATE DATABASE staging" -d "master"
   - dir -w .appveyor\
-  - sqlcmd -S (local)\%INSTANCENAME% -U sa -P Password12! -d "staging" -i .appveyor\create-brmo-persistence-sqlserver.sql
+  - sqlcmd -S (local)\%INSTANCENAME% -U sa -P Password12! -d "staging" -i .\.build\ci\mssql-create-schema.sql
 #
   - cmd: echo "computer name:" %COMPUTERNAME%
   - cmd: echo "instance name:" %INSTANCENAME%

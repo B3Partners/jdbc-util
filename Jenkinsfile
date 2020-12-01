@@ -7,9 +7,13 @@ timestamps {
             daysToKeepStr: '15',
             numToKeepStr: '5']
         ]]);
+    
+    final def jdks = ['JDK-11','JDK8']
 
     node {
-        withEnv(["JAVA_HOME=${ tool 'JDK8' }", "PATH+MAVEN=${tool 'Maven CURRENT'}/bin:${env.JAVA_HOME}/bin"]) {
+        jdks.eachWithIndex { jdk, indexOfJdk ->
+        final String jdkTestName = jdk.toString()
+        withEnv(["JAVA_HOME=${ tool jdkTestName }", "PATH+MAVEN=${tool 'Maven CURRENT'}/bin:${env.JAVA_HOME}/bin"]) {
 
             stage('Prepare') {
                 sh "ulimit -a"
@@ -57,6 +61,7 @@ timestamps {
                 sh "mvn org.owasp:dependency-check-maven:check --global-toolchains .jenkins/toolchains.xml"
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml', failedNewCritical: 1, failedNewHigh: 1, failedTotalCritical: 1, failedTotalHigh: 3, unstableTotalHigh: 2
             }
+        }
         }
     }
 }

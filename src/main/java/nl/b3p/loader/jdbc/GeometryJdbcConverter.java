@@ -36,7 +36,7 @@ public abstract class GeometryJdbcConverter {
 
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm,
             String tableName, String column) {
-        Object param = null;
+        Object param;
         stringValue = stringValue.trim();
         switch (cm.getDataType()) {
             case java.sql.Types.DECIMAL:
@@ -55,6 +55,9 @@ public abstract class GeometryJdbcConverter {
                 break;
             case java.sql.Types.CHAR:
             case java.sql.Types.VARCHAR:
+            case java.sql.Types.NVARCHAR:
+            case java.sql.Types.LONGNVARCHAR:
+            case java.sql.Types.LONGVARCHAR:
                 param = stringValue;
                 break;
             case java.sql.Types.DATE:
@@ -67,7 +70,9 @@ public abstract class GeometryJdbcConverter {
                 break;
             default:
                 throw new UnsupportedOperationException(
-                        String.format("Data type %s (#%d) van kolom \"%s\" wordt niet ondersteund.", cm.getTypeName(), cm.getDataType(), column));
+                        String.format("Data type %s (#%d) van kolom \"%s\" wordt niet ondersteund.",
+                                cm.getTypeName(), cm.getDataType(), cm.getName())
+                );
         }
         return param;
     }

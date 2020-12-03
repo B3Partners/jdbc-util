@@ -1,0 +1,83 @@
+name: Maven build
+
+on: [ push, pull_request ]
+
+env:
+  PGPASSWORD: postgres
+  PGUSER: postgres
+  PGDATABASE: postgres
+
+jobs:
+  build:
+    name: Java ${{ matrix.java }} / ${{ matrix.profile }} / PostGIS ${{ matrix.postgis }} build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 8, 11 ]
+        profile: [ hsqldb,  postgresql ]
+        postgis: [ 10-2.5 ]
+
+    services:
+      postgis:
+        image: postgis/postgis:${{ matrix.postgis }}
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 15s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 5
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Set up JDK 11 for toolchains
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Set up JDK 8 for toolchains
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - name: Set up JDK for build
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Set up PostGIS database
+        if: ${{ matrix.profile == 'postgresql' }}
+        run: |
+          psql --version
+          psql -U postgres -h localhost -c 'SELECT version();'
+          .build/ci/pgsql-setup.sh
+
+      - name: Inspect environment
+        run: |
+          set | grep JAVA
+
+      - name: Priming build
+        run: mvn install -Dmaven.test.skip=true --global-toolchains .github/ubuntu-toolchains.xml -B -V -e -fae -q -P${{ matrix.profile }}
+
+      - name: Test
+        run: mvn -e test -B --global-toolchains .github/ubuntu-toolchains.xml -P${{ matrix.profile }}
+
+      - name: Verify
+        run: mvn -e verify -B --global-toolchains .github/ubuntu-toolchains.xml -P${{ matrix.profile }} -T1 -Dtest.onlyITs=true
+
+      - name: Javadoc
+        if: ${{ matrix.java == '8' }}
+        run: |
+          mvn javadoc:javadoc --global-toolchains .github/ubuntu-toolchains.xml
+          mvn javadoc:test-javadoc --global-toolchains .github/ubuntu-toolchains.xml
+
+      - name: Clean artifacts from repository
+        run: mvn clean build-helper:remove-project-artifact
+
+      - name: Upload codecoverage
+        uses: codecov/codecov-action@v1

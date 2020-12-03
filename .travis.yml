@@ -20,7 +20,6 @@ services:
 
 jdk:
   - openjdk8
-  - openjdk11
 
 matrix:
   fast_finish: true
@@ -84,12 +83,6 @@ script:
   - mvn -e test -B --global-toolchains .travis/toolchains.xml -P$PROFILE
   # run integratie tests
   - mvn -e verify -B --global-toolchains .travis/toolchains.xml -P$PROFILE -T1 -Dtest.onlyITs=true
-  # test of de javadoc en test-javadoc compliant is met java-8 strict checks
-  # altijd doen anders loop je daar met maken van een release tegenaan
-  - if [ "$TRAVIS_JDK_VERSION" == openjdk8 ]; then
-      mvn javadoc:javadoc --global-toolchains .travis/toolchains.xml;
-      mvn javadoc:test-javadoc --global-toolchains .travis/toolchains.xml;
-    fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

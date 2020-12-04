@@ -16,15 +16,22 @@
  */
 package nl.b3p.loader.jdbc;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
-import java.math.BigDecimal;
 import org.locationtech.jts.io.WKTReader;
+
+import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 
 /**
  *
@@ -33,6 +40,7 @@ import java.util.Calendar;
  * @author mprins
  */
 public abstract class GeometryJdbcConverter {
+    private static final Log LOG = LogFactory.getLog(GeometryJdbcConverter.class);
 
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm,
             String tableName, String column) {
@@ -62,10 +70,23 @@ public abstract class GeometryJdbcConverter {
                 break;
             case java.sql.Types.DATE:
             case java.sql.Types.TIMESTAMP:
-                param = javax.xml.bind.DatatypeConverter.parseDateTime(stringValue);
+                try {
+                    param = LocalDateTime.parse(stringValue);
+                } catch (DateTimeParseException e) {
+                    LOG.debug(
+                            "Parsen van waarde " + stringValue + " als LocalDateTime is mislukt, probeer als " +
+                                    "LocalDate.");
+                    try {
+                        param = LocalDate.parse(stringValue).atTime(0, 0);
+                    } catch (DateTimeParseException e2) {
+                        LOG.error("Fout tijdens parsen van waarde " + stringValue + " als LocalDate", e2);
+                        param = null;
+                    }
+                }
                 if (param != null) {
-                    Calendar cal = (Calendar) param;
-                    param = new java.sql.Date(cal.getTimeInMillis());
+                    param = new java.sql.Date(
+                            Date.from(((LocalDateTime) param).atZone(ZoneId.systemDefault()).toInstant()).getTime()
+                    );
                 }
                 break;
             default:

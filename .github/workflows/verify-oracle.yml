@@ -1,0 +1,51 @@
+name: Oracle tests
+
+on: [push]
+
+jobs:
+  build:
+    name: Oracle / Java ${{ matrix.java }}
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        java: [8]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 5
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Set up JDK 11 for toolchains
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Set up JDK 8 for toolchains
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - name: Set up JDK for build
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Setup test environment for Oracle
+        run: |
+          ./.build/ci/oracle-start.sh
+          ./.build/ci/oracle-setup.sh
+
+      - name: Priming build
+        run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle --global-toolchains .github/ubuntu-toolchains.xml
+
+      - name: Verify ${{ matrix.mssql }}
+        run: mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true --global-toolchains .github/ubuntu-toolchains.xml
+
+      - name: Clean artifacts from repository
+        run: mvn clean build-helper:remove-project-artifact
+
+      - name: Upload codecoverage
+        uses: codecov/codecov-action@v1

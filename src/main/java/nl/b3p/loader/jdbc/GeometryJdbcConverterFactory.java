@@ -16,17 +16,14 @@
  */
 package nl.b3p.loader.jdbc;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import com.microsoft.sqlserver.jdbc.SQLServerConnection;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -55,35 +52,29 @@ public class GeometryJdbcConverterFactory {
             }
             return geomToJdbc;
         } else if (databaseProductName.contains("Oracle")) {
-            boolean oracle11 = false;
-            boolean oracle12 = false;
-            boolean oracle18 = false;
+            int majorVersion = 10;
             try {
-                oracle11 = (conn.getMetaData().getDatabaseMajorVersion() == 11);
-            } catch (SQLException ex) {
-                LOG.warn("Uitlezen database versie is mislukt.", ex);
-            }
-            try {
-                oracle12 = (conn.getMetaData().getDatabaseMajorVersion() == 12);
-            } catch (SQLException ex) {
-                LOG.warn("Uitlezen database versie is mislukt.", ex);
-            }
-            try {
-                oracle18 = (conn.getMetaData().getDatabaseMajorVersion() == 18);
+                majorVersion = conn.getMetaData().getDatabaseMajorVersion();
             } catch (SQLException ex) {
                 LOG.warn("Uitlezen database versie is mislukt.", ex);
             }
             try {
                 OracleConnection oc = OracleConnectionUnwrapper.unwrap(conn);
                 OracleJdbcConverter geomToJdbc;
-                if (oracle11) {
-                    geomToJdbc = new Oracle11JdbcConverter(oc);
-                }else if(oracle12){
-                    geomToJdbc = new Oracle12JdbcConverter(oc);
-                }else if(oracle18){
-                    geomToJdbc = new Oracle18JdbcConverter(oc);
-                } else {
-                    geomToJdbc = new OracleJdbcConverter(oc);
+                switch (majorVersion) {
+                    case 11:
+                        geomToJdbc = new Oracle11JdbcConverter(oc);
+                        break;
+                    case 12:
+                        geomToJdbc = new Oracle12JdbcConverter(oc);
+                        break;
+                    case 18:
+                    case 19:
+                    case 21:
+                        geomToJdbc = new OracleJdbcConverter(oc);
+                        break;
+                    default:
+                        geomToJdbc = new OracleJdbcConverter(oc);
                 }
                 geomToJdbc.setSchema(oc.getCurrentSchema());
                 return geomToJdbc;

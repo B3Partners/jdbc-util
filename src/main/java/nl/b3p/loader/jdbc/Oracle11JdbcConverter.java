@@ -62,6 +62,10 @@ public class Oracle11JdbcConverter extends OracleJdbcConverter {
             sql.append(limitPart);
         }
         return sql;
-        
+    }
+
+    @Override
+    public String getUpdateSequenceSQL(String seqName, long nextVal){
+        throw new UnsupportedOperationException("Update sequence not supported for this database version.");
     }
 }

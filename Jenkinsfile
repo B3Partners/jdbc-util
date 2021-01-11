@@ -19,6 +19,7 @@ timestamps {
                     sh "ulimit -a"
                     sh "free -m"
                     checkout scm
+                    sh "cp .jenkins/local.oracle.properties src/test/resources/"
                 }
 
                 stage('Build') {

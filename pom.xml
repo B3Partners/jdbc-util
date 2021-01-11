@@ -513,7 +513,6 @@
     </reporting>
     <profiles>
         <profile>
-            <!-- actief voor oa. Jenkins builds -->
             <id>oracle</id>
             <properties />
             <build>
@@ -526,7 +525,6 @@
                                 <database.properties.file>oracle.properties</database.properties.file>
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
-                            <!-- <excludedGroups>nl.b3p.brmo.test.util.database.OracleDriverBasedFailures</excludedGroups>-->
                             <useFile>false</useFile>
                             <argLine>${failsafeArgLine}</argLine>
                         </configuration>
@@ -535,7 +533,6 @@
             </build>
         </profile>
         <profile>
-            <!-- actief voor oa. Travis-CI builds -->
             <id>postgresql</id>
             <build>
                 <plugins>
@@ -547,7 +544,6 @@
                                 <database.properties.file>postgis.properties</database.properties.file>
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
-                            <!-- <excludedGroups>nl.b3p.brmo.test.util.database.PostgreSQLDriverBasedFailures</excludedGroups>-->
                             <excludes>
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
@@ -559,7 +555,6 @@
             </build>
         </profile>
         <profile>
-            <!-- actief voor oa. AppVeyor builds -->
             <id>mssql</id>
             <build>
                 <plugins>
@@ -571,7 +566,6 @@
                                 <database.properties.file>sqlserver.properties</database.properties.file>
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
-                            <!-- <excludedGroups>nl.b3p.brmo.test.util.database.JTDSDriverBasedFailures</excludedGroups> -->
                             <excludes>
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
@@ -603,7 +597,6 @@
                                 <database.properties.file>hsqldb.properties</database.properties.file>
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
-                            <!-- <excludedGroups>nl.b3p.brmo.test.util.database.HSQLDBDriverBasedFailures</excludedGroups> -->
                             <excludes>
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>

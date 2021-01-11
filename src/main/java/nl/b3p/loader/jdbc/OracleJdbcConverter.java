@@ -60,7 +60,7 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     @Override
     public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException, ParseException {
         if(g == null){
-            return gc.toSDO(null, srid);
+            return g;
         }
         String param = g.toText();
         // return param;

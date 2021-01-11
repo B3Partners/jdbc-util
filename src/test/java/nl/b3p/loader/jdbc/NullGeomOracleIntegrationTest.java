@@ -48,10 +48,9 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
      *
      * @throws Exception if any
      */
-    @DisplayName("test null geometrie XML")
-    @ParameterizedTest(name = "#{index} - waarde: {0}")
+    @ParameterizedTest(name = "#{index} - waarde: \"{0}\"")
     @NullAndEmptySource
-    @ValueSource(strings = {"", " ", "   "})
+    @ValueSource(strings = {" ", "   "})
     public void testNullGeomXML(String testVal) throws Exception {
         if (isOracle) {
             Connection connection = DriverManager.getConnection(
@@ -63,10 +62,7 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
             OracleJdbcConverter c = new OracleJdbcConverter(oc);
 
             OracleStruct s = (OracleStruct) c.convertToNativeGeometryObject(testVal);
-            assertEquals("MDSYS.SDO_GEOMETRY", s.getSQLTypeName(), "verwacht een sdo geometry");
-            for (Object o : s.getAttributes()) {
-                assertNull(o, "verwacht 'null'");
-            }
+            assertNull(s, "verwacht een null sdo geometry");
         }
     }
 }

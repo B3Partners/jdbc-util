@@ -20,6 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * test of de converters round-trip safe zijn, dus JTS-input naar native naar JTS-output moet gelijk blijven.
+ * 
+ *  gebruik bijvoorbeeld: 
+ *  {@code mvn -Dit.test=RoundTripIntegrationTest verify -Poracle -Dtest.onlyITs=true}
+ *  om deze test te draaien.
+ *  
  * @author mark
  */
 public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {

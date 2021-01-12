@@ -60,7 +60,7 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     @Override
     public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException, ParseException {
 <span class="nc bnc" id="L62" title="All 2 branches missed.">        if(g == null){</span>
-<span class="nc" id="L63">            return gc.toSDO(null, srid);</span>
+<span class="nc" id="L63">            return g;</span>
         }
 <span class="nc" id="L65">        String param = g.toText();</span>
         // return param;
@@ -201,8 +201,18 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
 <span class="nc" id="L201">        return jts;</span>
     }
 
-    public String getUpdateSequenceSQL(String seqName, long nextVal){
-<span class="nc" id="L205">        throw new UnsupportedOperationException(&quot;Update sequence not supported for this database version.&quot;);</span>
+    /**
+     * Gets a statement to use in a prepared statement to restart a sequence.
+     * This assumes no other interactions are going on with the sequence;
+     * &lt;em&gt;can only be used to increase the value of the sequence, not decrease.&lt;/em&gt;
+     *
+     * @param seqName name of sequence
+     * @return SQL statement specific for the flavour of database
+     */
+    @Override
+    public String getUpdateSequenceSQL(String seqName, long nextVal) {
+        // zie: https://rogertroller.com/2018/02/20/oracle-18c-alter-sequence-restart/
+<span class="nc" id="L215">        return String.format(&quot;ALTER SEQUENCE %s RESTART START WITH %d&quot;,seqName, nextVal);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

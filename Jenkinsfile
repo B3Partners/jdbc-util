@@ -33,7 +33,7 @@ timestamps {
                 }
 
                 lock('brmo-oracle') {
-                    # sh ".jenkins/start-oracle-brmo.sh"
+                    // sh ".jenkins/start-oracle-brmo.sh"
                     timeout(30) {
                         stage('Prepare Oracle Databases') {
                             sh "sqlplus -l -S jenkins_staging/jenkins_staging@192.168.1.26:15210/XE < ./.jenkins/clear-schema.sql"

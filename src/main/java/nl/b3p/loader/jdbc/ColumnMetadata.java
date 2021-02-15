@@ -26,7 +26,7 @@ import java.util.Collection;
  *
  * @author Matthijs Laan
  */
-public class ColumnMetadata implements Comparable {
+public class ColumnMetadata implements Comparable<ColumnMetadata> {
     private String name;
     private int position;
     private int dataType;
@@ -35,7 +35,7 @@ public class ColumnMetadata implements Comparable {
     private Integer decimalDigits;
     private boolean nullable;
     private Integer charOctetLength;
-    private String defaultValue;
+    private final String defaultValue;
     private boolean autoIncrement;
     
     public ColumnMetadata(ResultSet columnMetadataRs) throws SQLException {
@@ -168,7 +168,7 @@ public class ColumnMetadata implements Comparable {
                 defaultValue == null ? "" : "DEFAULT '" + defaultValue + "'");
     }
 
-    public int compareTo(Object rhs) {
-        return new Integer(position).compareTo(((ColumnMetadata)rhs).position);
+    public int compareTo(ColumnMetadata rhs) {
+        return Integer.compare(position, rhs.position);
     }
 }

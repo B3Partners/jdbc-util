@@ -1,5 +1,20 @@
 package nl.b3p.loader.jdbc;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.stream.Stream;
 import nl.b3p.AbstractDatabaseIntegrationTest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -8,17 +23,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import java.sql.*;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class ObjectConverterIntegrationTest extends AbstractDatabaseIntegrationTest {
     private static final Log LOG = LogFactory.getLog(ObjectConverterIntegrationTest.class);

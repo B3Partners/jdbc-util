@@ -52,13 +52,13 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
-    public String createPSGeometryPlaceholder() throws SQLException {
+    public String createPSGeometryPlaceholder() {
         //return "geometry::STGeomFromText(?, 28992)";
         return "?";
     }
 
     @Override
-    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g, int srid) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g, int srid) throws SQLException {
         if (g == null) {
             return null;
         }
@@ -77,7 +77,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
-    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g) throws SQLException {
         return convertToNativeGeometryObject(g, 28992);
     }
 

@@ -33,7 +33,7 @@ public class GeometryJdbcConverterFactory {
     private static final Log LOG = LogFactory.getLog(GeometryJdbcConverterFactory.class);
 
     public static GeometryJdbcConverter getGeometryJdbcConverter(Connection conn) {
-        String databaseProductName = null;
+        String databaseProductName;
         try {
             databaseProductName = conn.getMetaData().getDatabaseProductName();
         } catch (SQLException ex) {
@@ -45,7 +45,8 @@ public class GeometryJdbcConverterFactory {
                 // DO NOT USE conn.getSchema(). This is a JDBC 4.1 method not
                 // supported by older PostgreSQL drivers and NOT by DBCP 1.4
                 // used by Tomcat 7!
-                String schema = new QueryRunner().query(conn, "select current_schema", new ScalarHandler<String>());
+                String schema = new QueryRunner().query(conn, "select current_schema",
+                    new ScalarHandler<>());
                 geomToJdbc.setSchema(schema);
             } catch (SQLException ex) {
                 throw new UnsupportedOperationException("Cannot get/set schema: " + databaseProductName, ex);
@@ -71,8 +72,6 @@ public class GeometryJdbcConverterFactory {
                     case 18:
                     case 19:
                     case 21:
-                        geomToJdbc = new OracleJdbcConverter(oc);
-                        break;
                     default:
                         geomToJdbc = new OracleJdbcConverter(oc);
                 }
@@ -86,7 +85,8 @@ public class GeometryJdbcConverterFactory {
             try {
                 // vanwege Tomcat 7 / DBCP 1.4 die niet de getSchema() implementaties heeft
                 // geomToJdbc.setSchema( conn.getSchema());
-                String schema = new QueryRunner().query(conn, "SELECT SCHEMA_NAME()", new ScalarHandler<String>());
+                String schema = new QueryRunner().query(conn, "SELECT SCHEMA_NAME()",
+                    new ScalarHandler<>());
                 geomToJdbc.setSchema(schema);
             } catch (SQLException ex) {
                 throw new UnsupportedOperationException("Cannot get/set schema: " + databaseProductName, ex);

@@ -67,7 +67,8 @@ public class RoundTripIntegrationTest extends AbstractDatabaseIntegrationTest {
             GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
             Object nativeGeometryObject = conv.convertToNativeGeometryObject((String) null);
             LOG.debug("nativeGeometryObject: " + nativeGeometryObject);
-            assertEquals(null, conv.convertToJTSGeometryObject(nativeGeometryObject), "verwacht 'null' na round-trip");
+            assertNull(conv.convertToJTSGeometryObject(nativeGeometryObject),
+                "verwacht 'null' na round-trip");
         } catch (SQLException | ParseException | NullPointerException e) {
             LOG.error(e);
             fail(e.getLocalizedMessage());

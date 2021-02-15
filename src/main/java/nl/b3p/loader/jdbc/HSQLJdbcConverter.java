@@ -43,7 +43,7 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     }
 
     @Override
-    public String createPSGeometryPlaceholder() throws SQLException {
+    public String createPSGeometryPlaceholder() {
         return "?";
     }
 
@@ -131,7 +131,7 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     }
 
     @Override
-    public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException {
         if(param == null){
             return null;
         }

@@ -95,10 +95,8 @@ public class LongColumnListHandler extends AbstractListHandler<Long> {
      * @throws ClassCastException if the class datatype does not match the
      * column type
      *
-     * @see
-     * org.apache.commons.dbutils.handlers.AbstractListHandler#handle(ResultSet)
+     * @see org.apache.commons.dbutils.handlers.AbstractListHandler#handle(ResultSet)
      */
-    @SuppressWarnings("unchecked")
     @Override
     protected Long handleRow(ResultSet rs) throws SQLException {
         Object o;

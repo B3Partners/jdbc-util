@@ -120,7 +120,7 @@ public abstract class GeometryJdbcConverter {
     public abstract boolean isDuplicateKeyViolationMessage(String message);
 
     /**
-     * bepaal of een melding een contraint violation betreft.
+     * bepaal of een melding een constraint violation betreft.
      *
      * @param message de melding uit de database
      * @return {@code true} als de melding een contraint violation betreft

@@ -22,7 +22,7 @@
         <jaxb.api.version>2.3.3</jaxb.api.version>
         <jaxb.impl.version>2.3.3</jaxb.impl.version>
         <test.junit-jupiter.version>5.7.1</test.junit-jupiter.version>
-        <sqlserver.jdbc.version>9.2.0.jre8</sqlserver.jdbc.version>
+        <sqlserver.jdbc.version>9.2.1.jre15</sqlserver.jdbc.version>
         <postgresql.jdbc.version>42.2.19</postgresql.jdbc.version>
         <postgresql.postgis-jdbc.version>2.5.0</postgresql.postgis-jdbc.version>
         <dbutils.version>1.7</dbutils.version>

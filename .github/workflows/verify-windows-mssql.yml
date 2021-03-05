@@ -1,16 +1,14 @@
-name: MS SQL Server Linux tests
+name: MS SQL Server Windows tests
 
-on:
-  push:
+on: [push]
 
 jobs:
   build:
-    name: MS SQL ${{ matrix.mssql }} / Java ${{ matrix.java }}
-    runs-on: [ubuntu-latest]
+    name: MS SQL 2019 / Java ${{ matrix.java }}
+    runs-on: windows-2019
     strategy:
       matrix:
-        mssql: [2019-latest]
-        java: [8]
+        java: [8, 11]
 
     steps:
       - uses: actions/checkout@v2
@@ -35,19 +33,23 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Setup test environment for MS SQL ${{ matrix.mssql }}
-        run: |
-          ./.build/ci/mssql-start.sh ${{ matrix.mssql }}
-          ./.build/ci/mssql-setup.sh
+      - name: Docker login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.b3p.nl -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Setup database engine for MS SQL
+        run: .\.build\ci\mssql-start.ps1
+
+      - name: Setup test environment for MS SQL
+        run: .\.build\ci\mssql-setup.ps1
 
       - name: Priming build
-        run: mvn install -Dmaven.test.skip=true --global-toolchains .github/ubuntu-toolchains.xml -B -V -e -fae -q -Pmssql
+        run: mvn --% install -Dmaven.test.skip=true --global-toolchains .github/windows-toolchains.xml -B -V -e -fae -q -Pmssql
 
       - name: Verify ${{ matrix.mssql }}
-        run: mvn -e verify -B --global-toolchains .github/ubuntu-toolchains.xml -Pmssql -T1 -Dtest.onlyITs=true
+        run: mvn --% -e verify -B --global-toolchains .github/windows-toolchains.xml -Pmssql -T1 -Dtest.onlyITs=true
 
       - name: Clean artifacts from repository
-        run: mvn clean build-helper:remove-project-artifact
+        run: mvn --% clean build-helper:remove-project-artifact
 
       - name: Upload codecoverage
         uses: codecov/codecov-action@v1

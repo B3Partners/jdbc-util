@@ -1,6 +1,7 @@
 name: Oracle tests
 
-on: [push]
+on:
+  push:
 
 jobs:
   build:

@@ -6,7 +6,7 @@ printf "\n\nStarting MS SQL Server $1 container, this could take a while..."
 # this container can be stopped using: docker stop jdbcutil
 docker run --rm --name jdbcutil -e ACCEPT_EULA=Y -e sa_password='Password12!' -p '1433:1433' -d 'docker.b3p.nl/cautious-chainsaw/mssql-server-windows-developer:winsrv1809-sql2019'
 
-printf "\nWaiting for MS SQL Server $1 database to start up.... "
+printf "\nWaiting for MS SQL Server database to start up.... "
 $WAIT = 0;
 do
 {

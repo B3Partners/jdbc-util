@@ -34,7 +34,7 @@ import java.sql.SQLException;
  */
 public class OracleJdbcConverter extends GeometryJdbcConverter {
 <span class="nc" id="L36">    protected final static Log LOG = LogFactory.getLog(OracleJdbcConverter.class);</span>
-    private GeometryConverter gc;
+    private final GeometryConverter gc;
     private String schema;
 
 <span class="nc" id="L40">    public OracleJdbcConverter(OracleConnection oc) throws SQLException {</span>
@@ -52,7 +52,7 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
-    public String createPSGeometryPlaceholder() throws SQLException {
+    public String createPSGeometryPlaceholder() {
         // return &quot;SDO_GEOMETRY(?, 28992)&quot;;
 <span class="nc" id="L57">        return &quot;?&quot;;</span>
     }

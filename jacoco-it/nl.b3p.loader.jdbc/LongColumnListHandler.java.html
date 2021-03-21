@@ -95,25 +95,23 @@ public class LongColumnListHandler extends AbstractListHandler&lt;Long&gt; {
      * @throws ClassCastException if the class datatype does not match the
      * column type
      *
-     * @see
-     * org.apache.commons.dbutils.handlers.AbstractListHandler#handle(ResultSet)
+     * @see org.apache.commons.dbutils.handlers.AbstractListHandler#handle(ResultSet)
      */
-    @SuppressWarnings(&quot;unchecked&quot;)
     @Override
     protected Long handleRow(ResultSet rs) throws SQLException {
         Object o;
         Long l;
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (this.columnName == null) {</span>
-<span class="nc" id="L107">            o = rs.getObject(this.columnIndex);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (this.columnName == null) {</span>
+<span class="nc" id="L105">            o = rs.getObject(this.columnIndex);</span>
         } else {
-<span class="nc" id="L109">            o = rs.getObject(this.columnName);</span>
+<span class="nc" id="L107">            o = rs.getObject(this.columnName);</span>
         }
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (o instanceof BigDecimal) {</span>
-<span class="nc" id="L112">            l = ((BigDecimal) o).longValue();</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (o instanceof BigDecimal) {</span>
+<span class="nc" id="L110">            l = ((BigDecimal) o).longValue();</span>
         } else {
-<span class="nc" id="L114">            l = (Long) o;</span>
+<span class="nc" id="L112">            l = (Long) o;</span>
         }
-<span class="nc" id="L116">        return l;</span>
+<span class="nc" id="L114">        return l;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

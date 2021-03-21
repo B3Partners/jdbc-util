@@ -43,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
     }
 
     @Override
-    public String createPSGeometryPlaceholder() throws SQLException {
+    public String createPSGeometryPlaceholder() {
 <span class="nc" id="L47">        return &quot;?&quot;;</span>
     }
 
@@ -131,7 +131,7 @@ import org.apache.commons.logging.LogFactory;
     }
 
     @Override
-    public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException {
 <span class="nc bnc" id="L135" title="All 2 branches missed.">        if(param == null){</span>
 <span class="nc" id="L136">            return null;</span>
         }

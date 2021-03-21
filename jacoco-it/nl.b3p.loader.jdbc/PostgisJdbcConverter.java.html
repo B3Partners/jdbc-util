@@ -41,18 +41,18 @@ import org.postgis.PGgeometry;
     }
 
     @Override
-    public String createPSGeometryPlaceholder() throws SQLException {
+    public String createPSGeometryPlaceholder() {
         //return &quot;ST_GeomFromText(?, 28992)&quot;;
 <span class="nc" id="L46">        return &quot;?&quot;;</span>
     }
    
     @Override
-    public Object convertToNativeGeometryObject(Geometry g) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(Geometry g) throws SQLException {
 <span class="nc" id="L51">      return convertToNativeGeometryObject(g, 28992);</span>
     }
     
     @Override
-    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException, ParseException {
+    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException {
 <span class="nc bnc" id="L56" title="All 2 branches missed.">        if(g == null){</span>
 <span class="nc" id="L57">            return null;</span>
         }

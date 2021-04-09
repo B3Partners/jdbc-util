@@ -22,8 +22,8 @@
     <logger name="org.dbunit.ext">
         <level value="info" />
     </logger>
-   <logger name="nl.b3p.brmo">
-        <level value="info" />
+    <logger name="nl.b3p.loader">
+        <level value="debug" />
     </logger>
     <root>
         <level value="info" />

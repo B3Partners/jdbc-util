@@ -1,3 +1,7 @@
+# Copyright (C) 2017-2021 B3Partners B.V.
+#
+# SPDX-License-Identifier: MIT
+
 extraction: 
   java: 
     index: 

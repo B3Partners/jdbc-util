@@ -1,2 +1,6 @@
+# Copyright (C) 2017-2021 B3Partners B.V.
+#
+# SPDX-License-Identifier: MIT
+
 codecov:
   token: c23e7269-c995-47b1-b1a8-9f6be5f70b0d

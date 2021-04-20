@@ -1,0 +1,13 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: .appveyor/* .build/* .github/* .jenkins/* .mvn/* src/site/*
+Copyright: 2017 B3Partners B.V.
+License: MIT
+
+Files: README.md
+Copyright: 2017 B3Partners B.V.
+License: MIT
+
+Files: src/site/*.script src/test/resources/*
+Copyright: 2017 B3Partners B.V.
+License: MIT

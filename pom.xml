@@ -636,9 +636,9 @@ SPDX-License-Identifier: MIT
     </repositories>
     <licenses>
         <license>
-            <name>MIT-License</name>
+            <name>MIT</name>
             <distribution>repo</distribution>
-            <url>https://raw.githubusercontent.com/B3Partners/jdbc-util/master/LICENSE</url>
+            <url>https://spdx.org/licenses/MIT.html</url>
         </license>
     </licenses>
 </project>

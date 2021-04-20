@@ -4,7 +4,7 @@ Files: .appveyor/* .build/* .github/* .jenkins/* .mvn/* src/site/*
 Copyright: 2017 B3Partners B.V.
 License: MIT
 
-Files: README.md
+Files: README.md pom.xml
 Copyright: 2017 B3Partners B.V.
 License: MIT
 

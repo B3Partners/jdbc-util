@@ -2,8 +2,8 @@
          xmlns="http://maven.apache.org/DECORATION/1.8.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          name="${this.name} ${this.version}">
-  <publishDate position="left" format="dd-MMMM-yyyy" />
-  <version position="left" />
+  <publishDate format="dd-MMMM-yyyy" />
+  <version/>
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
@@ -27,8 +27,6 @@
     <menu name="Informatie">
       <item name="Home" href="/index.html" />
     </menu>
-    <menu ref="parent" />
-    <menu ref="modules" />
     <menu ref="reports" />
   </body>
   <poweredBy />

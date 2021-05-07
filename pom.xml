@@ -12,6 +12,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceVersion>${java.version}</project.build.sourceVersion>
         <project.build.targetVersion>${java.version}</project.build.targetVersion>
+        <project.build.outputTimestamp>2021-03-21T15:50:00Z</project.build.outputTimestamp>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -265,6 +266,9 @@
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${maven-javadoc-plugin.version}</version>
+                    <configuration>
+                        <notimestamp>true</notimestamp>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-antrun-plugin</artifactId>
@@ -481,6 +485,9 @@
                         </reports>
                     </reportSet>
                 </reportSets>
+                <configuration>
+                    <notimestamp>true</notimestamp>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -500,15 +507,16 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
                 <configuration>
+                    <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
                     <dataFileIncludes>
-                        <dataFileInclude>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFileInclude>
-                        <dataFileInclude>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFileInclude>
+                        <dataFileInclude>${project.build.directory}/jacoco-ut.exec</dataFileInclude>
+                        <dataFileInclude>${project.build.directory}/jacoco-it.exec</dataFileInclude>
                     </dataFileIncludes>
                 </configuration>
                 <reportSets>
                     <reportSet>
                         <reports>
-                            <report>report-aggregate</report>
+                            <report>report</report>
                         </reports>
                     </reportSet>
                 </reportSets>
@@ -617,7 +625,7 @@
                 <jdk>11</jdk>
             </activation>
             <properties>
-                <java.version>11</java.version>
+                <java.version>8</java.version>
             </properties>
         </profile>
     </profiles>

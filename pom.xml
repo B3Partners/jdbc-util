@@ -10,6 +10,7 @@
     <inceptionYear>2017</inceptionYear>
     <properties>
         <java.version>1.8</java.version>
+        <java.toolchain.version>${java.version}</java.toolchain.version>
         <project.build.sourceVersion>${java.version}</project.build.sourceVersion>
         <project.build.targetVersion>${java.version}</project.build.targetVersion>
         <project.build.outputTimestamp>2021-05-07T13:26:12Z</project.build.outputTimestamp>
@@ -151,11 +152,11 @@
             <!-- kan gebruikt worden in de OracleConnectionUnwrapper -->
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-dbcp</artifactId>
-            <version>7.0.109</version>
+            <version>9.0.46</version>
             <exclusions>
                 <exclusion>
                     <artifactId>org.apache.tomcat</artifactId>
-                    <groupId>tomcat-util</groupId>
+                    <groupId>tomcat-juli</groupId>
                 </exclusion>
             </exclusions>
             <scope>provided</scope>
@@ -301,7 +302,7 @@
                 <configuration>
                     <toolchains>
                         <jdk>
-                            <version>${java.version}</version>
+                            <version>${java.toolchain.version}</version>
                         </jdk>
                     </toolchains>
                 </configuration>
@@ -626,6 +627,7 @@
             </activation>
             <properties>
                 <java.version>1.8</java.version>
+                <java.toolchain.version>11</java.toolchain.version>
             </properties>
         </profile>
     </profiles>

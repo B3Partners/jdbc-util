@@ -13,7 +13,7 @@ updates:
   ignore:
   - dependency-name: org.apache.tomcat:tomcat-dbcp
     versions:
-    - ">= 8.a"
+    - ">= 10.a"
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:

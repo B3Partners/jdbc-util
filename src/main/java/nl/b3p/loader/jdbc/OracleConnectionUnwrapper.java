@@ -48,9 +48,9 @@ public class OracleConnectionUnwrapper {
         } else if(mdC instanceof OracleConnection) {
             LOG.trace("Cast MetaData Connection naar OracleConnection");
             oc = (OracleConnection)mdC;
-        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp.PoolableConnection) {
+        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {
             LOG.trace("Cast naar OracleConnection via cast naar tomcat DelegatingConnection");
-            oc = (OracleConnection) ((org.apache.tomcat.dbcp.dbcp.DelegatingConnection) mdC).getDelegate();
+            oc = (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) mdC).getDelegate();
         } else {
             throw new SQLException(
                     "Kan connectie niet unwrappen naar OracleConnection van meta connectie: "

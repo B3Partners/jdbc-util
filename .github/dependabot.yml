@@ -14,6 +14,7 @@ updates:
   - dependency-name: org.apache.tomcat:tomcat-dbcp
     versions:
     - ">= 10.a"
+
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
@@ -22,3 +23,5 @@ updates:
     timezone: Europe/Amsterdam
   labels:
   - "build infrastructure"
+  assignees:
+  - mprins

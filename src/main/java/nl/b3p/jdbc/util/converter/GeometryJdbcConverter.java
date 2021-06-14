@@ -16,7 +16,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-package nl.b3p.loader.jdbc;
+package nl.b3p.jdbc.util.converter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

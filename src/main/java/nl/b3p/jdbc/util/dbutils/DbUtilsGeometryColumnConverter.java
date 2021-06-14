@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 B3Partners B.V.
+ * Copyright (C) 2017 B3Partners B.V.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
@@ -16,40 +16,32 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-package nl.b3p.loader.jdbc;
+package nl.b3p.jdbc.util.dbutils;
 
-import oracle.jdbc.OracleConnection;
-
+import nl.b3p.jdbc.util.converter.GeometryJdbcConverter;
+import org.apache.commons.dbutils.BeanProcessor;
+import org.locationtech.jts.geom.Geometry;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Oracle 12c specifieke overrides.
- *
- * @author mprins
+ * @author Meine Toonen meinetoonen@b3partners.nl
  */
-public class Oracle12JdbcConverter extends OracleJdbcConverter {
+public class DbUtilsGeometryColumnConverter extends BeanProcessor {
 
-    public Oracle12JdbcConverter(OracleConnection oc) throws SQLException {
-        super(oc);
+    private final GeometryJdbcConverter gjc;
+
+    public DbUtilsGeometryColumnConverter(GeometryJdbcConverter gjc) {
+        this.gjc = gjc;
     }
 
-    /**
-     * Gets a statement to use in a prepared statement to restart a sequence.
-     * This assumes no other interactions are going on with the sequence;
-     * <em>can only be used to increase the value of the sequence, not decrease.</em>
-     *
-     * @param seqName name of sequence
-     * @return SQL statement specific for the flavour of database
-     */
     @Override
-    public String getUpdateSequenceSQL(String seqName, long nextVal) {
-        return String.format("DECLARE curr_seq NUMBER;\n"
-                + "BEGIN\n"
-                + "LOOP\n"
-                + "SELECT %s.NEXTVAL INTO curr_seq FROM dual;\n"
-                + "IF curr_seq >= (%d-1) THEN EXIT;\n"
-                + "END IF;\n"
-                + "END LOOP;\n"
-                + "END;\n",seqName, nextVal);
+    protected Object processColumn(ResultSet rs, int index, Class<?> propType) throws SQLException {
+        if (Geometry.class.isAssignableFrom(propType)) {
+            Object o = rs.getObject(index);
+            return gjc.convertToJTSGeometryObject(o);
+        } else {
+            return super.processColumn(rs, index, propType);
+        }
     }
 }

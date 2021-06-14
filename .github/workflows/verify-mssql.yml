@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         mssql: [2019-latest]
-        java: [8]
+        java: [ 11 ]
         java_dist: [ 'zulu' ]
 
     steps:
@@ -23,16 +23,6 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
-      - name: Set up JDK 11 for toolchains
-        uses: actions/setup-java@v2
-        with:
-          java-version: 11
-          distribution: ${{ matrix.java_dist }}
-      - name: Set up JDK 8 for toolchains
-        uses: actions/setup-java@v2
-        with:
-          java-version: 8
-          distribution: ${{ matrix.java_dist }}
       - name: Set up JDK for build
         uses: actions/setup-java@v2
         with:

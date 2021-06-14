@@ -16,9 +16,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-package nl.b3p.loader.jdbc;
+package nl.b3p.jdbc.util.converter;
 
-import nl.b3p.AbstractDatabaseIntegrationTest;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;

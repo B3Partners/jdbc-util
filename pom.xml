@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.b3p</groupId>
     <artifactId>jdbc-util</artifactId>
-    <version>8.3-SNAPSHOT</version>
+    <version>9.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDBC Util</name>
     <description>JDBC utilities: Converter for geometries and other useful things</description>
     <inceptionYear>2017</inceptionYear>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <java.toolchain.version>${java.version}</java.toolchain.version>
         <project.build.sourceVersion>${java.version}</project.build.sourceVersion>
         <project.build.targetVersion>${java.version}</project.build.targetVersion>
@@ -25,7 +25,7 @@
         <jaxb.api.version>2.3.3</jaxb.api.version>
         <jaxb.impl.version>2.3.3</jaxb.impl.version>
         <test.junit-jupiter.version>5.7.2</test.junit-jupiter.version>
-        <sqlserver.jdbc.version>9.3.1.jre8-preview</sqlserver.jdbc.version>
+        <sqlserver.jdbc.version>9.3.1.jre11-preview</sqlserver.jdbc.version>
         <postgresql.jdbc.version>42.2.21</postgresql.jdbc.version>
         <postgresql.postgis-jdbc.version>2.5.0</postgresql.postgis-jdbc.version>
         <dbutils.version>1.7</dbutils.version>
@@ -118,10 +118,10 @@
         </dependency>
         <dependency>
             <!-- <groupId>com.oracle.database.jdbc</groupId> -->
-            <!-- <artifactId>ojdbc8</artifactId> -->
+            <!-- <artifactId>ojdbc11</artifactId> -->
             <!-- ojdbc8_g heeft debugging symbols -->
             <groupId>com.oracle.database.jdbc.debug</groupId>
-            <artifactId>ojdbc8_g</artifactId>
+            <artifactId>ojdbc11_g</artifactId>
             <version>${oracle.jdbc.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -145,7 +145,7 @@
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -619,16 +619,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <id>java11</id>
-            <activation>
-                <jdk>11</jdk>
-            </activation>
-            <properties>
-                <java.version>1.8</java.version>
-                <java.toolchain.version>11</java.toolchain.version>
-            </properties>
         </profile>
     </profiles>
     <repositories>

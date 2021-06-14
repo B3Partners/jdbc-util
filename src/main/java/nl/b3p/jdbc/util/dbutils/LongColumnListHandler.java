@@ -16,7 +16,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-package nl.b3p.loader.jdbc;
+package nl.b3p.jdbc.util.dbutils;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;

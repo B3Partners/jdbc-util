@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OracleJdbcConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JDBC Util</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.jdbc.util.converter</a> &gt; <span class="el_source">OracleJdbcConverter.java</span></div><h1>OracleJdbcConverter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 B3Partners B.V.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+ * the Software.
+ *
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ */
+package nl.b3p.jdbc.util.converter;
+
+import oracle.jdbc.OracleConnection;
+import oracle.jdbc.OracleStruct;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.geotools.data.oracle.sdo.GeometryConverter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+
+import java.sql.SQLException;
+
+/**
+ *
+ * @author Matthijs Laan
+ */
+public class OracleJdbcConverter extends GeometryJdbcConverter {
+<span class="nc" id="L37">    protected final static Log LOG = LogFactory.getLog(OracleJdbcConverter.class);</span>
+    private final GeometryConverter gc;
+    private String schema;
+
+<span class="nc" id="L41">    public OracleJdbcConverter(OracleConnection oc) throws SQLException {</span>
+<span class="nc" id="L42">        gc = new GeometryConverter(oc, gf);</span>
+<span class="nc" id="L43">    }</span>
+
+    @Override
+    public boolean isDuplicateKeyViolationMessage(String message) {
+<span class="nc bnc" id="L47" title="All 4 branches missed.">        return message!=null &amp;&amp; message.startsWith(&quot;ORA-00001:&quot;);</span>
+    }
+
+    @Override
+    public boolean isFKConstraintViolationMessage(String message) {
+<span class="nc bnc" id="L52" title="All 4 branches missed.">        return message != null &amp;&amp; message.startsWith(&quot;ORA-02291:&quot;);</span>
+    }
+
+    @Override
+    public String createPSGeometryPlaceholder() {
+        // return &quot;SDO_GEOMETRY(?, 28992)&quot;;
+<span class="nc" id="L58">        return &quot;?&quot;;</span>
+    }
+    
+    @Override
+    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException, ParseException {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if(g == null){</span>
+<span class="nc" id="L64">            return g;</span>
+        }
+<span class="nc" id="L66">        String param = g.toText();</span>
+        // return param;
+<span class="nc" id="L68">        WKTReader reader = new WKTReader(gf);</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">        Geometry geom = param == null || param.trim().length() == 0 ? null : reader.read(param);</span>
+<span class="nc" id="L70">        return gc.toSDO(geom, srid);</span>
+    }
+    
+    @Override
+    public Object convertToNativeGeometryObject(Geometry g) throws SQLException, ParseException {
+<span class="nc" id="L75">        return convertToNativeGeometryObject(g, 28992);</span>
+    }
+
+    /**
+     * @return the schema
+     */
+    @Override
+    public String getSchema() {
+<span class="nc" id="L83">        return schema;</span>
+    }
+
+    /**
+     * @param schema the schema to set
+     */
+    public void setSchema(String schema) {
+<span class="nc" id="L90">        this.schema = schema;</span>
+<span class="nc" id="L91">    }</span>
+
+    @Override
+    public String getGeomTypeName() {
+<span class="nc" id="L95">        return &quot;SDO_GEOMETRY&quot;;</span>
+    }
+    
+    
+    /*
+     * Check http://www.oracle.com/technetwork/issue-archive/2006/06-sep/o56asktom-086197.html
+     * why just WHERE ROWNUM &gt; x AND ROWNUM &lt; x does not work.
+     * Using subquery with optimizer.
+    */
+    @Override
+    public String buildPaginationSql(String sql, int offset, int limit) {
+<span class="nc" id="L106">        StringBuilder builder = new StringBuilder();</span>
+
+<span class="nc" id="L108">        builder.append(&quot;select * from (&quot;);</span>
+<span class="nc" id="L109">        builder.append(&quot;select /*+ FIRST_ROWS(n) */&quot;);</span>
+<span class="nc" id="L110">        builder.append(&quot; a.*, ROWNUM rnum from (&quot;);</span>
+
+<span class="nc" id="L112">        builder.append(sql);</span>
+
+<span class="nc" id="L114">        builder.append(&quot; ) a where ROWNUM &lt;=&quot;);</span>
+
+<span class="nc" id="L116">        builder.append(offset + limit);</span>
+
+<span class="nc" id="L118">        builder.append(&quot; )&quot;);</span>
+
+<span class="nc" id="L120">        builder.append(&quot; where rnum  &gt; &quot;);</span>
+<span class="nc" id="L121">        builder.append(offset);</span>
+
+<span class="nc" id="L123">        return builder.toString();</span>
+    }
+
+    /**
+     * Voegt een limiet toe aan een query te gebruiken in geval van insert met
+     * select. Bijvoorbeeld zoals het plaatsen van stand-berichten in de job
+     * tabel.
+     * &lt;b&gt;NB&lt;/b&gt; {@link #buildPaginationSql} is niet bruikbaar voor een
+     * insert+select
+     *
+     * @param sql query zonder limiet
+     * @param limit max aantal op te halen records dat voldoet aan query
+     * @return query met limiet
+     * @since 1.4.1
+     */
+    @Override
+    public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
+<span class="nc" id="L140">        sql.append(&quot; FETCH FIRST &quot;).append(limit).append(&quot; ROWS ONLY&quot;);</span>
+<span class="nc" id="L141">        return sql;</span>
+    }
+
+    @Override
+    public boolean useSavepoints() {
+<span class="nc" id="L146">        return false;</span>
+    }
+
+    @Override
+    public boolean isPmdKnownBroken() {
+<span class="nc" id="L151">        return true;</span>
+    }
+
+    @Override
+    public String getGeotoolsDBTypeName() {
+<span class="nc" id="L156">        return &quot;oracle&quot;;</span>
+    }
+
+    @Override
+    public String getMViewsSQL() {
+<span class="nc" id="L161">        return &quot;SELECT MVIEW_NAME FROM ALL_MVIEWS&quot;;</span>
+    }
+
+    @Override
+    public String getMViewRefreshSQL(String mview) {
+        //return String.format(&quot;DBMS_MVIEW.REFRESH('%s','?','',FALSE,TRUE,0,0,0,FALSE,FALSE)&quot;, mview);
+<span class="nc" id="L167">        return String.format(&quot;begin\ndbms_mview.refresh('%s','C');\nend;&quot;, mview);</span>
+    }
+
+    @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+<span class="nc" id="L172">        return String.format(&quot;SELECT %s.nextval FROM dual&quot;, seqName);</span>
+    }
+
+    /**
+     * de geotools converter is niet round-trip safe, er treed een NPE op als een
+     * 'lege' geometrie wordt aangeboden:
+     * &lt;pre&gt;
+     *    at org.geotools.data.oracle.sdo.SDO.ETYPE(SDO.java:1681)
+     *    at org.geotools.data.oracle.sdo.SDO.create(SDO.java:1933)
+     * 	  at org.geotools.data.oracle.sdo.GeometryConverter.asGeometry(GeometryConverter.java:121)
+     * &lt;/pre&gt;
+     * dat is een bug in geotools.
+     *
+     * @param nativeObj uit de database
+     * @return jts geom of {@code null}
+     */
+    @Override
+    public Geometry convertToJTSGeometryObject(Object nativeObj) {
+<span class="nc" id="L190">        org.locationtech.jts.geom.Geometry jts = null;</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (nativeObj == null) {</span>
+<span class="nc" id="L192">            return jts;</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        } else if (OracleStruct.class.isAssignableFrom(nativeObj.getClass())) {</span>
+            try {
+<span class="nc" id="L195">                jts = gc.asGeometry((OracleStruct) nativeObj);</span>
+<span class="nc" id="L196">            } catch (SQLException | NullPointerException e) {</span>
+<span class="nc" id="L197">                LOG.error(&quot;Error parsing OracleStruct to geometry&quot;, e);</span>
+<span class="nc" id="L198">            }</span>
+        } else {
+<span class="nc" id="L200">            LOG.error(&quot;Native Oracle object can not be converted to JTS geometry&quot;);</span>
+        }
+<span class="nc" id="L202">        return jts;</span>
+    }
+
+    /**
+     * Gets a statement to use in a prepared statement to restart a sequence.
+     * This assumes no other interactions are going on with the sequence;
+     * &lt;em&gt;can only be used to increase the value of the sequence, not decrease.&lt;/em&gt;
+     *
+     * @param seqName name of sequence
+     * @return SQL statement specific for the flavour of database
+     */
+    @Override
+    public String getUpdateSequenceSQL(String seqName, long nextVal) {
+        // zie: https://rogertroller.com/2018/02/20/oracle-18c-alter-sequence-restart/
+<span class="nc" id="L216">        return String.format(&quot;ALTER SEQUENCE %s RESTART START WITH %d&quot;,seqName, nextVal);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

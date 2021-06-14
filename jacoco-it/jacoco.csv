@@ -1,13 +1,13 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-JDBC Util,nl.b3p.loader.util,DbUtilsGeometryColumnConverter,25,0,2,0,7,0,3,0,2,0
-JDBC Util,nl.b3p.loader.jdbc,OracleJdbcConverter,206,0,18,0,48,0,29,0,20,0
-JDBC Util,nl.b3p.loader.jdbc,ColumnMetadata,303,0,24,0,60,0,36,0,24,0
-JDBC Util,nl.b3p.loader.jdbc,Oracle11JdbcConverter,80,0,6,0,15,0,6,0,3,0
-JDBC Util,nl.b3p.loader.jdbc,HSQLJdbcConverter,115,0,4,0,30,0,20,0,18,0
-JDBC Util,nl.b3p.loader.jdbc,Oracle12JdbcConverter,18,0,0,0,4,0,2,0,2,0
-JDBC Util,nl.b3p.loader.jdbc,GeometryJdbcConverter,190,0,12,0,40,0,13,0,6,0
-JDBC Util,nl.b3p.loader.jdbc,GeometryJdbcConverterFactory,175,0,11,0,42,0,9,0,3,0
-JDBC Util,nl.b3p.loader.jdbc,PostgisJdbcConverter,163,0,18,0,38,0,27,0,18,0
-JDBC Util,nl.b3p.loader.jdbc,OracleConnectionUnwrapper,104,0,6,0,19,0,6,0,3,0
-JDBC Util,nl.b3p.loader.jdbc,LongColumnListHandler,52,0,4,0,17,0,7,0,5,0
-JDBC Util,nl.b3p.loader.jdbc,MssqlJdbcConverter,189,0,20,0,47,0,29,0,19,0
+JDBC Util,nl.b3p.jdbc.util.converter,OracleJdbcConverter,206,0,18,0,48,0,29,0,20,0
+JDBC Util,nl.b3p.jdbc.util.converter,MssqlJdbcConverter,174,0,20,0,47,0,29,0,19,0
+JDBC Util,nl.b3p.jdbc.util.converter,Oracle11JdbcConverter,74,0,6,0,15,0,6,0,3,0
+JDBC Util,nl.b3p.jdbc.util.converter,ColumnMetadata,268,0,24,0,64,0,36,0,24,0
+JDBC Util,nl.b3p.jdbc.util.converter,GeometryJdbcConverter,174,0,12,0,40,0,13,0,6,0
+JDBC Util,nl.b3p.jdbc.util.converter,HSQLJdbcConverter,109,0,4,0,30,0,20,0,18,0
+JDBC Util,nl.b3p.jdbc.util.converter,Oracle12JdbcConverter,18,0,0,0,4,0,2,0,2,0
+JDBC Util,nl.b3p.jdbc.util.converter,OracleConnectionUnwrapper,77,0,6,0,19,0,6,0,3,0
+JDBC Util,nl.b3p.jdbc.util.converter,GeometryJdbcConverterFactory,151,0,11,0,42,0,9,0,3,0
+JDBC Util,nl.b3p.jdbc.util.converter,PostgisJdbcConverter,154,0,18,0,38,0,27,0,18,0
+JDBC Util,nl.b3p.jdbc.util.dbutils,LongColumnListHandler,52,0,4,0,17,0,7,0,5,0
+JDBC Util,nl.b3p.jdbc.util.dbutils,DbUtilsGeometryColumnConverter,25,0,2,0,7,0,3,0,2,0

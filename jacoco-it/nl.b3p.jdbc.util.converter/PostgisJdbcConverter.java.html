@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PostgisJdbcConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JDBC Util</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.jdbc.util.converter</a> &gt; <span class="el_source">PostgisJdbcConverter.java</span></div><h1>PostgisJdbcConverter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 B3Partners B.V.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+ * the Software.
+ *
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ */
+package nl.b3p.jdbc.util.converter;
+
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import java.sql.SQLException;
+import org.postgis.PGgeometry;
+
+/**
+ *
+ * @author Matthijs Laan
+ */
+<span class="nc" id="L30">public class PostgisJdbcConverter extends GeometryJdbcConverter {</span>
+
+<span class="nc" id="L32">    private String schema = null;</span>
+
+    @Override
+    public boolean isDuplicateKeyViolationMessage(String message) {
+<span class="nc bnc" id="L36" title="All 4 branches missed.">        return message!=null &amp;&amp; message.startsWith(&quot;ERROR: duplicate key value violates unique constraint&quot;);</span>
+    }
+
+    @Override
+    public boolean isFKConstraintViolationMessage(String message) {
+<span class="nc bnc" id="L41" title="All 6 branches missed.">        return message != null &amp;&amp; message.startsWith(&quot;ERROR: insert or update on table&quot;) &amp;&amp; message.contains(&quot;violates foreign key constraint&quot;);</span>
+    }
+
+    @Override
+    public String createPSGeometryPlaceholder() {
+        //return &quot;ST_GeomFromText(?, 28992)&quot;;
+<span class="nc" id="L47">        return &quot;?&quot;;</span>
+    }
+   
+    @Override
+    public Object convertToNativeGeometryObject(Geometry g) throws SQLException {
+<span class="nc" id="L52">      return convertToNativeGeometryObject(g, 28992);</span>
+    }
+    
+    @Override
+    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if(g == null){</span>
+<span class="nc" id="L58">            return null;</span>
+        }
+<span class="nc" id="L60">        String param = g.toText();</span>
+<span class="nc bnc" id="L61" title="All 4 branches missed.">        if (param == null || param.trim().length() == 0) {</span>
+<span class="nc" id="L62">            return null;</span>
+        }
+<span class="nc" id="L64">        return new PGgeometry(&quot;SRID=&quot; + srid + &quot;;&quot; + param);</span>
+    }
+
+    @Override
+    public String getSchema() {
+<span class="nc" id="L69">        return schema;</span>
+    }
+
+    public void setSchema(String schema) {
+<span class="nc" id="L73">        this.schema = schema;</span>
+<span class="nc" id="L74">    }</span>
+
+    @Override
+    public String getGeomTypeName() {
+<span class="nc" id="L78">        return &quot;geometry&quot;;</span>
+    }
+    
+    @Override
+    public String buildPaginationSql(String sql, int offset, int limit) {
+<span class="nc" id="L83">        StringBuilder builder = new StringBuilder(sql);</span>
+<span class="nc" id="L84">        builder.append(&quot; LIMIT &quot;);</span>
+<span class="nc" id="L85">        builder.append(limit);</span>
+<span class="nc" id="L86">        builder.append(&quot; OFFSET &quot;);</span>
+<span class="nc" id="L87">        builder.append(offset);</span>
+<span class="nc" id="L88">        return builder.toString();</span>
+    }
+
+    @Override
+    public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
+<span class="nc" id="L93">        String s = buildPaginationSql(sql.toString(), 0, limit);</span>
+<span class="nc" id="L94">        return new StringBuilder(s);</span>
+    }
+
+    @Override
+    public boolean useSavepoints() {
+<span class="nc" id="L99">        return true;</span>
+    }
+
+     @Override
+    public boolean isPmdKnownBroken() {
+<span class="nc" id="L104">        return false;</span>
+    }
+    @Override
+    public String getGeotoolsDBTypeName() {
+<span class="nc" id="L108">        return &quot;postgis&quot;;</span>
+    }
+
+    @Override
+    public String getMViewsSQL() {
+<span class="nc" id="L113">        return &quot;SELECT oid::regclass::text FROM pg_class WHERE relkind = 'm'&quot;;</span>
+    }
+
+    @Override
+    public String getMViewRefreshSQL(String mview) {
+<span class="nc" id="L118">        return String.format(&quot;REFRESH MATERIALIZED VIEW %s;&quot;, mview);</span>
+    }
+
+    @Override
+    public String getSelectNextValueFromSequenceSQL(String seqName) {
+<span class="nc" id="L123">        return String.format(&quot;SELECT nextval('%s')&quot;, seqName);</span>
+    }
+
+    @Override
+    public Geometry convertToJTSGeometryObject(Object nativeObj) {
+<span class="nc" id="L128">        PGgeometry geom = (PGgeometry)nativeObj;</span>
+<span class="nc" id="L129">        StringBuffer sb = new StringBuffer();</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        if(geom == null){</span>
+<span class="nc" id="L131">            return null;</span>
+        }
+<span class="nc" id="L133">        geom.getGeometry().outerWKT(sb);</span>
+        try {
+<span class="nc" id="L135">            return wkt.read(sb.toString());</span>
+<span class="nc" id="L136">        } catch (ParseException ex) {</span>
+<span class="nc" id="L137">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

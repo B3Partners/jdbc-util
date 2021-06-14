@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GeometryJdbcConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JDBC Util</a> &gt; <a href="index.source.html" class="el_package">nl.b3p.jdbc.util.converter</a> &gt; <span class="el_source">GeometryJdbcConverter.java</span></div><h1>GeometryJdbcConverter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 B3Partners B.V.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of
+ * the Software.
+ *
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+ * TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ */
+package nl.b3p.jdbc.util.converter;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+
+/**
+ *
+ * @author Matthijs Laan
+ * @author Meine Toonen
+ * @author mprins
+ */
+<span class="nc" id="L44">public abstract class GeometryJdbcConverter {</span>
+<span class="nc" id="L45">    private static final Log LOG = LogFactory.getLog(GeometryJdbcConverter.class);</span>
+
+    static public Object convertToSQLObject(String stringValue, ColumnMetadata cm,
+            String tableName, String column) {
+        Object param;
+<span class="nc" id="L50">        stringValue = stringValue.trim();</span>
+<span class="nc bnc" id="L51" title="All 4 branches missed.">        switch (cm.getDataType()) {</span>
+            case java.sql.Types.DECIMAL:
+            case java.sql.Types.NUMERIC:
+            case java.sql.Types.INTEGER:
+                try {
+<span class="nc" id="L56">                    param = new BigDecimal(stringValue);</span>
+<span class="nc" id="L57">                } catch (NumberFormatException nfe) {</span>
+<span class="nc" id="L58">                    throw new NumberFormatException(</span>
+<span class="nc" id="L59">                            String.format(&quot;Conversie van waarde \&quot;%s\&quot; naar type %s voor %s.%s niet mogelijk&quot;,</span>
+                                    stringValue,
+<span class="nc" id="L61">                                    cm.getTypeName(),</span>
+                                    tableName,
+<span class="nc" id="L63">                                    cm.getName()));</span>
+<span class="nc" id="L64">                }</span>
+                break;
+            case java.sql.Types.CHAR:
+            case java.sql.Types.VARCHAR:
+            case java.sql.Types.NVARCHAR:
+            case java.sql.Types.LONGNVARCHAR:
+            case java.sql.Types.LONGVARCHAR:
+<span class="nc" id="L71">                param = stringValue;</span>
+<span class="nc" id="L72">                break;</span>
+            case java.sql.Types.DATE:
+            case java.sql.Types.TIMESTAMP:
+                try {
+<span class="nc" id="L76">                    param = LocalDateTime.parse(stringValue);</span>
+<span class="nc" id="L77">                } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L78">                    LOG.debug(</span>
+                            &quot;Parsen van waarde &quot; + stringValue + &quot; als LocalDateTime is mislukt, probeer als &quot; +
+                                    &quot;LocalDate.&quot;);
+                    try {
+<span class="nc" id="L82">                        param = LocalDate.parse(stringValue).atTime(0, 0);</span>
+<span class="nc" id="L83">                    } catch (DateTimeParseException e2) {</span>
+<span class="nc" id="L84">                        LOG.error(&quot;Fout tijdens parsen van waarde &quot; + stringValue + &quot; als LocalDate&quot;, e2);</span>
+<span class="nc" id="L85">                        param = null;</span>
+<span class="nc" id="L86">                    }</span>
+<span class="nc" id="L87">                }</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                if (param != null) {</span>
+<span class="nc" id="L89">                    param = new java.sql.Date(</span>
+<span class="nc" id="L90">                            Date.from(((LocalDateTime) param).atZone(ZoneId.systemDefault()).toInstant()).getTime()</span>
+                    );
+                }
+                break;
+            default:
+<span class="nc" id="L95">                throw new UnsupportedOperationException(</span>
+<span class="nc" id="L96">                        String.format(&quot;Data type %s (#%d) van kolom \&quot;%s\&quot; wordt niet ondersteund.&quot;,</span>
+<span class="nc" id="L97">                                cm.getTypeName(), cm.getDataType(), cm.getName())</span>
+                );
+        }
+<span class="nc" id="L100">        return param;</span>
+    }
+
+<span class="nc" id="L103">    protected GeometryFactory gf = new GeometryFactory();</span>
+<span class="nc" id="L104">    protected final WKTReader wkt = new WKTReader();</span>
+
+    //definieer placeholder als ? wanneer object naar native geometry wordt
+    //geconverteerd
+    //defineer placeholder via native wkt-import functie als geometry als
+    //wkt-string wordt doorgegeven
+    public abstract Object convertToNativeGeometryObject(Geometry param) throws SQLException, ParseException;
+
+    public abstract Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException, ParseException;
+
+    public abstract Geometry convertToJTSGeometryObject(Object nativeObj);
+
+    public abstract String createPSGeometryPlaceholder() throws SQLException;
+
+    public abstract String getSchema();
+
+    public abstract String getGeomTypeName();
+
+    public abstract boolean isDuplicateKeyViolationMessage(String message);
+
+    /**
+     * bepaal of een melding een constraint violation betreft.
+     *
+     * @param message de melding uit de database
+     * @return {@code true} als de melding een contraint violation betreft
+     */
+    public abstract boolean isFKConstraintViolationMessage(String message);
+
+    public abstract String buildPaginationSql(String sql, int offset, int limit);
+
+    public abstract StringBuilder buildLimitSql(StringBuilder sql, int limit);
+
+    public abstract boolean useSavepoints();
+
+    public abstract boolean isPmdKnownBroken();
+
+    public abstract String getMViewsSQL();
+
+    public abstract String getMViewRefreshSQL(String mview);
+
+    /**
+     * Gets a statement to use in a {@link java.sql.PreparedStatement } to restart a sequence.
+     *
+     * @param seqName name of sequence
+     * @param nextVal the value to restart the sequence, some systems
+     *                require this to be larger than the next value of the sequence.
+     * @return SQL statement specific for the flavour of database
+     */
+    public String getUpdateSequenceSQL(String seqName, long nextVal) {
+        // supported for postgres, ms sql, hsqldb, NB return values vary
+        // https://www.postgresql.org/docs/11/sql-altersequence.html
+        // https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-sequence-transact-sql?view=sql-server-ver15
+
+<span class="nc" id="L157">        return String.format(&quot;ALTER SEQUENCE %s RESTART WITH %d&quot;, seqName , nextVal);</span>
+    }
+
+    /**
+     * get the database flavour specific SQL statement to get the next value from a sequence.
+     *
+     * @param seqName name of sequence
+     * @return SQL statement specific for the flavour of database
+     */
+    public abstract String getSelectNextValueFromSequenceSQL(String seqName);
+
+    public abstract String getGeotoolsDBTypeName();
+
+    public Object convertToNativeGeometryObject(String param) throws ParseException, SQLException {
+<span class="nc" id="L171">        Geometry o = null;</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        if (param != null) {</span>
+<span class="nc" id="L173">            o = wkt.read(param);</span>
+        }
+<span class="nc" id="L175">        return convertToNativeGeometryObject(o);</span>
+    }
+
+    public Object createNativePoint(double lat, double lon, int srid) throws SQLException, ParseException {
+<span class="nc bnc" id="L179" title="All 4 branches missed.">        if (lat == 0 || lon == 0) {</span>
+<span class="nc" id="L180">            return null;</span>
+        }
+<span class="nc" id="L182">        Point p = gf.createPoint(new Coordinate(lon, lat));</span>
+<span class="nc" id="L183">        return convertToNativeGeometryObject(p, srid);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

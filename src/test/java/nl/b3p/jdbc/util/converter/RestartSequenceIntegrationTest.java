@@ -16,9 +16,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-package nl.b3p.loader.jdbc;
+package nl.b3p.jdbc.util.converter;
 
-import nl.b3p.AbstractDatabaseIntegrationTest;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -64,7 +63,7 @@ public class RestartSequenceIntegrationTest extends AbstractDatabaseIntegrationT
                 assertEquals(-1, updated, "expected -1 rows to be updated");
             } else if (converter instanceof OracleJdbcConverter) {
                 assertEquals(0, updated, "expected 0 rows to be updated");
-            }  else if (converter instanceof Oracle12JdbcConverter ) {
+            }  else if (converter instanceof Oracle12JdbcConverter) {
                 assertEquals(1, updated, "expected 1 rows to be updated");
             } else {
                 assertEquals(0, updated, "expected 0 rows to be updated");

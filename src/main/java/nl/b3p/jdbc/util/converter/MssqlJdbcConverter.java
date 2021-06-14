@@ -17,7 +17,7 @@
  *
  */
 
-package nl.b3p.loader.jdbc;
+package nl.b3p.jdbc.util.converter;
 
 import com.microsoft.sqlserver.jdbc.Geometry;
 import com.microsoft.sqlserver.jdbc.SQLServerException;

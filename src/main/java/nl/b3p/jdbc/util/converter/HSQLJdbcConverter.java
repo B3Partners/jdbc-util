@@ -16,7 +16,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-package nl.b3p.loader.jdbc;
+package nl.b3p.jdbc.util.converter;
 
 import org.hsqldb.jdbc.JDBCClob;
 import org.locationtech.jts.geom.Geometry;

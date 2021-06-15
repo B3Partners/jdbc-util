@@ -1,9 +1,9 @@
 extraction: 
   java: 
     index: 
-      java_version: 8
+      java_version: 11
       maven: 
-        version: "3.6.2"
+        version: "3.8.1"
 path_classifiers: 
   test: 
     - src/test

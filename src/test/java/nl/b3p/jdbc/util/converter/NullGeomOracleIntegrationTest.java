@@ -60,7 +60,7 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
      *
      * @throws Exception if any
      */
-    @ParameterizedTest(name = "#{index} - waarde: \"{0}\"")
+    @ParameterizedTest(name = "#{index} - waarde: `{0}`")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "   "})
     public void testNullGeomXML(String testVal) throws Exception {

@@ -28,6 +28,7 @@ import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 
 import java.sql.SQLException;
+import java.sql.Struct;
 
 /**
  *
@@ -60,14 +61,11 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     
     @Override
     public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException, ParseException {
-        if(g == null){
-            return g;
+        if (g == null) {
+            return null;
+        } else {
+            return gc.toSDO(g, srid);
         }
-        String param = g.toText();
-        // return param;
-        WKTReader reader = new WKTReader(gf);
-        Geometry geom = param == null || param.trim().length() == 0 ? null : reader.read(param);
-        return gc.toSDO(geom, srid);
     }
     
     @Override

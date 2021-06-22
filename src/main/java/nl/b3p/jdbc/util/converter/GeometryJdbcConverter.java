@@ -169,7 +169,7 @@ public abstract class GeometryJdbcConverter {
 
     public Object convertToNativeGeometryObject(String param) throws ParseException, SQLException {
         Geometry o = null;
-        if (param != null) {
+        if (param != null && param.trim().length() > 0) {
             o = wkt.read(param);
         }
         return convertToNativeGeometryObject(o);

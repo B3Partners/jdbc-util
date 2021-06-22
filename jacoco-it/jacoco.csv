@@ -1,9 +1,9 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-JDBC Util,nl.b3p.jdbc.util.converter,OracleJdbcConverter,206,0,18,0,48,0,29,0,20,0
+JDBC Util,nl.b3p.jdbc.util.converter,OracleJdbcConverter,185,0,14,0,45,0,27,0,20,0
 JDBC Util,nl.b3p.jdbc.util.converter,MssqlJdbcConverter,174,0,20,0,47,0,29,0,19,0
 JDBC Util,nl.b3p.jdbc.util.converter,Oracle11JdbcConverter,74,0,6,0,15,0,6,0,3,0
 JDBC Util,nl.b3p.jdbc.util.converter,ColumnMetadata,268,0,24,0,64,0,36,0,24,0
-JDBC Util,nl.b3p.jdbc.util.converter,GeometryJdbcConverter,174,0,12,0,40,0,13,0,6,0
+JDBC Util,nl.b3p.jdbc.util.converter,GeometryJdbcConverter,178,0,14,0,40,0,14,0,6,0
 JDBC Util,nl.b3p.jdbc.util.converter,HSQLJdbcConverter,109,0,4,0,30,0,20,0,18,0
 JDBC Util,nl.b3p.jdbc.util.converter,Oracle12JdbcConverter,18,0,0,0,4,0,2,0,2,0
 JDBC Util,nl.b3p.jdbc.util.converter,OracleConnectionUnwrapper,77,0,6,0,19,0,6,0,3,0

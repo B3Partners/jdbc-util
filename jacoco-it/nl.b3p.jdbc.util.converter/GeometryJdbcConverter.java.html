@@ -169,7 +169,7 @@ import java.util.Date;
 
     public Object convertToNativeGeometryObject(String param) throws ParseException, SQLException {
 <span class="nc" id="L171">        Geometry o = null;</span>
-<span class="nc bnc" id="L172" title="All 2 branches missed.">        if (param != null) {</span>
+<span class="nc bnc" id="L172" title="All 4 branches missed.">        if (param != null &amp;&amp; param.trim().length() &gt; 0) {</span>
 <span class="nc" id="L173">            o = wkt.read(param);</span>
         }
 <span class="nc" id="L175">        return convertToNativeGeometryObject(o);</span>

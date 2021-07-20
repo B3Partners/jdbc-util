@@ -36,12 +36,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class InsertGeometryIntegrationTest extends AbstractDatabaseIntegrationTest {
 
     private static final Log LOG = LogFactory.getLog(InsertGeometryIntegrationTest.class);
-    private static final String INSERT_STATEMENT = "INSERT INTO geometries (geom, naam) VALUES (";
+    private static final String INSERT_STATEMENT = "INSERT INTO geometries (geom, naam) VALUES (%s, ?)";
     private Geometry geom = null;
 
 static Stream<Arguments> featureProvider() {
@@ -70,12 +72,14 @@ static Stream<Arguments> featureProvider() {
             GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
             Object o = conv.convertToNativeGeometryObject(geom);
 
-            PreparedStatement ps = c.prepareStatement(INSERT_STATEMENT + conv.createPSGeometryPlaceholder() + ", ?)");
+            PreparedStatement ps = c.prepareStatement(
+                    String.format(INSERT_STATEMENT,  conv.createPSGeometryPlaceholder())
+            );
             ps.setObject(1, o);
             ps.setString(2, geomName + 1);
-            Assertions.assertEquals(1, ps.executeUpdate(), "");
+            assertEquals(1, ps.executeUpdate(), "");
         } catch (SQLException sqle) {
-            Assertions.fail("Insert failed, msg: " + sqle.getLocalizedMessage());
+            fail("Insert failed, msg: " + sqle.getLocalizedMessage());
         }
     }
 
@@ -92,12 +96,14 @@ static Stream<Arguments> featureProvider() {
             GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
             Object o = conv.convertToNativeGeometryObject(geom, srid);
 
-            PreparedStatement ps = c.prepareStatement(INSERT_STATEMENT + conv.createPSGeometryPlaceholder() + ", ?)");
+            PreparedStatement ps = c.prepareStatement(
+                    String.format(INSERT_STATEMENT,  conv.createPSGeometryPlaceholder())
+            );
             ps.setObject(1, o);
             ps.setString(2, geomName + 2);
-            Assertions.assertEquals(1, ps.executeUpdate(), "");
+            assertEquals(1, ps.executeUpdate(), "");
         } catch (SQLException sqle) {
-            Assertions.fail("Insert failed, msg: " + sqle.getLocalizedMessage());
+            fail("Insert failed, msg: " + sqle.getLocalizedMessage());
         }
     }
 
@@ -113,12 +119,14 @@ static Stream<Arguments> featureProvider() {
             GeometryJdbcConverter conv = GeometryJdbcConverterFactory.getGeometryJdbcConverter(c);
             Object o = conv.convertToNativeGeometryObject(wktString);
 
-            PreparedStatement ps = c.prepareStatement(INSERT_STATEMENT + conv.createPSGeometryPlaceholder() + ", ?)");
+            PreparedStatement ps = c.prepareStatement(
+                    String.format(INSERT_STATEMENT,  conv.createPSGeometryPlaceholder())
+            );
             ps.setObject(1, o);
             ps.setString(2, geomName + 2);
-            Assertions.assertEquals(1, ps.executeUpdate(), "");
+            assertEquals(1, ps.executeUpdate(), "");
         } catch (SQLException sqle) {
-            Assertions.fail("Insert failed, msg: " + sqle.getLocalizedMessage());
+            fail("Insert failed, msg: " + sqle.getLocalizedMessage());
         }
     }
 }

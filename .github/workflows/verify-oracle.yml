@@ -46,7 +46,7 @@ jobs:
       - name: Priming build
         run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle --global-toolchains .github/ubuntu-toolchains.xml
 
-      - name: Verify ${{ matrix.mssql }}
+      - name: Verify
         run: mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true --global-toolchains .github/ubuntu-toolchains.xml
 
       - name: Clean artifacts from repository

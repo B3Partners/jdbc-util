@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.postgresql.PGConnection;
 
 /**
  *
@@ -40,17 +41,19 @@ public class OracleConnectionUnwrapper {
         Connection mdC = c.getMetaData().getConnection();
         LOG.trace("MetaData connection class: " + mdC.getClass().getName());
 
-        OracleConnection oc;
-
         if(c.isWrapperFor(OracleConnection.class)) {
             LOG.trace("Unwrap Connection voor OracleConnection");
-            oc = c.unwrap(OracleConnection.class);
+            return c.unwrap(OracleConnection.class);
         } else if(mdC instanceof OracleConnection) {
             LOG.trace("Cast MetaData Connection naar OracleConnection");
-            oc = (OracleConnection)mdC;
+            return (OracleConnection)mdC;
         } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {
             LOG.trace("Cast naar OracleConnection via cast naar tomcat DelegatingConnection");
-            oc = (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) mdC).getDelegate();
+            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) mdC).getDelegate();
+        } else if (org.apache.tomcat.dbcp.dbcp2.DelegatingConnection.class.isAssignableFrom(c.getClass())) {
+            //org.apache.tomcat.dbcp.dbcp2.PoolingDataSource.PoolGuardConnectionWrapper is private maar extends DelegatingConnection
+            LOG.trace("Cast InnermostDelegate van DelegatingConnection connection");
+            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) c).getInnermostDelegate();
         } else {
             throw new SQLException(
                     "Kan connectie niet unwrappen naar OracleConnection van meta connectie: "
@@ -58,7 +61,5 @@ public class OracleConnectionUnwrapper {
                             + ", connection: " + c.getClass().getName()
             );
         }
-
-        return oc;
     }
 }

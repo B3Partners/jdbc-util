@@ -23,43 +23,44 @@ import java.sql.SQLException;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.postgresql.PGConnection;
 
 /**
  *
  * @author Matthijs Laan
  */
-<span class="nc" id="L31">public class OracleConnectionUnwrapper {</span>
-<span class="nc" id="L32">    private static final Log LOG = LogFactory.getLog(OracleConnectionUnwrapper.class);</span>
+<span class="nc" id="L32">public class OracleConnectionUnwrapper {</span>
+<span class="nc" id="L33">    private static final Log LOG = LogFactory.getLog(OracleConnectionUnwrapper.class);</span>
 
     public static OracleConnection unwrap(Connection c) throws SQLException {
-<span class="nc" id="L35">        LOG.trace(&quot;Unwrapping Oracle connection, isWrapperFor(OracleConnection.class): &quot; + c.isWrapperFor(OracleConnection.class));</span>
-<span class="nc" id="L36">        LOG.trace(&quot;Connection class: &quot; + c.getClass().getName());</span>
+<span class="nc" id="L36">        LOG.trace(&quot;Unwrapping Oracle connection, isWrapperFor(OracleConnection.class): &quot; + c.isWrapperFor(OracleConnection.class));</span>
+<span class="nc" id="L37">        LOG.trace(&quot;Connection class: &quot; + c.getClass().getName());</span>
         // Sometimes isWrapperFor() does not work for certain JDBC drivers. The
         // MetaData connection is always unwrapped, trick learned from Spring's
         // org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor
-<span class="nc" id="L40">        Connection mdC = c.getMetaData().getConnection();</span>
-<span class="nc" id="L41">        LOG.trace(&quot;MetaData connection class: &quot; + mdC.getClass().getName());</span>
+<span class="nc" id="L41">        Connection mdC = c.getMetaData().getConnection();</span>
+<span class="nc" id="L42">        LOG.trace(&quot;MetaData connection class: &quot; + mdC.getClass().getName());</span>
 
-        OracleConnection oc;
-
-<span class="nc bnc" id="L45" title="All 2 branches missed.">        if(c.isWrapperFor(OracleConnection.class)) {</span>
-<span class="nc" id="L46">            LOG.trace(&quot;Unwrap Connection voor OracleConnection&quot;);</span>
-<span class="nc" id="L47">            oc = c.unwrap(OracleConnection.class);</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        } else if(mdC instanceof OracleConnection) {</span>
-<span class="nc" id="L49">            LOG.trace(&quot;Cast MetaData Connection naar OracleConnection&quot;);</span>
-<span class="nc" id="L50">            oc = (OracleConnection)mdC;</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {</span>
-<span class="nc" id="L52">            LOG.trace(&quot;Cast naar OracleConnection via cast naar tomcat DelegatingConnection&quot;);</span>
-<span class="nc" id="L53">            oc = (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) mdC).getDelegate();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if(c.isWrapperFor(OracleConnection.class)) {</span>
+<span class="nc" id="L45">            LOG.trace(&quot;Unwrap Connection voor OracleConnection&quot;);</span>
+<span class="nc" id="L46">            return c.unwrap(OracleConnection.class);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        } else if(mdC instanceof OracleConnection) {</span>
+<span class="nc" id="L48">            LOG.trace(&quot;Cast MetaData Connection naar OracleConnection&quot;);</span>
+<span class="nc" id="L49">            return (OracleConnection)mdC;</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {</span>
+<span class="nc" id="L51">            LOG.trace(&quot;Cast naar OracleConnection via cast naar tomcat DelegatingConnection&quot;);</span>
+<span class="nc" id="L52">            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) mdC).getDelegate();</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        } else if (org.apache.tomcat.dbcp.dbcp2.DelegatingConnection.class.isAssignableFrom(c.getClass())) {</span>
+            //org.apache.tomcat.dbcp.dbcp2.PoolingDataSource.PoolGuardConnectionWrapper is private maar extends DelegatingConnection
+<span class="nc" id="L55">            LOG.trace(&quot;Cast InnermostDelegate van DelegatingConnection connection&quot;);</span>
+<span class="nc" id="L56">            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) c).getInnermostDelegate();</span>
         } else {
-<span class="nc" id="L55">            throw new SQLException(</span>
+<span class="nc" id="L58">            throw new SQLException(</span>
                     &quot;Kan connectie niet unwrappen naar OracleConnection van meta connectie: &quot;
-<span class="nc" id="L57">                            + mdC.getClass().getName()</span>
-<span class="nc" id="L58">                            + &quot;, connection: &quot; + c.getClass().getName()</span>
+<span class="nc" id="L60">                            + mdC.getClass().getName()</span>
+<span class="nc" id="L61">                            + &quot;, connection: &quot; + c.getClass().getName()</span>
             );
         }
-
-<span class="nc" id="L62">        return oc;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

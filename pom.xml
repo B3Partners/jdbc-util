@@ -26,7 +26,7 @@
         <jaxb.impl.version>2.3.3</jaxb.impl.version>
         <test.junit-jupiter.version>5.8.1</test.junit-jupiter.version>
         <sqlserver.jdbc.version>9.4.0.jre11</sqlserver.jdbc.version>
-        <postgresql.jdbc.version>42.2.24</postgresql.jdbc.version>
+        <postgresql.jdbc.version>42.3.0</postgresql.jdbc.version>
         <postgresql.postgis-jdbc.version>2.5.1</postgresql.postgis-jdbc.version>
         <dbutils.version>1.7</dbutils.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>

@@ -2,22 +2,22 @@
 docker version
 
 # this docker image has the following users/credentials (user/password = system/oracle)
-docker pull gvenzl/oracle-xe:latest
-docker run --rm -p 15210:1521 -e ORACLE_PASSWORD=oracle --name jdbcutil -h jdbcutil -d gvenzl/oracle-xe:latest
+docker pull gvenzl/oracle-xe:$1
+docker run --rm -p 15210:1521 -e ORACLE_PASSWORD=oracle --name jdbcutil -h jdbcutil -d gvenzl/oracle-xe:$1
 
 # start the dockerized oracle-xe instance
 # this container can be stopped using:
 #
 #    docker stop jdbcutil
 #
-printf "\n\nStarting Oracle XE container, this could take a few minutes..."
-printf "\nWaiting for Oracle XE database to start up.... "
+printf "\n\nStarting Oracle $1 XE container, this could take a few minutes..."
+printf "\nWaiting for Oracle $1 XE database to start up.... "
 _WAIT=0;
 while :
 do
     printf " $_WAIT"
     if $(docker logs jdbcutil | grep -q 'DATABASE IS READY TO USE!'); then
-        printf "\nOracle XE Database started\n\n"
+        printf "\nOracle $1 XE Database started\n\n"
         break
     fi
     sleep 10

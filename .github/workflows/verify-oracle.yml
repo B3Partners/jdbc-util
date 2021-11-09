@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    name: Oracle / Java ${{ matrix.java }}
+    name: Oracle ${{ matrix.oracle }} / Java ${{ matrix.java }}
     runs-on: [ubuntu-latest]
     strategy:
       matrix:

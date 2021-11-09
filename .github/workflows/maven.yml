@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11 ]
-        java_dist: [ 'adopt' ]
+        java_dist: [ 'temurin' ]
         profile: [ hsqldb,  postgresql ]
         postgis: [ 12-3.1 ]
 

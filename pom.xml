@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.b3p</groupId>
     <artifactId>jdbc-util</artifactId>
-    <version>10.2-SNAPSHOT</version>
+    <version>10.2</version>
     <packaging>jar</packaging>
     <name>JDBC Util</name>
     <description>JDBC utilities: Converter for geometries and other useful things</description>
@@ -13,7 +13,7 @@
         <java.toolchain.version>${java.version}</java.toolchain.version>
         <project.build.sourceVersion>${java.version}</project.build.sourceVersion>
         <project.build.targetVersion>${java.version}</project.build.targetVersion>
-        <project.build.outputTimestamp>2021-11-09T14:32:45Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2021-11-19T14:12:29Z</project.build.outputTimestamp>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,7 +47,7 @@
         <developerConnection>scm:git:git@github.com:B3Partners/jdbc-util.git</developerConnection>
         <connection>scm:git:git@github.com:B3Partners/jdbc-util.git</connection>
         <url>https://github.com/B3Partners/jdbc-util/</url>
-        <tag>HEAD</tag>
+        <tag>jdbc-util-10.2</tag>
     </scm>
     <distributionManagement>
         <repository>

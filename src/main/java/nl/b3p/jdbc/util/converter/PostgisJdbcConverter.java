@@ -18,10 +18,10 @@
  */
 package nl.b3p.jdbc.util.converter;
 
+import net.postgis.jdbc.PGgeometry;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import java.sql.SQLException;
-import org.postgis.PGgeometry;
 
 /**
  *

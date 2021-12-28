@@ -33,6 +33,8 @@
         <cve>CVE-2019-17571</cve>
         <!-- we don't use SMTP appender -->
         <cve>CVE-2020-9488</cve>
+        <!-- we don't use JMSAppender -->
+        <cve>CVE-2021-4104</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[

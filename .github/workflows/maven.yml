@@ -18,6 +18,7 @@ jobs:
         java: [ 11 ]
         java_dist: [ 'temurin' ]
         profile: [ hsqldb,  postgresql ]
+        # Ubuntu 20.04 heeft PG 12
         postgis: [ 12-3.1 ]
 
     services:

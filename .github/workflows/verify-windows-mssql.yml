@@ -1,16 +1,19 @@
-name: MS SQL Server Windows tests
+name: MSSQL Server Windows
 
 on:
   pull_request:
 
 jobs:
   build:
-    name: MS SQL 2019 / Java ${{ matrix.java }}
-    runs-on: windows-2019
+    name: MS SQL 2019 / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: [ 11 ]
-        java_dist: [ 'zulu' ]
+        include:
+          - os: 'windows-2019'
+            tag: 'ltsc2019-sql2019'
+          - os: 'windows-2022'
+            tag: 'ltsc2022-sql2019'
 
     steps:
       - uses: actions/checkout@v2
@@ -25,14 +28,14 @@ jobs:
       - name: Set up JDK for build
         uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.java }}
-          distribution: ${{ matrix.java_dist }}
+          java-version: 11
+          distribution: 'zulu'
 
       - name: Docker login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.b3p.nl -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Setup database engine for MS SQL
-        run: .\.build\ci\mssql-start.ps1
+        run: .\.build\ci\mssql-start.ps1 -tag ${{ matrix.tag }}
 
       - name: Setup test environment for MS SQL
         run: .\.build\ci\mssql-setup.ps1

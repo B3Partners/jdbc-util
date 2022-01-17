@@ -107,7 +107,7 @@ jobs:
           REPO_B3P_ACTOR: ${{ secrets.REPO_B3P_ACTOR }}
           REPO_B3P_TOKEN: ${{ secrets.REPO_B3P_TOKEN }}
         run: |
-          mvn -B -V -fae -DskipTests -DskipITs -DskipQA=true -Pqa-skip clean deploy --settings .github/maven-settings.xml
+          mvn -B -V -fae -Dmaven.test.skip=true clean deploy --settings .github/maven-settings.xml
 
 
   cleanup:

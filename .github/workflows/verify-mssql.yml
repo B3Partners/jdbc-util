@@ -3,13 +3,18 @@ name: MS SQL Server Linux tests
 on:
   push:
 
+concurrency: # cancel on PR pushes
+  # More info: https://stackoverflow.com/a/68422069/253468
+  group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' ) && format('ci-master-{0}', github.sha) || format('ci-master-{0}', github.ref) }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: MS SQL ${{ matrix.mssql }} / Java ${{ matrix.java }}
-    runs-on: [ubuntu-latest]
+    runs-on: [ ubuntu-latest ]
     strategy:
       matrix:
-        mssql: [2019-latest]
+        mssql: [ 2019-latest ]
         java: [ 11 ]
         java_dist: [ 'zulu' ]
 
@@ -35,10 +40,10 @@ jobs:
           ./.build/ci/mssql-setup.sh
 
       - name: Priming build
-        run: mvn install -Dmaven.test.skip=true --global-toolchains .github/ubuntu-toolchains.xml -B -V -e -fae -q -Pmssql
+        run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Pmssql
 
       - name: Verify ${{ matrix.mssql }}
-        run: mvn -e verify -B --global-toolchains .github/ubuntu-toolchains.xml -Pmssql -T1 -Dtest.onlyITs=true
+        run: mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true
 
       - name: Clean artifacts from repository
         run: mvn clean build-helper:remove-project-artifact

@@ -7,7 +7,7 @@ template: |
   ## What’s Changed
 
   $CHANGES
-  
+
 categories:
   - title: 🚨 Removed
     label: removed

@@ -3,28 +3,33 @@ name: Oracle tests
 on:
   push:
 
+concurrency: # cancel on PR pushes
+  # More info: https://stackoverflow.com/a/68422069/253468
+  group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' ) && format('ci-master-{0}', github.sha) || format('ci-master-{0}', github.ref) }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Oracle ${{ matrix.oracle }} / Java ${{ matrix.java }}
-    runs-on: [ubuntu-latest]
+    runs-on: [ ubuntu-latest ]
     strategy:
       matrix:
         java: [ 11 ]
         java_dist: [ 'temurin' ]
-        oracle: ['18.4.0-full', '21.3.0-full']
+        oracle: [ '18.4.0-full', '21.3.0-full' ]
 
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 5
-          
+
       - uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
-            
+
       - name: Set up JDK for build
         uses: actions/setup-java@v2
         with:
@@ -45,10 +50,10 @@ jobs:
           ./.build/ci/oracle-setup.sh
 
       - name: Priming build
-        run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle --global-toolchains .github/ubuntu-toolchains.xml
+        run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle
 
       - name: Verify
-        run: mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true --global-toolchains .github/ubuntu-toolchains.xml
+        run: mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true
 
       - name: Clean artifacts from repository
         run: mvn clean build-helper:remove-project-artifact

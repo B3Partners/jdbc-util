@@ -1,29 +1,29 @@
 version: 2
 updates:
-- package-ecosystem: maven
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "06:00"
-    timezone: Europe/Amsterdam
-  open-pull-requests-limit: 25
-  assignees:
-  - mprins
-  labels:
-  - "build infrastructure"
-  - "dependencies"
-  ignore:
-  - dependency-name: org.apache.tomcat:tomcat-dbcp
-    versions:
-    - ">= 10.a"
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    open-pull-requests-limit: 25
+    assignees:
+      - mprins
+    labels:
+      - "build infrastructure"
+      - "dependencies"
+    ignore:
+      - dependency-name: org.apache.tomcat:tomcat-dbcp
+        versions:
+          - ">= 10.a"
 
-- package-ecosystem: "github-actions"
-  directory: "/"
-  schedule:
-    interval: "weekly"
-    day: saturday
-    timezone: Europe/Amsterdam
-  labels:
-  - "build infrastructure"
-  assignees:
-  - mprins
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: saturday
+      timezone: Europe/Amsterdam
+    labels:
+      - "build infrastructure"
+    assignees:
+      - mprins

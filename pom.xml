@@ -87,12 +87,6 @@
             <version>1.2</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
             <version>${jts.version}</version>
@@ -319,8 +313,15 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.6.0</version>
+                                    <version>3.8</version>
                                 </requireMavenVersion>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>junit:junit</exclude>
+                                        <exclude>org.hamcrest:hamcrest-core</exclude>
+                                        <exclude>log4j:log4j</exclude>
+                                    </excludes>
+                                </bannedDependencies>
                             </rules>
                         </configuration>
                     </execution>

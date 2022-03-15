@@ -74,7 +74,9 @@ public class NullGeomOracleIntegrationTest extends AbstractDatabaseIntegrationTe
             OracleJdbcConverter c = new OracleJdbcConverter(oc);
 
             OracleStruct s = (OracleStruct) c.convertToNativeGeometryObject(testVal);
-            assertNull(s, "verwacht een null object");
+            for (Object o : s.getAttributes()) {
+                assertNull(o, "verwacht een null object");
+            }
         }
     }
 }

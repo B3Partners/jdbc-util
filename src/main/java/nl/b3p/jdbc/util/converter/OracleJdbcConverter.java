@@ -60,12 +60,13 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     }
     
     @Override
-    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException, ParseException {
-        if (g == null) {
-            return null;
-        } else {
-            return gc.toSDO(g, srid);
-        }
+    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException {
+        // geen (Object)null geven, dat levert in veel gevallen een
+        // java.sql.SQLException: ORA-00932: inconsistent datatypes: expected MDSYS.SDO_GEOMETRY got CHAR
+        // if (null ==g){
+        //     return ((OracleStruct)null);
+        // }
+        return gc.toSDO(g, srid);
     }
     
     @Override

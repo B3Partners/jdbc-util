@@ -5,7 +5,7 @@ JDBC Util,nl.b3p.jdbc.util.converter,Oracle12JdbcConverter,18,0,0,0,4,0,2,0,2,0
 JDBC Util,nl.b3p.jdbc.util.converter,PGConnectionUnwrapper,91,0,8,0,22,0,7,0,3,0
 JDBC Util,nl.b3p.jdbc.util.converter,GeometryJdbcConverterFactory,151,0,11,0,42,0,9,0,3,0
 JDBC Util,nl.b3p.jdbc.util.converter,PostgisJdbcConverter,154,0,18,0,38,0,27,0,18,0
-JDBC Util,nl.b3p.jdbc.util.converter,OracleJdbcConverter,185,0,14,0,45,0,27,0,20,0
+JDBC Util,nl.b3p.jdbc.util.converter,OracleJdbcConverter,181,0,12,0,43,0,26,0,20,0
 JDBC Util,nl.b3p.jdbc.util.converter,ColumnMetadata,268,0,24,0,64,0,36,0,24,0
 JDBC Util,nl.b3p.jdbc.util.converter,GeometryJdbcConverter,178,0,14,0,40,0,14,0,6,0
 JDBC Util,nl.b3p.jdbc.util.converter,HSQLJdbcConverter,109,0,4,0,30,0,20,0,18,0

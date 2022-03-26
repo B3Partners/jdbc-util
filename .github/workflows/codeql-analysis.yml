@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 10
 
       - name: Restore Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: maven-${{ hashFiles('**/pom.xml') }}

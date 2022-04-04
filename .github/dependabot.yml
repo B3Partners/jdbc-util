@@ -16,6 +16,10 @@ updates:
       - dependency-name: org.apache.tomcat:tomcat-dbcp
         versions:
           - ">= 10.a"
+      - dependency-name: com.microsoft.sqlserver:mssql-jdbc
+        versions:
+          - "10.3.x"
+          - "11.1.x"
 
   - package-ecosystem: "github-actions"
     directory: "/"

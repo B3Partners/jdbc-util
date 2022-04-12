@@ -19,7 +19,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <test.onlyITs>false</test.onlyITs>
         <oracle.jdbc.version>21.5.0.0</oracle.jdbc.version>
-        <geotools.version>26.3</geotools.version>
+        <geotools.version>26.4</geotools.version>
         <jts.version>1.18.2</jts.version>
         <jaxb.api.version>2.3.3</jaxb.api.version>
         <jaxb.impl.version>2.3.3</jaxb.impl.version>

@@ -31,7 +31,7 @@
         <maven.surefire.version>3.0.0-M6</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
-        <versions-maven-plugin.version>2.10.0</versions-maven-plugin.version>
+        <versions-maven-plugin.version>2.11.0</versions-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
     </properties>
     <organization>

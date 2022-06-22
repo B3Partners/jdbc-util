@@ -20,7 +20,7 @@
         <test.onlyITs>false</test.onlyITs>
         <oracle.jdbc.version>21.6.0.0.1</oracle.jdbc.version>
         <geotools.version>27.0</geotools.version>
-        <jts.version>1.18.2</jts.version>
+        <jts.version>1.19.0</jts.version>
         <jaxb.api.version>2.3.3</jaxb.api.version>
         <jaxb.impl.version>2.3.3</jaxb.impl.version>
         <test.junit-jupiter.version>5.8.2</test.junit-jupiter.version>

@@ -52,6 +52,9 @@ jobs:
       - name: Priming build
         run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle
 
+      - name: Test
+        run: mvn -e test -B -Poracle
+
       - name: Verify
         run: mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true
 

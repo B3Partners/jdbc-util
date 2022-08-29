@@ -2,8 +2,8 @@
 docker version
 
 # this docker image has the following users/credentials (user/password = system/oracle)
-docker pull gvenzl/oracle-xe:$1
-docker run --rm -p 15210:1521 -e ORACLE_PASSWORD=oracle --name jdbcutil -h jdbcutil -d gvenzl/oracle-xe:$1
+docker pull ghcr.io/gvenzl/oracle-xe:$1
+docker run --rm -p 15210:1521 -e ORACLE_PASSWORD=oracle --name jdbcutil -h jdbcutil -d ghcr.io/gvenzl/oracle-xe:$1
 
 # start the dockerized oracle-xe instance
 # this container can be stopped using:

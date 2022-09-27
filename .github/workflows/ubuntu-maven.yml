@@ -104,8 +104,8 @@ jobs:
       - name: Build and Push
         # no need to run any QC or tests
         env:
-          REPO_B3P_ACTOR: ${{ secrets.REPO_B3P_ACTOR }}
-          REPO_B3P_TOKEN: ${{ secrets.REPO_B3P_TOKEN }}
+          B3P_DEPLOY_ACTOR: ${{ secrets.B3P_DEPLOY_ACTOR }}
+          B3P_DEPLOY_TOKEN: ${{ secrets.B3P_DEPLOY_TOKEN }}
         run: |
           mvn -B -V -fae -Dmaven.test.skip=true clean deploy --settings .github/maven-settings.xml
 

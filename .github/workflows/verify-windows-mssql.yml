@@ -36,8 +36,12 @@ jobs:
           java-version: 11
           distribution: 'zulu'
 
-      - name: Docker login
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.b3p.nl -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: 'Login to b3p.nl'
+        uses: docker/login-action@v2
+        with:
+          registry: docker.b3p.nl
+          username: ${{ secrets.DOCKER_B3P_PULL_ACTOR }}
+          password: ${{ secrets.DOCKER_B3P_PULL_TOKEN }}
 
       - name: Setup database engine for MS SQL
         run: .\.build\ci\mssql-start.ps1 -tag ${{ matrix.tag }}

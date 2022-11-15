@@ -147,7 +147,7 @@
             <!-- kan gebruikt worden in de OracleConnectionUnwrapper -->
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-dbcp</artifactId>
-            <version>9.0.68</version>
+            <version>9.0.69</version>
             <exclusions>
                 <exclusion>
                     <artifactId>org.apache.tomcat</artifactId>

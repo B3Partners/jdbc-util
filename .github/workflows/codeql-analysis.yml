@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: Ubuntu-20.04
+    runs-on: Ubuntu-latest
 
     strategy:
       fail-fast: false

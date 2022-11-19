@@ -2,6 +2,8 @@ name: MS SQL Server Linux tests
 
 on:
   push:
+    branches: [ master ]
+  pull_request:
 
 concurrency: # cancel on PR pushes
   # More info: https://stackoverflow.com/a/68422069/253468
@@ -14,7 +16,7 @@ jobs:
     runs-on: [ ubuntu-latest ]
     strategy:
       matrix:
-        mssql: [ 2019-latest ]
+        mssql: [ 2019-latest, 2022-latest ]
         java: [ 11 ]
         java_dist: [ 'zulu' ]
 

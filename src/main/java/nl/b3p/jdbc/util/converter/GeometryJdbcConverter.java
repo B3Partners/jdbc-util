@@ -36,16 +36,17 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 /**
- *
  * @author Matthijs Laan
  * @author Meine Toonen
  * @author mprins
  */
 public abstract class GeometryJdbcConverter {
     private static final Log LOG = LogFactory.getLog(GeometryJdbcConverter.class);
+    protected final WKTReader wkt = new WKTReader();
+    protected GeometryFactory gf = new GeometryFactory();
 
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm,
-            String tableName, String column) {
+                                            String tableName, String column) {
         Object param;
         stringValue = stringValue.trim();
         switch (cm.getDataType()) {
@@ -55,12 +56,19 @@ public abstract class GeometryJdbcConverter {
                 try {
                     param = new BigDecimal(stringValue);
                 } catch (NumberFormatException nfe) {
-                    throw new NumberFormatException(
-                            String.format("Conversie van waarde \"%s\" naar type %s voor %s.%s niet mogelijk",
-                                    stringValue,
-                                    cm.getTypeName(),
-                                    tableName,
-                                    cm.getName()));
+                    // try to convert to 1/0 for Oracle boolean
+                    if ("true".equalsIgnoreCase(stringValue)) {
+                        param = BigDecimal.ONE;
+                    } else if ("false".equalsIgnoreCase(stringValue)) {
+                        param = BigDecimal.ZERO;
+                    } else {
+                        throw new NumberFormatException(
+                                String.format("Conversie van waarde \"%s\" naar type %s voor %s.%s niet mogelijk",
+                                        stringValue,
+                                        cm.getTypeName(),
+                                        tableName,
+                                        cm.getName()));
+                    }
                 }
                 break;
             case java.sql.Types.CHAR:
@@ -91,6 +99,21 @@ public abstract class GeometryJdbcConverter {
                     );
                 }
                 break;
+            case java.sql.Types.BOOLEAN:
+            case java.sql.Types.BIT:
+                param = Boolean.parseBoolean(stringValue);
+                break;
+//            case java.sql.Types.BIT:
+//                PostgreSQL boolean kolom komt uit de JDBC drivar als BIT / -7 en niet als BOOLEAN / 16
+//                // try to convert to 1/0 for MSSQL boolean
+//                if ("true".equalsIgnoreCase(stringValue)) {
+//                    param = 1;
+//                } else if ("false".equalsIgnoreCase(stringValue)) {
+//                    param = 0;
+//                } else {
+//                    param = Integer.parseInt(stringValue);
+//                }
+//                break;
             default:
                 throw new UnsupportedOperationException(
                         String.format("Data type %s (#%d) van kolom \"%s\" wordt niet ondersteund.",
@@ -99,9 +122,6 @@ public abstract class GeometryJdbcConverter {
         }
         return param;
     }
-
-    protected GeometryFactory gf = new GeometryFactory();
-    protected final WKTReader wkt = new WKTReader();
 
     //definieer placeholder als ? wanneer object naar native geometry wordt
     //geconverteerd
@@ -154,7 +174,7 @@ public abstract class GeometryJdbcConverter {
         // https://www.postgresql.org/docs/11/sql-altersequence.html
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-sequence-transact-sql?view=sql-server-ver15
 
-        return String.format("ALTER SEQUENCE %s RESTART WITH %d", seqName , nextVal);
+        return String.format("ALTER SEQUENCE %s RESTART WITH %d", seqName, nextVal);
     }
 
     /**

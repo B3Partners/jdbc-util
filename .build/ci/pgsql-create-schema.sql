@@ -111,3 +111,8 @@ create table geometries (
 );
 
 CREATE SEQUENCE testing_seq MINVALUE 1;
+
+create table booleantable (
+    id bigserial not null,
+    ishetwaar boolean not null
+);

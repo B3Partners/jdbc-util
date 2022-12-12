@@ -137,3 +137,8 @@ insert into user_sdo_geom_metadata values('geometries', 'geom', MDSYS.SDO_DIM_AR
 );
 
 CREATE SEQUENCE testing_seq MINVALUE 1;
+
+create table booleantable (
+    id number GENERATED ALWAYS AS IDENTITY,
+    ishetwaar NUMBER(1,0) DEFAULT 0 NOT NULL CHECK(ishetwaar IN (0,1))
+);

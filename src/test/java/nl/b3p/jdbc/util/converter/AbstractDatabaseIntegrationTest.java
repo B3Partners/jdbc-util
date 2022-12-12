@@ -26,6 +26,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Locale;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -38,16 +42,6 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 public abstract class AbstractDatabaseIntegrationTest {
 
     private static final Log LOG = LogFactory.getLog(AbstractDatabaseIntegrationTest.class);
-
-    /**
-     * test of de database properties zijn aangegeven, zo niet dan skippen we
-     * alle tests in deze test.
-     */
-    @BeforeAll
-    public static void checkDatabaseIsProvided() {
-        assumeFalse(null == System.getProperty("database.properties.file"), "Verwacht database omgeving te zijn aangegeven.");
-    }
-
     /**
      * properties uit {@code <DB smaak>.properties} en
      * {@code local.<DB smaak>.properties}.
@@ -55,27 +49,35 @@ public abstract class AbstractDatabaseIntegrationTest {
      * @see #loadProps()
      */
     protected final Properties params = new Properties();
-
     /**
      * {@code true} als we met een Oracle database bezig zijn.
      */
     protected boolean isOracle;
-
     /**
      * {@code true} als we met een MS SQL Server database bezig zijn.
      */
     protected boolean isMsSQL;
-
     /**
      * {@code true} als we met een Postgis database bezig zijn.
      */
     protected boolean isPostgis;
-
     /**
      * {@code true} als we met een HSQLDB database bezig zijn.
      */
     protected boolean isHSQLDB;
 
+    /**
+     * test of de database properties zijn aangegeven, zo niet dan skippen we
+     * alle tests in deze test.
+     */
+    @BeforeAll
+    public static void checkDatabaseIsProvided() {
+        // als je vanuit de IDE wilt draaien kun je hier de database property instellen
+        // System.setProperty("database.properties.file", "postgis.properties");
+        // System.setProperty("database.properties.file", "sqlserver.properties");
+        // System.setProperty("database.properties.file", "oracle.properties");
+        assumeFalse(null == System.getProperty("database.properties.file"), "Verwacht database omgeving te zijn aangegeven.");
+    }
 
     /**
      * subklassen dienen zelf een setup te hebben.
@@ -128,5 +130,24 @@ public abstract class AbstractDatabaseIntegrationTest {
     @AfterEach
     public void endTest(TestInfo testInfo) {
         LOG.info("==== Einde test methode: " + testInfo.getDisplayName());
+    }
+
+    public ColumnMetadata getColumnMetadata(Connection c, String tableName, String colName) throws SQLException {
+        ColumnMetadata columnMetadata = null;
+        try (ResultSet columnsRs = c.getMetaData().getColumns(null, c.getSchema(), getCasedName(tableName),
+                getCasedName(colName))) {
+            while (columnsRs.next()) {
+                columnMetadata = new ColumnMetadata(columnsRs);
+            }
+        }
+        LOG.debug("metadata voor kolom: " + colName + " is: " + columnMetadata);
+        return columnMetadata;
+    }
+
+    private String getCasedName(String name) {
+        if (this.isHSQLDB || this.isOracle) {
+            return name.toUpperCase(Locale.ROOT);
+        }
+        return name;
     }
 }

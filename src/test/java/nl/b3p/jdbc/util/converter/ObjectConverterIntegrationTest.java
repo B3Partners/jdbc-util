@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -135,27 +136,4 @@ public class ObjectConverterIntegrationTest extends AbstractDatabaseIntegrationT
             fail(e.getLocalizedMessage());
         }
     }
-
-    private String getCasedName(String name) {
-        if (this.isHSQLDB) {
-            return name.toUpperCase(Locale.ROOT);
-        }
-        if (this.isOracle) {
-            return name.toUpperCase(Locale.ROOT);
-        }
-        return name;
-    }
-
-    private ColumnMetadata getColumnMetadata(Connection c, String tableName, String colName) throws SQLException {
-        ColumnMetadata columnMetadata = null;
-        try (ResultSet columnsRs = c.getMetaData().getColumns(null, c.getSchema(), getCasedName(tableName),
-                getCasedName(colName))) {
-            while (columnsRs.next()) {
-                columnMetadata = new ColumnMetadata(columnsRs);
-            }
-        }
-        LOG.debug("metadata voor kolom: " + colName + " is: " + columnMetadata);
-        return columnMetadata;
-    }
-
 }

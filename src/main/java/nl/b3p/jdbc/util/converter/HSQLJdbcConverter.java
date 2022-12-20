@@ -45,11 +45,6 @@ public class HSQLJdbcConverter  extends GeometryJdbcConverter {
     }
 
     @Override
-    public String createPSGeometryPlaceholder() {
-        return "?";
-    }
-
-    @Override
     public String getGeomTypeName() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -54,12 +54,6 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
-    public String createPSGeometryPlaceholder() {
-        // return "SDO_GEOMETRY(?, 28992)";
-        return "?";
-    }
-    
-    @Override
     public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException {
         // geen (Object)null geven, dat levert in veel gevallen een
         // java.sql.SQLException: ORA-00932: inconsistent datatypes: expected MDSYS.SDO_GEOMETRY got CHAR

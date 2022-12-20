@@ -133,7 +133,9 @@ public abstract class GeometryJdbcConverter {
 
     public abstract Geometry convertToJTSGeometryObject(Object nativeObj);
 
-    public abstract String createPSGeometryPlaceholder() throws SQLException;
+    public String createPSGeometryPlaceholder() throws SQLException {
+        return "?";
+    }
 
     public abstract String getSchema();
 

@@ -42,12 +42,6 @@ public class PostgisJdbcConverter extends GeometryJdbcConverter {
     }
 
     @Override
-    public String createPSGeometryPlaceholder() {
-        //return "ST_GeomFromText(?, 28992)";
-        return "?";
-    }
-   
-    @Override
     public Object convertToNativeGeometryObject(Geometry g) throws SQLException {
       return convertToNativeGeometryObject(g, 28992);
     }

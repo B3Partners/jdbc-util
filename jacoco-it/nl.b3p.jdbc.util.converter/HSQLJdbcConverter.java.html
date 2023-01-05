@@ -45,99 +45,94 @@ import org.apache.commons.logging.LogFactory;
     }
 
     @Override
-    public String createPSGeometryPlaceholder() {
-<span class="nc" id="L49">        return &quot;?&quot;;</span>
-    }
-
-    @Override
     public String getGeomTypeName() {
-<span class="nc" id="L54">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L49">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public Geometry convertToJTSGeometryObject(Object nativeObj) {
 
         try {
-<span class="nc" id="L61">            Clob c = (Clob) nativeObj;</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">            if(c == null){</span>
-<span class="nc" id="L63">                return null;</span>
+<span class="nc" id="L56">            Clob c = (Clob) nativeObj;</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if(c == null){</span>
+<span class="nc" id="L58">                return null;</span>
             }
-<span class="nc" id="L65">            InputStream in = c.getAsciiStream();</span>
-<span class="nc" id="L66">            StringWriter w = new StringWriter();</span>
-<span class="nc" id="L67">            IOUtils.copy(in, w, Charset.defaultCharset());</span>
+<span class="nc" id="L60">            InputStream in = c.getAsciiStream();</span>
+<span class="nc" id="L61">            StringWriter w = new StringWriter();</span>
+<span class="nc" id="L62">            IOUtils.copy(in, w, Charset.defaultCharset());</span>
             Geometry g;
             
-<span class="nc" id="L70">            g = wkt.read(w.toString());</span>
+<span class="nc" id="L65">            g = wkt.read(w.toString());</span>
             
-<span class="nc" id="L72">            return g;</span>
-<span class="nc" id="L73">        } catch (IOException | ParseException | SQLException ex) {</span>
-<span class="nc" id="L74">            LOG.error(&quot;Error parsing clob to geometry&quot;, ex);</span>
-<span class="nc" id="L75">            return null;</span>
+<span class="nc" id="L67">            return g;</span>
+<span class="nc" id="L68">        } catch (IOException | ParseException | SQLException ex) {</span>
+<span class="nc" id="L69">            LOG.error(&quot;Error parsing clob to geometry&quot;, ex);</span>
+<span class="nc" id="L70">            return null;</span>
         }
     }
 
     @Override
     public boolean isPmdKnownBroken() {
-<span class="nc" id="L81">        return false;</span>
+<span class="nc" id="L76">        return false;</span>
     }
 
     @Override
     public String getSchema() {
-<span class="nc" id="L86">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L81">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public boolean isDuplicateKeyViolationMessage(String message) {
-<span class="nc" id="L91">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L86">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public boolean isFKConstraintViolationMessage(String message) {
-<span class="nc" id="L96">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L91">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public String buildPaginationSql(String sql, int offset, int limit) {
-<span class="nc" id="L101">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L96">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-<span class="nc" id="L106">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L101">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public boolean useSavepoints() {
-<span class="nc" id="L111">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L106">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public String getMViewsSQL() {
-<span class="nc" id="L116">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L111">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public String getMViewRefreshSQL(String mview) {
-<span class="nc" id="L121">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+<span class="nc" id="L116">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
     }
 
     @Override
     public String getSelectNextValueFromSequenceSQL(String seqName) {
-<span class="nc" id="L126">        return &quot;CALL NEXT VALUE FOR &quot; + seqName;</span>
+<span class="nc" id="L121">        return &quot;CALL NEXT VALUE FOR &quot; + seqName;</span>
     }
 
     @Override
     public String getGeotoolsDBTypeName() {
         // no hsqldb datastore in geotools
-<span class="nc" id="L132">        return null;</span>
+<span class="nc" id="L127">        return null;</span>
     }
 
     @Override
     public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException {
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if(param == null){</span>
-<span class="nc" id="L138">            return null;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if(param == null){</span>
+<span class="nc" id="L133">            return null;</span>
         }
-<span class="nc" id="L140">        return new JDBCClob(param.toText());</span>
+<span class="nc" id="L135">        return new JDBCClob(param.toText());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

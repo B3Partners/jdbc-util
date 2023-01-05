@@ -36,72 +36,92 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 /**
- *
  * @author Matthijs Laan
  * @author Meine Toonen
  * @author mprins
  */
-<span class="nc" id="L44">public abstract class GeometryJdbcConverter {</span>
-<span class="nc" id="L45">    private static final Log LOG = LogFactory.getLog(GeometryJdbcConverter.class);</span>
+<span class="nc" id="L43">public abstract class GeometryJdbcConverter {</span>
+<span class="nc" id="L44">    private static final Log LOG = LogFactory.getLog(GeometryJdbcConverter.class);</span>
+<span class="nc" id="L45">    protected final WKTReader wkt = new WKTReader();</span>
+<span class="nc" id="L46">    protected GeometryFactory gf = new GeometryFactory();</span>
 
     static public Object convertToSQLObject(String stringValue, ColumnMetadata cm,
-            String tableName, String column) {
+                                            String tableName, String column) {
         Object param;
-<span class="nc" id="L50">        stringValue = stringValue.trim();</span>
-<span class="nc bnc" id="L51" title="All 4 branches missed.">        switch (cm.getDataType()) {</span>
+<span class="nc" id="L51">        stringValue = stringValue.trim();</span>
+<span class="nc bnc" id="L52" title="All 5 branches missed.">        switch (cm.getDataType()) {</span>
             case java.sql.Types.DECIMAL:
             case java.sql.Types.NUMERIC:
             case java.sql.Types.INTEGER:
                 try {
-<span class="nc" id="L56">                    param = new BigDecimal(stringValue);</span>
-<span class="nc" id="L57">                } catch (NumberFormatException nfe) {</span>
-<span class="nc" id="L58">                    throw new NumberFormatException(</span>
-<span class="nc" id="L59">                            String.format(&quot;Conversie van waarde \&quot;%s\&quot; naar type %s voor %s.%s niet mogelijk&quot;,</span>
-                                    stringValue,
-<span class="nc" id="L61">                                    cm.getTypeName(),</span>
-                                    tableName,
-<span class="nc" id="L63">                                    cm.getName()));</span>
-<span class="nc" id="L64">                }</span>
-                break;
+<span class="nc" id="L57">                    param = new BigDecimal(stringValue);</span>
+<span class="nc" id="L58">                } catch (NumberFormatException nfe) {</span>
+                    // try to convert to 1/0 for Oracle boolean
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                    if (&quot;true&quot;.equalsIgnoreCase(stringValue)) {</span>
+<span class="nc" id="L61">                        param = BigDecimal.ONE;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                    } else if (&quot;false&quot;.equalsIgnoreCase(stringValue)) {</span>
+<span class="nc" id="L63">                        param = BigDecimal.ZERO;</span>
+                    } else {
+<span class="nc" id="L65">                        throw new NumberFormatException(</span>
+<span class="nc" id="L66">                                String.format(&quot;Conversie van waarde \&quot;%s\&quot; naar type %s voor %s.%s niet mogelijk&quot;,</span>
+                                        stringValue,
+<span class="nc" id="L68">                                        cm.getTypeName(),</span>
+                                        tableName,
+<span class="nc" id="L70">                                        cm.getName()));</span>
+                    }
+<span class="nc" id="L72">                }</span>
+<span class="nc" id="L73">                break;</span>
             case java.sql.Types.CHAR:
             case java.sql.Types.VARCHAR:
             case java.sql.Types.NVARCHAR:
             case java.sql.Types.LONGNVARCHAR:
             case java.sql.Types.LONGVARCHAR:
-<span class="nc" id="L71">                param = stringValue;</span>
-<span class="nc" id="L72">                break;</span>
+<span class="nc" id="L79">                param = stringValue;</span>
+<span class="nc" id="L80">                break;</span>
             case java.sql.Types.DATE:
             case java.sql.Types.TIMESTAMP:
                 try {
-<span class="nc" id="L76">                    param = LocalDateTime.parse(stringValue);</span>
-<span class="nc" id="L77">                } catch (DateTimeParseException e) {</span>
-<span class="nc" id="L78">                    LOG.debug(</span>
+<span class="nc" id="L84">                    param = LocalDateTime.parse(stringValue);</span>
+<span class="nc" id="L85">                } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L86">                    LOG.debug(</span>
                             &quot;Parsen van waarde &quot; + stringValue + &quot; als LocalDateTime is mislukt, probeer als &quot; +
                                     &quot;LocalDate.&quot;);
                     try {
-<span class="nc" id="L82">                        param = LocalDate.parse(stringValue).atTime(0, 0);</span>
-<span class="nc" id="L83">                    } catch (DateTimeParseException e2) {</span>
-<span class="nc" id="L84">                        LOG.error(&quot;Fout tijdens parsen van waarde &quot; + stringValue + &quot; als LocalDate&quot;, e2);</span>
-<span class="nc" id="L85">                        param = null;</span>
-<span class="nc" id="L86">                    }</span>
-<span class="nc" id="L87">                }</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">                if (param != null) {</span>
-<span class="nc" id="L89">                    param = new java.sql.Date(</span>
-<span class="nc" id="L90">                            Date.from(((LocalDateTime) param).atZone(ZoneId.systemDefault()).toInstant()).getTime()</span>
+<span class="nc" id="L90">                        param = LocalDate.parse(stringValue).atTime(0, 0);</span>
+<span class="nc" id="L91">                    } catch (DateTimeParseException e2) {</span>
+<span class="nc" id="L92">                        LOG.error(&quot;Fout tijdens parsen van waarde &quot; + stringValue + &quot; als LocalDate&quot;, e2);</span>
+<span class="nc" id="L93">                        param = null;</span>
+<span class="nc" id="L94">                    }</span>
+<span class="nc" id="L95">                }</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                if (param != null) {</span>
+<span class="nc" id="L97">                    param = new java.sql.Date(</span>
+<span class="nc" id="L98">                            Date.from(((LocalDateTime) param).atZone(ZoneId.systemDefault()).toInstant()).getTime()</span>
                     );
                 }
                 break;
+            case java.sql.Types.BOOLEAN:
+            case java.sql.Types.BIT:
+<span class="nc" id="L104">                param = Boolean.parseBoolean(stringValue);</span>
+<span class="nc" id="L105">                break;</span>
+//            case java.sql.Types.BIT:
+//                PostgreSQL boolean kolom komt uit de JDBC drivar als BIT / -7 en niet als BOOLEAN / 16
+//                // try to convert to 1/0 for MSSQL boolean
+//                if (&quot;true&quot;.equalsIgnoreCase(stringValue)) {
+//                    param = 1;
+//                } else if (&quot;false&quot;.equalsIgnoreCase(stringValue)) {
+//                    param = 0;
+//                } else {
+//                    param = Integer.parseInt(stringValue);
+//                }
+//                break;
             default:
-<span class="nc" id="L95">                throw new UnsupportedOperationException(</span>
-<span class="nc" id="L96">                        String.format(&quot;Data type %s (#%d) van kolom \&quot;%s\&quot; wordt niet ondersteund.&quot;,</span>
-<span class="nc" id="L97">                                cm.getTypeName(), cm.getDataType(), cm.getName())</span>
+<span class="nc" id="L118">                throw new UnsupportedOperationException(</span>
+<span class="nc" id="L119">                        String.format(&quot;Data type %s (#%d) van kolom \&quot;%s\&quot; wordt niet ondersteund.&quot;,</span>
+<span class="nc" id="L120">                                cm.getTypeName(), cm.getDataType(), cm.getName())</span>
                 );
         }
-<span class="nc" id="L100">        return param;</span>
+<span class="nc" id="L123">        return param;</span>
     }
-
-<span class="nc" id="L103">    protected GeometryFactory gf = new GeometryFactory();</span>
-<span class="nc" id="L104">    protected final WKTReader wkt = new WKTReader();</span>
 
     //definieer placeholder als ? wanneer object naar native geometry wordt
     //geconverteerd
@@ -113,7 +133,9 @@ import java.util.Date;
 
     public abstract Geometry convertToJTSGeometryObject(Object nativeObj);
 
-    public abstract String createPSGeometryPlaceholder() throws SQLException;
+    public String createPSGeometryPlaceholder() throws SQLException {
+<span class="nc" id="L137">        return &quot;?&quot;;</span>
+    }
 
     public abstract String getSchema();
 
@@ -154,7 +176,7 @@ import java.util.Date;
         // https://www.postgresql.org/docs/11/sql-altersequence.html
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-sequence-transact-sql?view=sql-server-ver15
 
-<span class="nc" id="L157">        return String.format(&quot;ALTER SEQUENCE %s RESTART WITH %d&quot;, seqName , nextVal);</span>
+<span class="nc" id="L179">        return String.format(&quot;ALTER SEQUENCE %s RESTART WITH %d&quot;, seqName, nextVal);</span>
     }
 
     /**
@@ -168,19 +190,19 @@ import java.util.Date;
     public abstract String getGeotoolsDBTypeName();
 
     public Object convertToNativeGeometryObject(String param) throws ParseException, SQLException {
-<span class="nc" id="L171">        Geometry o = null;</span>
-<span class="nc bnc" id="L172" title="All 4 branches missed.">        if (param != null &amp;&amp; param.trim().length() &gt; 0) {</span>
-<span class="nc" id="L173">            o = wkt.read(param);</span>
+<span class="nc" id="L193">        Geometry o = null;</span>
+<span class="nc bnc" id="L194" title="All 4 branches missed.">        if (param != null &amp;&amp; param.trim().length() &gt; 0) {</span>
+<span class="nc" id="L195">            o = wkt.read(param);</span>
         }
-<span class="nc" id="L175">        return convertToNativeGeometryObject(o);</span>
+<span class="nc" id="L197">        return convertToNativeGeometryObject(o);</span>
     }
 
     public Object createNativePoint(double lat, double lon, int srid) throws SQLException, ParseException {
-<span class="nc bnc" id="L179" title="All 4 branches missed.">        if (lat == 0 || lon == 0) {</span>
-<span class="nc" id="L180">            return null;</span>
+<span class="nc bnc" id="L201" title="All 4 branches missed.">        if (lat == 0 || lon == 0) {</span>
+<span class="nc" id="L202">            return null;</span>
         }
-<span class="nc" id="L182">        Point p = gf.createPoint(new Coordinate(lon, lat));</span>
-<span class="nc" id="L183">        return convertToNativeGeometryObject(p, srid);</span>
+<span class="nc" id="L204">        Point p = gf.createPoint(new Coordinate(lon, lat));</span>
+<span class="nc" id="L205">        return convertToNativeGeometryObject(p, srid);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

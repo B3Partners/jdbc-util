@@ -32,6 +32,7 @@
         <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
         <versions-maven-plugin.version>2.14.2</versions-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <maven-fluido-skin.version>2.0.0-M2</maven-fluido-skin.version>
     </properties>
     <organization>
         <name>B3Partners B.V.</name>
@@ -383,9 +384,17 @@
                     <generateSitemap>true</generateSitemap>
                     <attach>false</attach>
                     <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
-                    <locales>nl</locales>
+                    <!-- dit blijkt stuk in 4.0.0-M4
+                    <locales>nl</locales> -->
                     <relativizeDecorationLinks>false</relativizeDecorationLinks>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.skins</groupId>
+                        <artifactId>maven-fluido-skin</artifactId>
+                        <version>${maven-fluido-skin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-scm-publish-plugin</artifactId>

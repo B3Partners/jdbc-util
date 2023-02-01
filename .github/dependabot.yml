@@ -18,8 +18,7 @@ updates:
           - ">= 10.a"
       - dependency-name: com.microsoft.sqlserver:mssql-jdbc
         versions:
-          - "10.3.x"
-          - "11.1.x"
+          - "12.3.x"
 
   - package-ecosystem: "github-actions"
     directory: "/"

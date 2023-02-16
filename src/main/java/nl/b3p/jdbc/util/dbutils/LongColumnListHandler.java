@@ -47,7 +47,7 @@ public class LongColumnListHandler extends AbstractListHandler<Long> {
 
     /**
      * Creates a new instance of ColumnListHandler. The first column of each row
-     * will be returned from <code>handle()</code>.
+     * will be returned from {@code handle()}.
      */
     public LongColumnListHandler() {
         this(1, null);
@@ -57,7 +57,7 @@ public class LongColumnListHandler extends AbstractListHandler<Long> {
      * Creates a new instance of ColumnListHandler.
      *
      * @param columnIndex The index of the column to retrieve from the
-     * <code>ResultSet</code>.
+     * {@code ResultSet}.
      */
     public LongColumnListHandler(int columnIndex) {
         this(columnIndex, null);
@@ -67,7 +67,7 @@ public class LongColumnListHandler extends AbstractListHandler<Long> {
      * Creates a new instance of ColumnListHandler.
      *
      * @param columnName The name of the column to retrieve from the
-     * <code>ResultSet</code>.
+     * {@code ResultSet}.
      */
     public LongColumnListHandler(String columnName) {
         this(1, columnName);
@@ -77,9 +77,9 @@ public class LongColumnListHandler extends AbstractListHandler<Long> {
      * Private Helper
      *
      * @param columnIndex The index of the column to retrieve from the
-     * <code>ResultSet</code>.
+     * {@code ResultSet}.
      * @param columnName The name of the column to retrieve from the
-     * <code>ResultSet</code>.
+     * {@code ResultSet}.
      */
     private LongColumnListHandler(int columnIndex, String columnName) {
         super();
@@ -88,10 +88,10 @@ public class LongColumnListHandler extends AbstractListHandler<Long> {
     }
 
     /**
-     * Returns one <code>ResultSet</code> column value as <code>Long</code>.
+     * Returns one {@code ResultSet} column value as <code>Long</code>.
      *
-     * @param rs <code>ResultSet</code> to process.
-     * @return <code>Object</code>, never <code>null</code>.
+     * @param rs {@code ResultSet} to process.
+     * @return {@code Object}, never <code>null</code>.
      *
      * @throws SQLException if a database access error occurs
      * @throws ClassCastException if the class datatype does not match the

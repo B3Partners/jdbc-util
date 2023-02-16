@@ -49,11 +49,11 @@ public class OracleConnectionUnwrapper {
             return (OracleConnection)mdC;
         } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {
             LOG.trace("Cast naar OracleConnection via cast naar tomcat DelegatingConnection");
-            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) mdC).getDelegate();
+            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) mdC).getDelegate();
         } else if (org.apache.tomcat.dbcp.dbcp2.DelegatingConnection.class.isAssignableFrom(c.getClass())) {
             //org.apache.tomcat.dbcp.dbcp2.PoolingDataSource.PoolGuardConnectionWrapper is private maar extends DelegatingConnection
             LOG.trace("Cast InnermostDelegate van DelegatingConnection connection");
-            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) c).getInnermostDelegate();
+            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) c).getInnermostDelegate();
         } else {
             throw new SQLException(
                     "Kan connectie niet unwrappen naar OracleConnection van meta connectie: "

@@ -47,11 +47,11 @@ public class PGConnectionUnwrapper {
             return (PGConnection) metadataConnection;
         } else if (metadataConnection instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {
             LOG.trace("Cast naar matadataConnection PGConnection via cast naar tomcat DelegatingConnection");
-            return (PGConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) metadataConnection).getDelegate();
+            return (PGConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) metadataConnection).getDelegate();
         } else if (org.apache.tomcat.dbcp.dbcp2.DelegatingConnection.class.isAssignableFrom(connection.getClass())) {
             //org.apache.tomcat.dbcp.dbcp2.PoolingDataSource.PoolGuardConnectionWrapper is private maar extends DelegatingConnection
             LOG.trace("Cast InnermostDelegate van DelegatingConnection connection");
-            return (PGConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) connection).getInnermostDelegate();
+            return (PGConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) connection).getInnermostDelegate();
         } else {
             throw new SQLException(
                     "Kan connectie niet unwrappen naar PGConnection van meta connectie: "

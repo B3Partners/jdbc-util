@@ -39,12 +39,10 @@ public class Oracle11JdbcConverter extends OracleJdbcConverter {
      * {@code FETCH FIRST ... ROWS ONLY} alleen in Oracle 12 werkt. Zie ook:
      * <a href="https://github.com/B3Partners/brmo/issues/294">GH 294</a>.
      *
-     *
      * @param sql query zonder limiet
      * @param limit max aantal op te halen records dat voldoet aan query
      * @return query met limiet
      * @since 1.4.3
-     * @see OracleJdbcConverter#buildLimitSql(java.lang.StringBuilder, int)
      */
     @Override
     public StringBuilder buildLimitSql(StringBuilder sql, int limit) {

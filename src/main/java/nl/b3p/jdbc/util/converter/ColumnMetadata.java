@@ -169,6 +169,7 @@ public class ColumnMetadata implements Comparable<ColumnMetadata> {
                 defaultValue == null ? "" : "DEFAULT '" + defaultValue + "'");
     }
 
+    @Override
     public int compareTo(ColumnMetadata rhs) {
         return Integer.compare(position, rhs.position);
     }

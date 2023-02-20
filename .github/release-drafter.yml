@@ -23,6 +23,7 @@ categories:
       - fix
       - bugfix
       - regression
+      - security
   - title: 📖 Documentation updates
     label: documentation
   - title: 🔨 Dependency updates

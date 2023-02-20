@@ -49,11 +49,11 @@ import org.postgresql.PGConnection;
 <span class="nc" id="L49">            return (OracleConnection)mdC;</span>
 <span class="nc bnc" id="L50" title="All 2 branches missed.">        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {</span>
 <span class="nc" id="L51">            LOG.trace(&quot;Cast naar OracleConnection via cast naar tomcat DelegatingConnection&quot;);</span>
-<span class="nc" id="L52">            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) mdC).getDelegate();</span>
+<span class="nc" id="L52">            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection&lt;?&gt;) mdC).getDelegate();</span>
 <span class="nc bnc" id="L53" title="All 2 branches missed.">        } else if (org.apache.tomcat.dbcp.dbcp2.DelegatingConnection.class.isAssignableFrom(c.getClass())) {</span>
             //org.apache.tomcat.dbcp.dbcp2.PoolingDataSource.PoolGuardConnectionWrapper is private maar extends DelegatingConnection
 <span class="nc" id="L55">            LOG.trace(&quot;Cast InnermostDelegate van DelegatingConnection connection&quot;);</span>
-<span class="nc" id="L56">            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection) c).getInnermostDelegate();</span>
+<span class="nc" id="L56">            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection&lt;?&gt;) c).getInnermostDelegate();</span>
         } else {
 <span class="nc" id="L58">            throw new SQLException(</span>
                     &quot;Kan connectie niet unwrappen naar OracleConnection van meta connectie: &quot;

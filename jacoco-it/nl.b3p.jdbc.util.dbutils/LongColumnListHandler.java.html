@@ -47,7 +47,7 @@ public class LongColumnListHandler extends AbstractListHandler&lt;Long&gt; {
 
     /**
      * Creates a new instance of ColumnListHandler. The first column of each row
-     * will be returned from &lt;code&gt;handle()&lt;/code&gt;.
+     * will be returned from {@code handle()}.
      */
     public LongColumnListHandler() {
 <span class="nc" id="L53">        this(1, null);</span>
@@ -57,7 +57,7 @@ public class LongColumnListHandler extends AbstractListHandler&lt;Long&gt; {
      * Creates a new instance of ColumnListHandler.
      *
      * @param columnIndex The index of the column to retrieve from the
-     * &lt;code&gt;ResultSet&lt;/code&gt;.
+     * {@code ResultSet}.
      */
     public LongColumnListHandler(int columnIndex) {
 <span class="nc" id="L63">        this(columnIndex, null);</span>
@@ -67,7 +67,7 @@ public class LongColumnListHandler extends AbstractListHandler&lt;Long&gt; {
      * Creates a new instance of ColumnListHandler.
      *
      * @param columnName The name of the column to retrieve from the
-     * &lt;code&gt;ResultSet&lt;/code&gt;.
+     * {@code ResultSet}.
      */
     public LongColumnListHandler(String columnName) {
 <span class="nc" id="L73">        this(1, columnName);</span>
@@ -77,9 +77,9 @@ public class LongColumnListHandler extends AbstractListHandler&lt;Long&gt; {
      * Private Helper
      *
      * @param columnIndex The index of the column to retrieve from the
-     * &lt;code&gt;ResultSet&lt;/code&gt;.
+     * {@code ResultSet}.
      * @param columnName The name of the column to retrieve from the
-     * &lt;code&gt;ResultSet&lt;/code&gt;.
+     * {@code ResultSet}.
      */
     private LongColumnListHandler(int columnIndex, String columnName) {
 <span class="nc" id="L85">        super();</span>
@@ -88,10 +88,10 @@ public class LongColumnListHandler extends AbstractListHandler&lt;Long&gt; {
 <span class="nc" id="L88">    }</span>
 
     /**
-     * Returns one &lt;code&gt;ResultSet&lt;/code&gt; column value as &lt;code&gt;Long&lt;/code&gt;.
+     * Returns one {@code ResultSet} column value as &lt;code&gt;Long&lt;/code&gt;.
      *
-     * @param rs &lt;code&gt;ResultSet&lt;/code&gt; to process.
-     * @return &lt;code&gt;Object&lt;/code&gt;, never &lt;code&gt;null&lt;/code&gt;.
+     * @param rs {@code ResultSet} to process.
+     * @return {@code Object}, never &lt;code&gt;null&lt;/code&gt;.
      *
      * @throws SQLException if a database access error occurs
      * @throws ClassCastException if the class datatype does not match the

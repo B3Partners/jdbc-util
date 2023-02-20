@@ -169,8 +169,9 @@ public class ColumnMetadata implements Comparable&lt;ColumnMetadata&gt; {
 <span class="nc bnc" id="L169" title="All 2 branches missed.">                defaultValue == null ? &quot;&quot; : &quot;DEFAULT '&quot; + defaultValue + &quot;'&quot;);</span>
     }
 
+    @Override
     public int compareTo(ColumnMetadata rhs) {
-<span class="nc" id="L173">        return Integer.compare(position, rhs.position);</span>
+<span class="nc" id="L174">        return Integer.compare(position, rhs.position);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

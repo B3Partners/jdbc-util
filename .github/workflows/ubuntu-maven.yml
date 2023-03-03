@@ -83,7 +83,7 @@ jobs:
     permissions:
       packages: write
       contents: read
-    if: ${{ ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/geotools-28' ) && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' ) }}
+    if: ${{ github.ref == 'refs/heads/master' && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' ) }}
     steps:
       - uses: actions/checkout@v3
 
@@ -107,6 +107,13 @@ jobs:
           B3P_DEPLOY_TOKEN: ${{ secrets.B3P_DEPLOY_TOKEN }}
         run: |
           mvn -B -V -fae -Dmaven.test.skip=true clean deploy --settings .github/maven-settings.xml
+
+      - name: 'Deploy SBOM'
+        uses: DependencyTrack/gh-upload-sbom@v1.0.0
+        with:
+          serverhostname: ${{ secrets.DEPENDENCY_TRACK_HOSTNAME }}
+          apikey: ${{ secrets.DEPENDENCY_TRACK_APIKEY }}
+          project: 'd3442453-6841-4f80-9908-af8d7cc112f0'
 
 
   cleanup:

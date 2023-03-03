@@ -457,7 +457,7 @@
                 <artifactId>cyclonedx-maven-plugin</artifactId>
                 <version>2.7.5</version>
                 <configuration>
-                    <projectType>application</projectType>
+                    <projectType>library</projectType>
                 </configuration>
                 <executions>
                     <execution>

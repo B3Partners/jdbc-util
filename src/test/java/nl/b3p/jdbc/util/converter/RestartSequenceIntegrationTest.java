@@ -63,8 +63,6 @@ public class RestartSequenceIntegrationTest extends AbstractDatabaseIntegrationT
                 assertEquals(-1, updated, "expected -1 rows to be updated");
             } else if (converter instanceof OracleJdbcConverter) {
                 assertEquals(0, updated, "expected 0 rows to be updated");
-            }  else if (converter instanceof Oracle12JdbcConverter) {
-                assertEquals(1, updated, "expected 1 rows to be updated");
             } else {
                 assertEquals(0, updated, "expected 0 rows to be updated");
             }

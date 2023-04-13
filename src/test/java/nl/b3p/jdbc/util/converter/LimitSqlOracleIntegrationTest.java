@@ -92,7 +92,7 @@ public class LimitSqlOracleIntegrationTest extends AbstractDatabaseIntegrationTe
 
             String q = "Select * from bericht where id > 0 order by id";
             OracleConnection oc = OracleConnectionUnwrapper.unwrap(c);
-            GeometryJdbcConverter converter = new Oracle11JdbcConverter(oc);
+            GeometryJdbcConverter converter = new OracleJdbcConverter(oc);
             String finalquery = converter.buildLimitSql(new StringBuilder(q), 10).toString();
             LOG.info("Final query" + finalquery);
             MapListHandler h = new MapListHandler();

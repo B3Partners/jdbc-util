@@ -25,10 +25,8 @@ import org.apache.commons.logging.LogFactory;
 import org.geotools.data.oracle.sdo.GeometryConverter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
 
 import java.sql.SQLException;
-import java.sql.Struct;
 
 /**
  *
@@ -156,7 +154,6 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
 
     @Override
     public String getMViewRefreshSQL(String mview) {
-        //return String.format("DBMS_MVIEW.REFRESH('%s','?','',FALSE,TRUE,0,0,0,FALSE,FALSE)", mview);
         return String.format("begin\ndbms_mview.refresh('%s','C');\nend;", mview);
     }
 

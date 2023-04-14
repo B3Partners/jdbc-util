@@ -55,7 +55,7 @@ public class GeometryJdbcConverterFactory {
             }
             return geomToJdbc;
         } else if (databaseProductName.contains("Oracle")) {
-            int majorVersion = 10;
+            int majorVersion = 19;
             try {
                 majorVersion = conn.getMetaData().getDatabaseMajorVersion();
             } catch (SQLException ex) {
@@ -66,14 +66,13 @@ public class GeometryJdbcConverterFactory {
                 OracleJdbcConverter geomToJdbc;
                 switch (majorVersion) {
                     case 11:
-                        geomToJdbc = new Oracle11JdbcConverter(oc);
-                        break;
+                        throw new UnsupportedOperationException("Oracle 11 is niet ondersteund");
                     case 12:
-                        geomToJdbc = new Oracle12JdbcConverter(oc);
-                        break;
+                        throw new UnsupportedOperationException("Oracle 12 is niet ondersteund");
                     case 18:
                     case 19:
                     case 21:
+                    case 23:
                     default:
                         geomToJdbc = new OracleJdbcConverter(oc);
                 }

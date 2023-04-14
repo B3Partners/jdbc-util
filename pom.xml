@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <test.onlyITs>false</test.onlyITs>
-        <oracle.jdbc.version>21.9.0.0</oracle.jdbc.version>
+        <oracle.jdbc.version>23.2.0.0</oracle.jdbc.version>
         <geotools.version>29.0</geotools.version>
         <jts.version>1.19.0</jts.version>
         <jaxb.api.version>2.3.3</jaxb.api.version>
@@ -95,6 +95,16 @@
             <groupId>org.geotools.jdbc</groupId>
             <artifactId>gt-jdbc-oracle</artifactId>
             <version>${geotools.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.oracle.database.jdbc</groupId>
+                    <artifactId>ojdbc8</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.oracle.database.jdbc</groupId>
+                    <artifactId>ojdbc11</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-dbutils</groupId>
@@ -113,11 +123,11 @@
             <version>3.12.0</version>
         </dependency>
         <dependency>
-            <!-- <groupId>com.oracle.database.jdbc</groupId> -->
-            <!-- <artifactId>ojdbc11</artifactId> -->
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
             <!-- ojdbc11_g heeft debugging symbols -->
-            <groupId>com.oracle.database.jdbc.debug</groupId>
-            <artifactId>ojdbc11_g</artifactId>
+            <!-- <groupId>com.oracle.database.jdbc.debug</groupId>-->
+            <!-- <artifactId>ojdbc11_g</artifactId>-->
             <version>${oracle.jdbc.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -328,6 +338,7 @@
                         <exclude>**/*IntegrationTest.java</exclude>
                     </excludes>
                     <skipTests>${test.onlyITs}</skipTests>
+                    <!--suppress UnresolvedMavenProperty -->
                     <argLine>${surefireArgLine}</argLine>
                 </configuration>
             </plugin>
@@ -342,6 +353,7 @@
                     <useFile>false</useFile>
                     <skipTests>!${test.onlyITs}</skipTests>
                     <skipITs>!${test.onlyITs}</skipITs>
+                    <!--suppress UnresolvedMavenProperty -->
                     <argLine>${failsafeArgLine}</argLine>
                 </configuration>
                 <executions>
@@ -386,7 +398,6 @@
                     <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
                     <!-- dit blijkt stuk in 4.0.0-M4
                     <locales>nl</locales> -->
-                    <relativizeDecorationLinks>false</relativizeDecorationLinks>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -539,6 +550,7 @@
                                 <project.version>${project.version}</project.version>
                             </systemPropertyVariables>
                             <useFile>false</useFile>
+                            <!--suppress UnresolvedMavenProperty -->
                             <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>
@@ -561,6 +573,7 @@
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
                             <useFile>false</useFile>
+                            <!--suppress UnresolvedMavenProperty -->
                             <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>
@@ -583,6 +596,7 @@
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
                             <useFile>false</useFile>
+                            <!--suppress UnresolvedMavenProperty -->
                             <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>
@@ -614,6 +628,7 @@
                                 <exclude>**/*OracleIntegrationTest.java</exclude>
                             </excludes>
                             <useFile>false</useFile>
+                            <!--suppress UnresolvedMavenProperty -->
                             <argLine>${failsafeArgLine}</argLine>
                         </configuration>
                     </plugin>

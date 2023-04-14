@@ -40,11 +40,17 @@ public class ColumnMetadata implements Comparable<ColumnMetadata> {
     private boolean autoIncrement;
 
     public ColumnMetadata(ResultSet columnMetadataRs) throws SQLException {
+        // the resultset mmay be forward-only, therefor the order could be important (oracle 23.2 driver)
+        // see https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/DatabaseMetaData.html#getColumns(java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+        //4
         name = columnMetadataRs.getString("COLUMN_NAME");
-        position = columnMetadataRs.getInt("ORDINAL_POSITION");
+        //5
         dataType = columnMetadataRs.getInt("DATA_TYPE");
+        //6
         typeName = columnMetadataRs.getString("TYPE_NAME");
+        //7
         size = columnMetadataRs.getInt("COLUMN_SIZE");
+        //9
         Object o = columnMetadataRs.getObject("DECIMAL_DIGITS");
         if (o != null) {
             if (o instanceof BigDecimal) {
@@ -53,7 +59,11 @@ public class ColumnMetadata implements Comparable<ColumnMetadata> {
                 decimalDigits = (Integer) o;
             }
         }
+        //11
         nullable = DatabaseMetaData.columnNullable == columnMetadataRs.getInt("NULLABLE");
+        //13
+        defaultValue = columnMetadataRs.getString("COLUMN_DEF");
+        //16
         o = columnMetadataRs.getObject("CHAR_OCTET_LENGTH");
         if (o != null) {
             if (o instanceof BigDecimal) {
@@ -62,7 +72,9 @@ public class ColumnMetadata implements Comparable<ColumnMetadata> {
                 charOctetLength = (Integer) o;
             }
         }
-        defaultValue = columnMetadataRs.getString("COLUMN_DEF");
+        //17
+        position = columnMetadataRs.getInt("ORDINAL_POSITION");
+        //23
         //autoIncrement = "YES".equals(columnMetadataRs.getString("IS_AUTOINCREMENT"));
     }
 

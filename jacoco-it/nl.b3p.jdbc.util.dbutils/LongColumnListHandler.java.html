@@ -24,96 +24,83 @@ import java.sql.SQLException;
 import org.apache.commons.dbutils.handlers.AbstractListHandler;
 
 /**
- * Een ListHandler die een list van {@code Long} teruggeeft ipv
- * watdedatabaseverzint. Oracle geeft BigDecimal terug voor identity kolommen
- * van bijv. staging database tabellen omdat het NUMBER(19,0) kolommen zijn.
+ * Een ListHandler die een list van {@code Long} teruggeeft ipv watdedatabaseverzint. Oracle geeft
+ * BigDecimal terug voor identity kolommen van bijv. staging database tabellen omdat het
+ * NUMBER(19,0) kolommen zijn.
  *
  * @see org.apache.commons.dbutils.handlers.ColumnListHandler
- *
  * @author mprins
  */
 public class LongColumnListHandler extends AbstractListHandler&lt;Long&gt; {
 
-    /**
-     * The column number to retrieve.
-     */
-    private final int columnIndex;
+  /** The column number to retrieve. */
+  private final int columnIndex;
 
-    /**
-     * The column name to retrieve. Either columnName or columnIndex will be
-     * used but never both.
-     */
-    private final String columnName;
+  /** The column name to retrieve. Either columnName or columnIndex will be used but never both. */
+  private final String columnName;
 
-    /**
-     * Creates a new instance of ColumnListHandler. The first column of each row
-     * will be returned from {@code handle()}.
-     */
-    public LongColumnListHandler() {
-<span class="nc" id="L53">        this(1, null);</span>
-<span class="nc" id="L54">    }</span>
+  /**
+   * Creates a new instance of ColumnListHandler. The first column of each row will be returned from
+   * {@code handle()}.
+   */
+  public LongColumnListHandler() {
+<span class="nc" id="L47">    this(1, null);</span>
+<span class="nc" id="L48">  }</span>
 
-    /**
-     * Creates a new instance of ColumnListHandler.
-     *
-     * @param columnIndex The index of the column to retrieve from the
-     * {@code ResultSet}.
-     */
-    public LongColumnListHandler(int columnIndex) {
-<span class="nc" id="L63">        this(columnIndex, null);</span>
-<span class="nc" id="L64">    }</span>
+  /**
+   * Creates a new instance of ColumnListHandler.
+   *
+   * @param columnIndex The index of the column to retrieve from the {@code ResultSet}.
+   */
+  public LongColumnListHandler(int columnIndex) {
+<span class="nc" id="L56">    this(columnIndex, null);</span>
+<span class="nc" id="L57">  }</span>
 
-    /**
-     * Creates a new instance of ColumnListHandler.
-     *
-     * @param columnName The name of the column to retrieve from the
-     * {@code ResultSet}.
-     */
-    public LongColumnListHandler(String columnName) {
-<span class="nc" id="L73">        this(1, columnName);</span>
-<span class="nc" id="L74">    }</span>
+  /**
+   * Creates a new instance of ColumnListHandler.
+   *
+   * @param columnName The name of the column to retrieve from the {@code ResultSet}.
+   */
+  public LongColumnListHandler(String columnName) {
+<span class="nc" id="L65">    this(1, columnName);</span>
+<span class="nc" id="L66">  }</span>
 
-    /**
-     * Private Helper
-     *
-     * @param columnIndex The index of the column to retrieve from the
-     * {@code ResultSet}.
-     * @param columnName The name of the column to retrieve from the
-     * {@code ResultSet}.
-     */
-    private LongColumnListHandler(int columnIndex, String columnName) {
-<span class="nc" id="L85">        super();</span>
-<span class="nc" id="L86">        this.columnIndex = columnIndex;</span>
-<span class="nc" id="L87">        this.columnName = columnName;</span>
-<span class="nc" id="L88">    }</span>
+  /**
+   * Private Helper
+   *
+   * @param columnIndex The index of the column to retrieve from the {@code ResultSet}.
+   * @param columnName The name of the column to retrieve from the {@code ResultSet}.
+   */
+  private LongColumnListHandler(int columnIndex, String columnName) {
+<span class="nc" id="L75">    super();</span>
+<span class="nc" id="L76">    this.columnIndex = columnIndex;</span>
+<span class="nc" id="L77">    this.columnName = columnName;</span>
+<span class="nc" id="L78">  }</span>
 
-    /**
-     * Returns one {@code ResultSet} column value as &lt;code&gt;Long&lt;/code&gt;.
-     *
-     * @param rs {@code ResultSet} to process.
-     * @return {@code Object}, never &lt;code&gt;null&lt;/code&gt;.
-     *
-     * @throws SQLException if a database access error occurs
-     * @throws ClassCastException if the class datatype does not match the
-     * column type
-     *
-     * @see org.apache.commons.dbutils.handlers.AbstractListHandler#handle(ResultSet)
-     */
-    @Override
-    protected Long handleRow(ResultSet rs) throws SQLException {
-        Object o;
-        Long l;
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (this.columnName == null) {</span>
-<span class="nc" id="L107">            o = rs.getObject(this.columnIndex);</span>
-        } else {
-<span class="nc" id="L109">            o = rs.getObject(this.columnName);</span>
-        }
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (o instanceof BigDecimal) {</span>
-<span class="nc" id="L112">            l = ((BigDecimal) o).longValue();</span>
-        } else {
-<span class="nc" id="L114">            l = (Long) o;</span>
-        }
-<span class="nc" id="L116">        return l;</span>
+  /**
+   * Returns one {@code ResultSet} column value as &lt;code&gt;Long&lt;/code&gt;.
+   *
+   * @param rs {@code ResultSet} to process.
+   * @return {@code Object}, never &lt;code&gt;null&lt;/code&gt;.
+   * @throws SQLException if a database access error occurs
+   * @throws ClassCastException if the class datatype does not match the column type
+   * @see org.apache.commons.dbutils.handlers.AbstractListHandler#handle(ResultSet)
+   */
+  @Override
+  protected Long handleRow(ResultSet rs) throws SQLException {
+    Object o;
+    Long l;
+<span class="nc bnc" id="L93" title="All 2 branches missed.">    if (this.columnName == null) {</span>
+<span class="nc" id="L94">      o = rs.getObject(this.columnIndex);</span>
+    } else {
+<span class="nc" id="L96">      o = rs.getObject(this.columnName);</span>
     }
+<span class="nc bnc" id="L98" title="All 2 branches missed.">    if (o instanceof BigDecimal) {</span>
+<span class="nc" id="L99">      l = ((BigDecimal) o).longValue();</span>
+    } else {
+<span class="nc" id="L101">      l = (Long) o;</span>
+    }
+<span class="nc" id="L103">    return l;</span>
+  }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

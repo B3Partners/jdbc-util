@@ -18,118 +18,121 @@
  */
 package nl.b3p.jdbc.util.converter;
 
+import java.sql.SQLException;
 import net.postgis.jdbc.PGgeometry;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
-import java.sql.SQLException;
 
 /**
- *
  * @author Matthijs Laan
  */
-<span class="nc" id="L30">public class PostgisJdbcConverter extends GeometryJdbcConverter {</span>
+<span class="nc" id="L29">public class PostgisJdbcConverter extends GeometryJdbcConverter {</span>
 
-<span class="nc" id="L32">    private String schema = null;</span>
+<span class="nc" id="L31">  private String schema = null;</span>
 
-    @Override
-    public boolean isDuplicateKeyViolationMessage(String message) {
-<span class="nc bnc" id="L36" title="All 4 branches missed.">        return message!=null &amp;&amp; message.startsWith(&quot;ERROR: duplicate key value violates unique constraint&quot;);</span>
-    }
+  @Override
+  public boolean isDuplicateKeyViolationMessage(String message) {
+<span class="nc bnc" id="L35" title="All 2 branches missed.">    return message != null</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        &amp;&amp; message.startsWith(&quot;ERROR: duplicate key value violates unique constraint&quot;);</span>
+  }
 
-    @Override
-    public boolean isFKConstraintViolationMessage(String message) {
-<span class="nc bnc" id="L41" title="All 6 branches missed.">        return message != null &amp;&amp; message.startsWith(&quot;ERROR: insert or update on table&quot;) &amp;&amp; message.contains(&quot;violates foreign key constraint&quot;);</span>
-    }
+  @Override
+  public boolean isFKConstraintViolationMessage(String message) {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">    return message != null</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        &amp;&amp; message.startsWith(&quot;ERROR: insert or update on table&quot;)</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        &amp;&amp; message.contains(&quot;violates foreign key constraint&quot;);</span>
+  }
 
-    @Override
-    public Object convertToNativeGeometryObject(Geometry g) throws SQLException {
-<span class="nc" id="L46">      return convertToNativeGeometryObject(g, 28992);</span>
-    }
-    
-    @Override
-    public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException {
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if(g == null){</span>
-<span class="nc" id="L52">            return null;</span>
-        }
-<span class="nc" id="L54">        String param = g.toText();</span>
-<span class="nc bnc" id="L55" title="All 4 branches missed.">        if (param == null || param.trim().length() == 0) {</span>
-<span class="nc" id="L56">            return null;</span>
-        }
-<span class="nc" id="L58">        return new PGgeometry(&quot;SRID=&quot; + srid + &quot;;&quot; + param);</span>
-    }
+  @Override
+  public Object convertToNativeGeometryObject(Geometry g) throws SQLException {
+<span class="nc" id="L48">    return convertToNativeGeometryObject(g, 28992);</span>
+  }
 
-    @Override
-    public String getSchema() {
-<span class="nc" id="L63">        return schema;</span>
+  @Override
+  public Object convertToNativeGeometryObject(Geometry g, int srid) throws SQLException {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">    if (g == null) {</span>
+<span class="nc" id="L54">      return null;</span>
     }
+<span class="nc" id="L56">    String param = g.toText();</span>
+<span class="nc bnc" id="L57" title="All 4 branches missed.">    if (param == null || param.trim().length() == 0) {</span>
+<span class="nc" id="L58">      return null;</span>
+    }
+<span class="nc" id="L60">    return new PGgeometry(&quot;SRID=&quot; + srid + &quot;;&quot; + param);</span>
+  }
 
-    public void setSchema(String schema) {
-<span class="nc" id="L67">        this.schema = schema;</span>
-<span class="nc" id="L68">    }</span>
+  @Override
+  public String getSchema() {
+<span class="nc" id="L65">    return schema;</span>
+  }
 
-    @Override
-    public String getGeomTypeName() {
-<span class="nc" id="L72">        return &quot;geometry&quot;;</span>
-    }
-    
-    @Override
-    public String buildPaginationSql(String sql, int offset, int limit) {
-<span class="nc" id="L77">        StringBuilder builder = new StringBuilder(sql);</span>
-<span class="nc" id="L78">        builder.append(&quot; LIMIT &quot;);</span>
-<span class="nc" id="L79">        builder.append(limit);</span>
-<span class="nc" id="L80">        builder.append(&quot; OFFSET &quot;);</span>
-<span class="nc" id="L81">        builder.append(offset);</span>
-<span class="nc" id="L82">        return builder.toString();</span>
-    }
+  public void setSchema(String schema) {
+<span class="nc" id="L69">    this.schema = schema;</span>
+<span class="nc" id="L70">  }</span>
 
-    @Override
-    public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-<span class="nc" id="L87">        String s = buildPaginationSql(sql.toString(), 0, limit);</span>
-<span class="nc" id="L88">        return new StringBuilder(s);</span>
-    }
+  @Override
+  public String getGeomTypeName() {
+<span class="nc" id="L74">    return &quot;geometry&quot;;</span>
+  }
 
-    @Override
-    public boolean useSavepoints() {
-<span class="nc" id="L93">        return true;</span>
-    }
+  @Override
+  public String buildPaginationSql(String sql, int offset, int limit) {
+<span class="nc" id="L79">    StringBuilder builder = new StringBuilder(sql);</span>
+<span class="nc" id="L80">    builder.append(&quot; LIMIT &quot;);</span>
+<span class="nc" id="L81">    builder.append(limit);</span>
+<span class="nc" id="L82">    builder.append(&quot; OFFSET &quot;);</span>
+<span class="nc" id="L83">    builder.append(offset);</span>
+<span class="nc" id="L84">    return builder.toString();</span>
+  }
 
-     @Override
-    public boolean isPmdKnownBroken() {
-<span class="nc" id="L98">        return false;</span>
-    }
-    @Override
-    public String getGeotoolsDBTypeName() {
-<span class="nc" id="L102">        return &quot;postgis&quot;;</span>
-    }
+  @Override
+  public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
+<span class="nc" id="L89">    String s = buildPaginationSql(sql.toString(), 0, limit);</span>
+<span class="nc" id="L90">    return new StringBuilder(s);</span>
+  }
 
-    @Override
-    public String getMViewsSQL() {
-<span class="nc" id="L107">        return &quot;SELECT oid::regclass::text FROM pg_class WHERE relkind = 'm'&quot;;</span>
-    }
+  @Override
+  public boolean useSavepoints() {
+<span class="nc" id="L95">    return true;</span>
+  }
 
-    @Override
-    public String getMViewRefreshSQL(String mview) {
-<span class="nc" id="L112">        return String.format(&quot;REFRESH MATERIALIZED VIEW %s;&quot;, mview);</span>
-    }
+  @Override
+  public boolean isPmdKnownBroken() {
+<span class="nc" id="L100">    return false;</span>
+  }
 
-    @Override
-    public String getSelectNextValueFromSequenceSQL(String seqName) {
-<span class="nc" id="L117">        return String.format(&quot;SELECT nextval('%s')&quot;, seqName);</span>
-    }
+  @Override
+  public String getGeotoolsDBTypeName() {
+<span class="nc" id="L105">    return &quot;postgis&quot;;</span>
+  }
 
-    @Override
-    public Geometry convertToJTSGeometryObject(Object nativeObj) {
-<span class="nc" id="L122">        PGgeometry geom = (PGgeometry)nativeObj;</span>
-<span class="nc" id="L123">        StringBuffer sb = new StringBuffer();</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">        if(geom == null){</span>
-<span class="nc" id="L125">            return null;</span>
-        }
-<span class="nc" id="L127">        geom.getGeometry().outerWKT(sb);</span>
-        try {
-<span class="nc" id="L129">            return wkt.read(sb.toString());</span>
-<span class="nc" id="L130">        } catch (ParseException ex) {</span>
-<span class="nc" id="L131">            return null;</span>
-        }
+  @Override
+  public String getMViewsSQL() {
+<span class="nc" id="L110">    return &quot;SELECT oid::regclass::text FROM pg_class WHERE relkind = 'm'&quot;;</span>
+  }
+
+  @Override
+  public String getMViewRefreshSQL(String mview) {
+<span class="nc" id="L115">    return String.format(&quot;REFRESH MATERIALIZED VIEW %s;&quot;, mview);</span>
+  }
+
+  @Override
+  public String getSelectNextValueFromSequenceSQL(String seqName) {
+<span class="nc" id="L120">    return String.format(&quot;SELECT nextval('%s')&quot;, seqName);</span>
+  }
+
+  @Override
+  public Geometry convertToJTSGeometryObject(Object nativeObj) {
+<span class="nc" id="L125">    PGgeometry geom = (PGgeometry) nativeObj;</span>
+<span class="nc" id="L126">    StringBuffer sb = new StringBuffer();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">    if (geom == null) {</span>
+<span class="nc" id="L128">      return null;</span>
     }
+<span class="nc" id="L130">    geom.getGeometry().outerWKT(sb);</span>
+    try {
+<span class="nc" id="L132">      return wkt.read(sb.toString());</span>
+<span class="nc" id="L133">    } catch (ParseException ex) {</span>
+<span class="nc" id="L134">      return null;</span>
+    }
+  }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

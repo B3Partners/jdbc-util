@@ -21,174 +21,179 @@ package nl.b3p.jdbc.util.converter;
 
 import com.microsoft.sqlserver.jdbc.Geometry;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import java.sql.SQLException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.locationtech.jts.io.ParseException;
-import java.sql.SQLException;
-
 
 /**
  * @author Matthijs Laan
  * @author mprins
  */
-<span class="nc" id="L35">public class MssqlJdbcConverter extends GeometryJdbcConverter {</span>
-<span class="nc" id="L36">    private final static Log LOG = LogFactory.getLog(MssqlJdbcConverter.class);</span>
-<span class="nc" id="L37">    private String schema = &quot;dbo&quot;;</span>
-    // a select query that returns empty result any time any place
-    private static final String NOT_IMPLEMENTED_DUMMY_SQL_SELECT = &quot;select 1 where 1 = 2&quot;;
-    // an update / delete query that returns 0 results for update
-    private static final String NOT_IMPLEMENTED_DUMMY_SQL_UPDATE = &quot;while 1 = 0 break&quot;;
+<span class="nc" id="L34">public class MssqlJdbcConverter extends GeometryJdbcConverter {</span>
+<span class="nc" id="L35">  private static final Log LOG = LogFactory.getLog(MssqlJdbcConverter.class);</span>
+<span class="nc" id="L36">  private String schema = &quot;dbo&quot;;</span>
+  // a select query that returns empty result any time any place
+  private static final String NOT_IMPLEMENTED_DUMMY_SQL_SELECT = &quot;select 1 where 1 = 2&quot;;
+  // an update / delete query that returns 0 results for update
+  private static final String NOT_IMPLEMENTED_DUMMY_SQL_UPDATE = &quot;while 1 = 0 break&quot;;
 
+  @Override
+  public boolean isDuplicateKeyViolationMessage(String message) {
+    // Error Code: 2627
+    // Violation of %ls constraint '%.*ls'. Cannot insert duplicate key in object '%.*ls'.
+<span class="nc bnc" id="L46" title="All 4 branches missed.">    return message != null &amp;&amp; message.contains(&quot;Cannot insert duplicate key in object&quot;);</span>
+  }
 
-    @Override
-    public boolean isDuplicateKeyViolationMessage(String message) {
-        //Error Code: 2627
-        //Violation of %ls constraint '%.*ls'. Cannot insert duplicate key in object '%.*ls'.
-<span class="nc bnc" id="L48" title="All 4 branches missed.">        return message != null &amp;&amp; message.contains(&quot;Cannot insert duplicate key in object&quot;);</span>
+  @Override
+  public boolean isFKConstraintViolationMessage(String message) {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">    return message != null</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        &amp;&amp; message.startsWith(&quot;The INSERT statement conflicted with the FOREIGN KEY constraint&quot;);</span>
+  }
+
+  @Override
+  public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g, int srid)
+      throws SQLException {
+<span class="nc bnc" id="L58" title="All 2 branches missed.">    if (g == null) {</span>
+<span class="nc" id="L59">      return null;</span>
     }
-
-    @Override
-    public boolean isFKConstraintViolationMessage(String message) {
-<span class="nc bnc" id="L53" title="All 4 branches missed.">        return message != null &amp;&amp; message.startsWith(&quot;The INSERT statement conflicted with the FOREIGN KEY constraint&quot;);</span>
+<span class="nc" id="L61">    String param = g.toText();</span>
+    // geotools
+    // import org.geotools.geometry.jts.WKTWriter2;
+    // import org.locationtech.jts.io.WKTWriter;
+    // String param = (new WKTWriter2(2)).write(g);
+<span class="nc bnc" id="L66" title="All 4 branches missed.">    if (param == null || param.trim().length() == 0) {</span>
+<span class="nc" id="L67">      return null;</span>
     }
+<span class="nc" id="L69">    LOG.trace(&quot;Converted geom WKT: &quot; + param + &quot;, SRID: &quot; + srid);</span>
+<span class="nc" id="L70">    Geometry sqlGeom = Geometry.STGeomFromText(param, srid);</span>
+<span class="nc" id="L71">    LOG.trace(&quot;mssql geom: &quot; + sqlGeom);</span>
+<span class="nc" id="L72">    return sqlGeom;</span>
+  }
 
-    @Override
-    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g, int srid) throws SQLException {
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (g == null) {</span>
-<span class="nc" id="L59">            return null;</span>
-        }
-<span class="nc" id="L61">        String param = g.toText();</span>
-        // geotools
-        // import org.geotools.geometry.jts.WKTWriter2;
-        // import org.locationtech.jts.io.WKTWriter;
-        // String param = (new WKTWriter2(2)).write(g);
-<span class="nc bnc" id="L66" title="All 4 branches missed.">        if (param == null || param.trim().length() == 0) {</span>
-<span class="nc" id="L67">            return null;</span>
-        }
-<span class="nc" id="L69">        LOG.trace(&quot;Converted geom WKT: &quot; + param + &quot;, SRID: &quot; + srid);</span>
-<span class="nc" id="L70">        Geometry sqlGeom = Geometry.STGeomFromText(param, srid);</span>
-<span class="nc" id="L71">        LOG.trace(&quot;mssql geom: &quot; + sqlGeom);</span>
-<span class="nc" id="L72">        return sqlGeom;</span>
+  @Override
+  public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g)
+      throws SQLException {
+<span class="nc" id="L78">    return convertToNativeGeometryObject(g, 28992);</span>
+  }
+
+  @Override
+  public String getSchema() {
+<span class="nc" id="L83">    return schema;</span>
+  }
+
+  public void setSchema(String schema) {
+<span class="nc" id="L87">    this.schema = schema;</span>
+<span class="nc" id="L88">  }</span>
+
+  @Override
+  public String getGeomTypeName() {
+<span class="nc" id="L92">    return &quot;geometry&quot;;</span>
+  }
+
+  /*
+  QUERY USING &quot;ROW_NUMBER&quot;
+  DECLARE @PageNumber AS INT, @RowspPage AS INT
+  SET @PageNumber = 2
+  SET @RowspPage = 10
+  SELECT * FROM (
+               SELECT ROW_NUMBER() OVER(ORDER BY ID_EXAMPLE) AS Numero,
+                      ID_EXAMPLE, NM_EXAMPLE , DT_CREATE FROM TB_EXAMPLE
+                 ) AS TBL
+  WHERE Numero BETWEEN ((@PageNumber - 1) * @RowspPage + 1) AND (@PageNumber * @RowspPage)
+  ORDER BY ID_EXAMPLE
+  GO
+
+  QUERY USING &quot;OFFSET&quot; AND &quot;FETCH NEXT&quot; (SQL SERVER 2012)
+  DECLARE @PageNumber AS INT, @RowspPage AS INT
+  SET @PageNumber = 2
+  SET @RowspPage = 10
+
+  SELECT ID_EXAMPLE, NM_EXAMPLE, DT_CREATE
+  FROM TB_EXAMPLE
+  ORDER BY ID_EXAMPLE
+  OFFSET ((@PageNumber - 1) * @RowspPage) ROWS
+  FETCH NEXT @RowspPage ROWS ONLY
+  GO
+  */
+  @Override
+  public String buildPaginationSql(String sql, int offset, int limit) {
+<span class="nc" id="L122">    StringBuilder builder = new StringBuilder(sql);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">    if (!StringUtils.containsIgnoreCase(sql, &quot;ORDER BY&quot;)) {</span>
+      // OFFSET ... FETCH queries require order by,
+      // see https://msdn.microsoft.com/en-us/library/gg699618.aspx?f=255&amp;MSPPError=-2147217396
+<span class="nc" id="L126">      builder.append(&quot; ORDER BY id &quot;);</span>
     }
+<span class="nc" id="L128">    builder.append(&quot; OFFSET &quot;);</span>
+<span class="nc" id="L129">    builder.append(offset);</span>
+<span class="nc" id="L130">    builder.append(&quot; ROWS FETCH NEXT &quot;);</span>
+<span class="nc" id="L131">    builder.append(limit);</span>
+<span class="nc" id="L132">    builder.append(&quot; ROWS ONLY &quot;);</span>
+<span class="nc" id="L133">    return builder.toString();</span>
+  }
 
-    @Override
-    public Object convertToNativeGeometryObject(org.locationtech.jts.geom.Geometry g) throws SQLException {
-<span class="nc" id="L77">        return convertToNativeGeometryObject(g, 28992);</span>
+  @Override
+  public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
+<span class="nc" id="L138">    String s = buildPaginationSql(sql.toString(), 0, limit);</span>
+<span class="nc" id="L139">    return new StringBuilder(s);</span>
+  }
+
+  @Override
+  public boolean useSavepoints() {
+<span class="nc" id="L144">    return false;</span>
+  }
+
+  @Override
+  public boolean isPmdKnownBroken() {
+<span class="nc" id="L149">    return false;</span>
+  }
+
+  @Override
+  public String getGeotoolsDBTypeName() {
+    // see: http://docs.geotools.org/stable/userguide/library/jdbc/sqlserver.html
+<span class="nc" id="L155">    return &quot;sqlserver&quot;;</span>
+  }
+
+  /**
+   * return een dummy query omdat mssql geen materialized views kent.
+   *
+   * @return een dummy select query omdat mssql geen materialized views kent.
+   */
+  @Override
+  public String getMViewsSQL() {
+<span class="nc" id="L165">    return NOT_IMPLEMENTED_DUMMY_SQL_SELECT;</span>
+  }
+
+  /**
+   * return een dummy query omdat mssql geen materialized views kent.
+   *
+   * @return een dummy update query omdat mssql geen materialized views kent.
+   */
+  @Override
+  public String getMViewRefreshSQL(String mview) {
+<span class="nc" id="L175">    return NOT_IMPLEMENTED_DUMMY_SQL_UPDATE;</span>
+  }
+
+  @Override
+  public String getSelectNextValueFromSequenceSQL(String seqName) {
+<span class="nc" id="L180">    return String.format(&quot;SELECT NEXT VALUE FOR %s&quot;, seqName);</span>
+  }
+
+  @Override
+  public org.locationtech.jts.geom.Geometry convertToJTSGeometryObject(Object nativeObj) {
+<span class="nc" id="L185">    org.locationtech.jts.geom.Geometry jts = null;</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">    if (nativeObj == null) {</span>
+<span class="nc" id="L187">      return jts;</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">    } else if (Geometry.class.isAssignableFrom(nativeObj.getClass())) {</span>
+      try {
+<span class="nc" id="L190">        jts = wkt.read(((Geometry) nativeObj).STAsText());</span>
+<span class="nc" id="L191">        jts.setSRID(((Geometry) nativeObj).getSrid());</span>
+<span class="nc" id="L192">      } catch (ParseException | SQLServerException e) {</span>
+<span class="nc" id="L193">        LOG.error(&quot;Error converting SQL Server to JTS geometry&quot;, e);</span>
+<span class="nc" id="L194">      }</span>
     }
-
-    @Override
-    public String getSchema() {
-<span class="nc" id="L82">        return schema;</span>
-    }
-
-    public void setSchema(String schema) {
-<span class="nc" id="L86">        this.schema = schema;</span>
-<span class="nc" id="L87">    }</span>
-
-    @Override
-    public String getGeomTypeName() {
-<span class="nc" id="L91">        return &quot;geometry&quot;;</span>
-    }
-
-    /*
-    QUERY USING &quot;ROW_NUMBER&quot;
-    DECLARE @PageNumber AS INT, @RowspPage AS INT
-    SET @PageNumber = 2
-    SET @RowspPage = 10 
-    SELECT * FROM (
-                 SELECT ROW_NUMBER() OVER(ORDER BY ID_EXAMPLE) AS Numero,
-                        ID_EXAMPLE, NM_EXAMPLE , DT_CREATE FROM TB_EXAMPLE
-                   ) AS TBL
-    WHERE Numero BETWEEN ((@PageNumber - 1) * @RowspPage + 1) AND (@PageNumber * @RowspPage)
-    ORDER BY ID_EXAMPLE
-    GO
-
-    QUERY USING &quot;OFFSET&quot; AND &quot;FETCH NEXT&quot; (SQL SERVER 2012)
-    DECLARE @PageNumber AS INT, @RowspPage AS INT
-    SET @PageNumber = 2
-    SET @RowspPage = 10
-    
-    SELECT ID_EXAMPLE, NM_EXAMPLE, DT_CREATE
-    FROM TB_EXAMPLE
-    ORDER BY ID_EXAMPLE
-    OFFSET ((@PageNumber - 1) * @RowspPage) ROWS
-    FETCH NEXT @RowspPage ROWS ONLY
-    GO    
-    */
-    @Override
-    public String buildPaginationSql(String sql, int offset, int limit) {
-<span class="nc" id="L121">        StringBuilder builder = new StringBuilder(sql);</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (!StringUtils.containsIgnoreCase(sql, &quot;ORDER BY&quot;)) {</span>
-            // OFFSET ... FETCH queries require order by,
-            // see https://msdn.microsoft.com/en-us/library/gg699618.aspx?f=255&amp;MSPPError=-2147217396
-<span class="nc" id="L125">            builder.append(&quot; ORDER BY id &quot;);</span>
-        }
-<span class="nc" id="L127">        builder.append(&quot; OFFSET &quot;);</span>
-<span class="nc" id="L128">        builder.append(offset);</span>
-<span class="nc" id="L129">        builder.append(&quot; ROWS FETCH NEXT &quot;);</span>
-<span class="nc" id="L130">        builder.append(limit);</span>
-<span class="nc" id="L131">        builder.append(&quot; ROWS ONLY &quot;);</span>
-<span class="nc" id="L132">        return builder.toString();</span>
-    }
-
-    @Override
-    public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-<span class="nc" id="L137">        String s = buildPaginationSql(sql.toString(), 0, limit);</span>
-<span class="nc" id="L138">        return new StringBuilder(s);</span>
-    }
-
-    @Override
-    public boolean useSavepoints() {
-<span class="nc" id="L143">        return false;</span>
-    }
-
-    @Override
-    public boolean isPmdKnownBroken() {
-<span class="nc" id="L148">        return false;</span>
-    }
-
-    @Override
-    public String getGeotoolsDBTypeName() {
-        // see: http://docs.geotools.org/stable/userguide/library/jdbc/sqlserver.html
-<span class="nc" id="L154">        return &quot;sqlserver&quot;;</span>
-    }
-
-    /**
-     * return een dummy query omdat mssql geen materialized views kent.
-     *
-     * @return een dummy select query omdat mssql geen materialized views kent.
-     */
-    @Override
-<span class="nc" id="L163">    public String getMViewsSQL() { return NOT_IMPLEMENTED_DUMMY_SQL_SELECT; }</span>
-
-    /**
-     * return een dummy query omdat mssql geen materialized views kent.
-     *
-     * @return een dummy update query omdat mssql geen materialized views kent.
-     */
-    @Override
-<span class="nc" id="L171">    public String getMViewRefreshSQL(String mview) { return NOT_IMPLEMENTED_DUMMY_SQL_UPDATE; }</span>
-
-    @Override
-    public String getSelectNextValueFromSequenceSQL(String seqName) {
-<span class="nc" id="L175">        return String.format(&quot;SELECT NEXT VALUE FOR %s&quot;, seqName);</span>
-    }
-
-    @Override
-    public org.locationtech.jts.geom.Geometry convertToJTSGeometryObject(Object nativeObj) {
-<span class="nc" id="L180">        org.locationtech.jts.geom.Geometry jts = null;</span>
-<span class="nc bnc" id="L181" title="All 2 branches missed.">        if (nativeObj == null) {</span>
-<span class="nc" id="L182">            return jts;</span>
-<span class="nc bnc" id="L183" title="All 2 branches missed.">        } else if (Geometry.class.isAssignableFrom(nativeObj.getClass())) {</span>
-            try {
-<span class="nc" id="L185">                jts = wkt.read(((Geometry) nativeObj).STAsText());</span>
-<span class="nc" id="L186">                jts.setSRID(((Geometry) nativeObj).getSrid());</span>
-<span class="nc" id="L187">            } catch (ParseException | SQLServerException e) {</span>
-<span class="nc" id="L188">                LOG.error(&quot;Error converting SQL Server to JTS geometry&quot;, e);</span>
-<span class="nc" id="L189">            }</span>
-        }
-<span class="nc" id="L191">        return jts;</span>
-    }
+<span class="nc" id="L196">    return jts;</span>
+  }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

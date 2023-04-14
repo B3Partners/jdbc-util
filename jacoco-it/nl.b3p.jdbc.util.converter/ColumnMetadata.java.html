@@ -28,150 +28,164 @@ import java.util.Collection;
  * @author Matthijs Laan
  */
 public class ColumnMetadata implements Comparable&lt;ColumnMetadata&gt; {
-    private final String defaultValue;
-    private String name;
-    private int position;
-    private int dataType;
-    private String typeName;
-    private int size;
-    private Integer decimalDigits;
-    private boolean nullable;
-    private Integer charOctetLength;
-    private boolean autoIncrement;
+  private final String defaultValue;
+  private String name;
+  private int position;
+  private int dataType;
+  private String typeName;
+  private int size;
+  private Integer decimalDigits;
+  private boolean nullable;
+  private Integer charOctetLength;
+  private boolean autoIncrement;
 
-<span class="nc" id="L42">    public ColumnMetadata(ResultSet columnMetadataRs) throws SQLException {</span>
-<span class="nc" id="L43">        name = columnMetadataRs.getString(&quot;COLUMN_NAME&quot;);</span>
-<span class="nc" id="L44">        position = columnMetadataRs.getInt(&quot;ORDINAL_POSITION&quot;);</span>
-<span class="nc" id="L45">        dataType = columnMetadataRs.getInt(&quot;DATA_TYPE&quot;);</span>
-<span class="nc" id="L46">        typeName = columnMetadataRs.getString(&quot;TYPE_NAME&quot;);</span>
-<span class="nc" id="L47">        size = columnMetadataRs.getInt(&quot;COLUMN_SIZE&quot;);</span>
-<span class="nc" id="L48">        Object o = columnMetadataRs.getObject(&quot;DECIMAL_DIGITS&quot;);</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (o != null) {</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">            if (o instanceof BigDecimal) {</span>
-<span class="nc" id="L51">                decimalDigits = ((BigDecimal) o).intValue();</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">            } else if (o instanceof Integer) {</span>
-<span class="nc" id="L53">                decimalDigits = (Integer) o;</span>
-            }
-        }
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        nullable = DatabaseMetaData.columnNullable == columnMetadataRs.getInt(&quot;NULLABLE&quot;);</span>
-<span class="nc" id="L57">        o = columnMetadataRs.getObject(&quot;CHAR_OCTET_LENGTH&quot;);</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (o != null) {</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">            if (o instanceof BigDecimal) {</span>
-<span class="nc" id="L60">                charOctetLength = ((BigDecimal) o).intValue();</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">            } else if (o instanceof Integer) {</span>
-<span class="nc" id="L62">                charOctetLength = (Integer) o;</span>
-            }
-        }
-<span class="nc" id="L65">        defaultValue = columnMetadataRs.getString(&quot;COLUMN_DEF&quot;);</span>
-        //autoIncrement = &quot;YES&quot;.equals(columnMetadataRs.getString(&quot;IS_AUTOINCREMENT&quot;));
-<span class="nc" id="L67">    }</span>
-
-    public String getName() {
-<span class="nc" id="L70">        return name;</span>
+<span class="nc" id="L42">  public ColumnMetadata(ResultSet columnMetadataRs) throws SQLException {</span>
+    // the resultset mmay be forward-only, therefor the order could be important (oracle 23.2
+    // driver)
+    // see
+    // https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/DatabaseMetaData.html#getColumns(java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    // 4
+<span class="nc" id="L48">    name = columnMetadataRs.getString(&quot;COLUMN_NAME&quot;);</span>
+    // 5
+<span class="nc" id="L50">    dataType = columnMetadataRs.getInt(&quot;DATA_TYPE&quot;);</span>
+    // 6
+<span class="nc" id="L52">    typeName = columnMetadataRs.getString(&quot;TYPE_NAME&quot;);</span>
+    // 7
+<span class="nc" id="L54">    size = columnMetadataRs.getInt(&quot;COLUMN_SIZE&quot;);</span>
+    // 9
+<span class="nc" id="L56">    Object o = columnMetadataRs.getObject(&quot;DECIMAL_DIGITS&quot;);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">    if (o != null) {</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">      if (o instanceof BigDecimal) {</span>
+<span class="nc" id="L59">        decimalDigits = ((BigDecimal) o).intValue();</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">      } else if (o instanceof Integer) {</span>
+<span class="nc" id="L61">        decimalDigits = (Integer) o;</span>
+      }
     }
-
-    public void setName(String name) {
-<span class="nc" id="L74">        this.name = name;</span>
-<span class="nc" id="L75">    }</span>
-
-    public int getDataType() {
-<span class="nc" id="L78">        return dataType;</span>
+    // 11
+<span class="nc bnc" id="L65" title="All 2 branches missed.">    nullable = DatabaseMetaData.columnNullable == columnMetadataRs.getInt(&quot;NULLABLE&quot;);</span>
+    // 13
+<span class="nc" id="L67">    defaultValue = columnMetadataRs.getString(&quot;COLUMN_DEF&quot;);</span>
+    // 16
+<span class="nc" id="L69">    o = columnMetadataRs.getObject(&quot;CHAR_OCTET_LENGTH&quot;);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">    if (o != null) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">      if (o instanceof BigDecimal) {</span>
+<span class="nc" id="L72">        charOctetLength = ((BigDecimal) o).intValue();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">      } else if (o instanceof Integer) {</span>
+<span class="nc" id="L74">        charOctetLength = (Integer) o;</span>
+      }
     }
+    // 17
+<span class="nc" id="L78">    position = columnMetadataRs.getInt(&quot;ORDINAL_POSITION&quot;);</span>
+    // 23
+    // autoIncrement = &quot;YES&quot;.equals(columnMetadataRs.getString(&quot;IS_AUTOINCREMENT&quot;));
+<span class="nc" id="L81">  }</span>
 
-    public void setDataType(int dataType) {
-<span class="nc" id="L82">        this.dataType = dataType;</span>
-<span class="nc" id="L83">    }</span>
+  public String getName() {
+<span class="nc" id="L84">    return name;</span>
+  }
 
-    public String getTypeName() {
-<span class="nc" id="L86">        return typeName;</span>
-    }
+  public void setName(String name) {
+<span class="nc" id="L88">    this.name = name;</span>
+<span class="nc" id="L89">  }</span>
 
-    public void setTypeName(String typeName) {
-<span class="nc" id="L90">        this.typeName = typeName;</span>
-<span class="nc" id="L91">    }</span>
+  public int getDataType() {
+<span class="nc" id="L92">    return dataType;</span>
+  }
 
-    public int getSize() {
-<span class="nc" id="L94">        return size;</span>
-    }
+  public void setDataType(int dataType) {
+<span class="nc" id="L96">    this.dataType = dataType;</span>
+<span class="nc" id="L97">  }</span>
 
-    public void setSize(int size) {
-<span class="nc" id="L98">        this.size = size;</span>
-<span class="nc" id="L99">    }</span>
+  public String getTypeName() {
+<span class="nc" id="L100">    return typeName;</span>
+  }
 
-    public Integer getDecimalDigits() {
-<span class="nc" id="L102">        return decimalDigits;</span>
-    }
+  public void setTypeName(String typeName) {
+<span class="nc" id="L104">    this.typeName = typeName;</span>
+<span class="nc" id="L105">  }</span>
 
-    public void setDecimalDigits(Integer decimalDigits) {
-<span class="nc" id="L106">        this.decimalDigits = decimalDigits;</span>
-<span class="nc" id="L107">    }</span>
+  public int getSize() {
+<span class="nc" id="L108">    return size;</span>
+  }
 
-    public int getPosition() {
-<span class="nc" id="L110">        return position;</span>
-    }
+  public void setSize(int size) {
+<span class="nc" id="L112">    this.size = size;</span>
+<span class="nc" id="L113">  }</span>
 
-    public void setPosition(int position) {
-<span class="nc" id="L114">        this.position = position;</span>
-<span class="nc" id="L115">    }</span>
+  public Integer getDecimalDigits() {
+<span class="nc" id="L116">    return decimalDigits;</span>
+  }
 
-    public boolean isNullable() {
-<span class="nc" id="L118">        return nullable;</span>
-    }
+  public void setDecimalDigits(Integer decimalDigits) {
+<span class="nc" id="L120">    this.decimalDigits = decimalDigits;</span>
+<span class="nc" id="L121">  }</span>
 
-    public void setNullable(boolean nullable) {
-<span class="nc" id="L122">        this.nullable = nullable;</span>
-<span class="nc" id="L123">    }</span>
+  public int getPosition() {
+<span class="nc" id="L124">    return position;</span>
+  }
 
-    public Integer getCharOctetLength() {
-<span class="nc" id="L126">        return charOctetLength;</span>
-    }
+  public void setPosition(int position) {
+<span class="nc" id="L128">    this.position = position;</span>
+<span class="nc" id="L129">  }</span>
 
-    public void setCharOctetLength(Integer charOctetLength) {
-<span class="nc" id="L130">        this.charOctetLength = charOctetLength;</span>
-<span class="nc" id="L131">    }</span>
+  public boolean isNullable() {
+<span class="nc" id="L132">    return nullable;</span>
+  }
 
-    public boolean isAutoIncrement() {
-<span class="nc" id="L134">        return autoIncrement;</span>
-    }
+  public void setNullable(boolean nullable) {
+<span class="nc" id="L136">    this.nullable = nullable;</span>
+<span class="nc" id="L137">  }</span>
 
-    public void setAutoIncrement(boolean autoIncrement) {
-<span class="nc" id="L138">        this.autoIncrement = autoIncrement;</span>
-<span class="nc" id="L139">    }</span>
+  public Integer getCharOctetLength() {
+<span class="nc" id="L140">    return charOctetLength;</span>
+  }
 
-    @Override
-    public String toString() {
-<span class="nc" id="L143">        return toString(&quot;%s %4d %s %s bytes=%d %s %s&quot;);</span>
-    }
+  public void setCharOctetLength(Integer charOctetLength) {
+<span class="nc" id="L144">    this.charOctetLength = charOctetLength;</span>
+<span class="nc" id="L145">  }</span>
 
-    public String typeToString() {
-<span class="nc" id="L147">        return typeName + &quot;(&quot; + size +</span>
-<span class="nc bnc" id="L148" title="All 2 branches missed.">                (decimalDigits == null ? &quot;&quot; : &quot;,&quot; + decimalDigits) + &quot;)&quot;;</span>
-    }
+  public boolean isAutoIncrement() {
+<span class="nc" id="L148">    return autoIncrement;</span>
+  }
 
-    public String toStringFixedWidth(Collection&lt;ColumnMetadata&gt; allColumns) {
-<span class="nc" id="L152">        int nameWidth = name.length(), typeWidth = typeToString().length();</span>
-<span class="nc bnc" id="L153" title="All 2 branches missed.">        for (ColumnMetadata c : allColumns) {</span>
-<span class="nc" id="L154">            nameWidth = Math.max(c.getName().length(), nameWidth);</span>
-<span class="nc" id="L155">            typeWidth = Math.max(c.typeToString().length(), typeWidth);</span>
-<span class="nc" id="L156">        }</span>
-<span class="nc" id="L157">        return toString(&quot;%-&quot; + nameWidth + &quot;s %4d %-&quot; + typeWidth + &quot;s %8s bytes=%d %s %s&quot;);</span>
-    }
+  public void setAutoIncrement(boolean autoIncrement) {
+<span class="nc" id="L152">    this.autoIncrement = autoIncrement;</span>
+<span class="nc" id="L153">  }</span>
 
-    private String toString(String formatString) {
+  @Override
+  public String toString() {
+<span class="nc" id="L157">    return toString(&quot;%s %4d %s %s bytes=%d %s %s&quot;);</span>
+  }
 
-<span class="nc" id="L162">        return String.format(formatString,</span>
-                name,
-<span class="nc" id="L164">                dataType,</span>
-<span class="nc" id="L165">                typeToString(),</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">                nullable ? &quot;NULL&quot; : &quot;NOT NULL&quot;,</span>
-                charOctetLength,
-<span class="nc bnc" id="L168" title="All 2 branches missed.">                autoIncrement ? &quot;AUTO INCREMENT&quot; : &quot;&quot;,</span>
-<span class="nc bnc" id="L169" title="All 2 branches missed.">                defaultValue == null ? &quot;&quot; : &quot;DEFAULT '&quot; + defaultValue + &quot;'&quot;);</span>
-    }
+  public String typeToString() {
+<span class="nc bnc" id="L161" title="All 2 branches missed.">    return typeName + &quot;(&quot; + size + (decimalDigits == null ? &quot;&quot; : &quot;,&quot; + decimalDigits) + &quot;)&quot;;</span>
+  }
 
-    @Override
-    public int compareTo(ColumnMetadata rhs) {
-<span class="nc" id="L174">        return Integer.compare(position, rhs.position);</span>
-    }
+  public String toStringFixedWidth(Collection&lt;ColumnMetadata&gt; allColumns) {
+<span class="nc" id="L165">    int nameWidth = name.length(), typeWidth = typeToString().length();</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">    for (ColumnMetadata c : allColumns) {</span>
+<span class="nc" id="L167">      nameWidth = Math.max(c.getName().length(), nameWidth);</span>
+<span class="nc" id="L168">      typeWidth = Math.max(c.typeToString().length(), typeWidth);</span>
+<span class="nc" id="L169">    }</span>
+<span class="nc" id="L170">    return toString(&quot;%-&quot; + nameWidth + &quot;s %4d %-&quot; + typeWidth + &quot;s %8s bytes=%d %s %s&quot;);</span>
+  }
+
+  private String toString(String formatString) {
+
+<span class="nc" id="L175">    return String.format(</span>
+        formatString,
+        name,
+<span class="nc" id="L178">        dataType,</span>
+<span class="nc" id="L179">        typeToString(),</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        nullable ? &quot;NULL&quot; : &quot;NOT NULL&quot;,</span>
+        charOctetLength,
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        autoIncrement ? &quot;AUTO INCREMENT&quot; : &quot;&quot;,</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        defaultValue == null ? &quot;&quot; : &quot;DEFAULT '&quot; + defaultValue + &quot;'&quot;);</span>
+  }
+
+  @Override
+  public int compareTo(ColumnMetadata rhs) {
+<span class="nc" id="L188">    return Integer.compare(position, rhs.position);</span>
+  }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

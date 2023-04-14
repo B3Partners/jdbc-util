@@ -18,31 +18,31 @@
  */
 package nl.b3p.jdbc.util.dbutils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import nl.b3p.jdbc.util.converter.GeometryJdbcConverter;
 import org.apache.commons.dbutils.BeanProcessor;
 import org.locationtech.jts.geom.Geometry;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author Meine Toonen meinetoonen@b3partners.nl
  */
 public class DbUtilsGeometryColumnConverter extends BeanProcessor {
 
-    private final GeometryJdbcConverter gjc;
+  private final GeometryJdbcConverter gjc;
 
-<span class="nc" id="L34">    public DbUtilsGeometryColumnConverter(GeometryJdbcConverter gjc) {</span>
-<span class="nc" id="L35">        this.gjc = gjc;</span>
-<span class="nc" id="L36">    }</span>
+<span class="nc" id="L34">  public DbUtilsGeometryColumnConverter(GeometryJdbcConverter gjc) {</span>
+<span class="nc" id="L35">    this.gjc = gjc;</span>
+<span class="nc" id="L36">  }</span>
 
-    @Override
-    protected Object processColumn(ResultSet rs, int index, Class&lt;?&gt; propType) throws SQLException {
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (Geometry.class.isAssignableFrom(propType)) {</span>
-<span class="nc" id="L41">            Object o = rs.getObject(index);</span>
-<span class="nc" id="L42">            return gjc.convertToJTSGeometryObject(o);</span>
-        } else {
-<span class="nc" id="L44">            return super.processColumn(rs, index, propType);</span>
-        }
+  @Override
+  protected Object processColumn(ResultSet rs, int index, Class&lt;?&gt; propType) throws SQLException {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">    if (Geometry.class.isAssignableFrom(propType)) {</span>
+<span class="nc" id="L41">      Object o = rs.getObject(index);</span>
+<span class="nc" id="L42">      return gjc.convertToJTSGeometryObject(o);</span>
+    } else {
+<span class="nc" id="L44">      return super.processColumn(rs, index, propType);</span>
     }
+  }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

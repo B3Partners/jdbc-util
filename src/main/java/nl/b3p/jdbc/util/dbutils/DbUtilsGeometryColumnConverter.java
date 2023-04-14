@@ -18,30 +18,30 @@
  */
 package nl.b3p.jdbc.util.dbutils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import nl.b3p.jdbc.util.converter.GeometryJdbcConverter;
 import org.apache.commons.dbutils.BeanProcessor;
 import org.locationtech.jts.geom.Geometry;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author Meine Toonen meinetoonen@b3partners.nl
  */
 public class DbUtilsGeometryColumnConverter extends BeanProcessor {
 
-    private final GeometryJdbcConverter gjc;
+  private final GeometryJdbcConverter gjc;
 
-    public DbUtilsGeometryColumnConverter(GeometryJdbcConverter gjc) {
-        this.gjc = gjc;
-    }
+  public DbUtilsGeometryColumnConverter(GeometryJdbcConverter gjc) {
+    this.gjc = gjc;
+  }
 
-    @Override
-    protected Object processColumn(ResultSet rs, int index, Class<?> propType) throws SQLException {
-        if (Geometry.class.isAssignableFrom(propType)) {
-            Object o = rs.getObject(index);
-            return gjc.convertToJTSGeometryObject(o);
-        } else {
-            return super.processColumn(rs, index, propType);
-        }
+  @Override
+  protected Object processColumn(ResultSet rs, int index, Class<?> propType) throws SQLException {
+    if (Geometry.class.isAssignableFrom(propType)) {
+      Object o = rs.getObject(index);
+      return gjc.convertToJTSGeometryObject(o);
+    } else {
+      return super.processColumn(rs, index, propType);
     }
+  }
 }

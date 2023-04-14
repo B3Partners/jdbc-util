@@ -8,6 +8,44 @@
     <name>JDBC Util</name>
     <description>JDBC utilities: Converter for geometries and other useful things</description>
     <inceptionYear>2017</inceptionYear>
+    <organization>
+        <name>B3Partners B.V.</name>
+        <url>https://www.b3partners.nl/</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>MIT-License</name>
+            <url>https://raw.githubusercontent.com/B3Partners/jdbc-util/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git@github.com:B3Partners/jdbc-util.git</connection>
+        <developerConnection>scm:git:git@github.com:B3Partners/jdbc-util.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/B3Partners/jdbc-util/</url>
+    </scm>
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/B3Partners/jdbc-util/issues</url>
+    </issueManagement>
+    <distributionManagement>
+        <repository>
+            <id>repo.b3p.nl</id>
+            <name>B3Partners releases repository</name>
+            <url>https://repo.b3p.nl/nexus/repository/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>repo.b3p.nl</id>
+            <name>B3Partners snapshots repository</name>
+            <url>https://repo.b3p.nl/nexus/repository/snapshots/</url>
+        </snapshotRepository>
+        <site>
+            <id>gh-pages</id>
+            <name>github pages site</name>
+            <url>scm:git:ssh://git@github.com/b3partners/jdbc-util.git</url>
+        </site>
+    </distributionManagement>
     <properties>
         <java.version>11</java.version>
         <project.build.sourceVersion>${java.version}</project.build.sourceVersion>
@@ -33,38 +71,9 @@
         <versions-maven-plugin.version>2.15.0</versions-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
         <maven-fluido-skin.version>2.0.0-M5</maven-fluido-skin.version>
+        <fmt.action>format</fmt.action>
+        <pom.fmt.action>sort</pom.fmt.action>
     </properties>
-    <organization>
-        <name>B3Partners B.V.</name>
-        <url>https://www.b3partners.nl/</url>
-    </organization>
-    <issueManagement>
-        <system>Github</system>
-        <url>https://github.com/B3Partners/jdbc-util/issues</url>
-    </issueManagement>
-    <scm>
-        <developerConnection>scm:git:git@github.com:B3Partners/jdbc-util.git</developerConnection>
-        <connection>scm:git:git@github.com:B3Partners/jdbc-util.git</connection>
-        <url>https://github.com/B3Partners/jdbc-util/</url>
-        <tag>HEAD</tag>
-    </scm>
-    <distributionManagement>
-        <repository>
-            <id>repo.b3p.nl</id>
-            <name>B3Partners releases repository</name>
-            <url>https://repo.b3p.nl/nexus/repository/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>repo.b3p.nl</id>
-            <name>B3Partners snapshots repository</name>
-            <url>https://repo.b3p.nl/nexus/repository/snapshots/</url>
-        </snapshotRepository>
-        <site>
-            <id>gh-pages</id>
-            <name>github pages site</name>
-            <url>scm:git:ssh://git@github.com/b3partners/jdbc-util.git</url>
-        </site>
-    </distributionManagement>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -160,13 +169,13 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-dbcp</artifactId>
             <version>9.0.73</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <artifactId>org.apache.tomcat</artifactId>
                     <groupId>tomcat-juli</groupId>
+                    <artifactId>org.apache.tomcat</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -185,6 +194,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>repo.b3p.nl</id>
+            <name>B3P Repository</name>
+            <url>https://repo.b3p.nl/nexus/repository/public/</url>
+        </repository>
+    </repositories>
     <build>
         <finalName>${project.artifactId}</finalName>
         <pluginManagement>
@@ -278,6 +294,16 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
+                <plugin>
+                    <groupId>com.github.ekryd.sortpom</groupId>
+                    <artifactId>sortpom-maven-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.spotify.fmt</groupId>
+                    <artifactId>fmt-maven-plugin</artifactId>
+                    <version>2.19</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -370,10 +396,10 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <phase>verify</phase>
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -382,10 +408,10 @@
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
-                        <phase>verify</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -416,11 +442,11 @@
                 <executions>
                     <execution>
                         <id>scm-publish</id>
-                        <phase>site-deploy</phase>
                         <!-- deploy site with maven-scm-publish-plugin -->
                         <goals>
                             <goal>publish-scm</goal>
                         </goals>
+                        <phase>site-deploy</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -439,27 +465,27 @@
                     </execution>
                     <execution>
                         <id>pre-integration-test</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>prepare-agent-integration</goal>
                         </goals>
+                        <phase>pre-integration-test</phase>
                         <configuration>
                             <propertyName>failsafeArgLine</propertyName>
                         </configuration>
                     </execution>
                     <execution>
                         <id>post-unit-test</id>
-                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <phase>test</phase>
                     </execution>
                     <execution>
                         <id>post-integration-test</id>
-                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>report-integration</goal>
                         </goals>
+                        <phase>post-integration-test</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -472,10 +498,49 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
                         <goals>
                             <goal>makeBom</goal>
                         </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify.fmt</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <configuration>
+                    <verbose>false</verbose>
+                    <filesNamePattern>.*\.java</filesNamePattern>
+                    <style>google</style>
+                    <displayFiles>true</displayFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>${fmt.action}</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.ekryd.sortpom</groupId>
+                <artifactId>sortpom-maven-plugin</artifactId>
+                <configuration>
+                    <keepBlankLines>false</keepBlankLines>
+                    <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
+                    <createBackupFile>false</createBackupFile>
+                    <verifyFail>stop</verifyFail>
+                    <verifyFailOn>strict</verifyFailOn>
+                    <expandEmptyElements>false</expandEmptyElements>
+                    <nrOfIndentSpace>4</nrOfIndentSpace>
+                    <indentSchemaLocation>false</indentSchemaLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>${pom.fmt.action}</goal>
+                        </goals>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -490,6 +555,9 @@
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <notimestamp>true</notimestamp>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -497,9 +565,6 @@
                         </reports>
                     </reportSet>
                 </reportSets>
-                <configuration>
-                    <notimestamp>true</notimestamp>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -611,8 +676,8 @@
                         <directory>src/test/resources</directory>
                     </testResource>
                     <testResource>
-                        <directory>src/test/resources/unittest-hsqldb/test</directory>
                         <targetPath>${project.build.directory}/unittest-hsqldb/test</targetPath>
+                        <directory>src/test/resources/unittest-hsqldb/test</directory>
                     </testResource>
                 </testResources>
                 <plugins>
@@ -636,18 +701,4 @@
             </build>
         </profile>
     </profiles>
-    <repositories>
-        <repository>
-            <id>repo.b3p.nl</id>
-            <name>B3P Repository</name>
-            <url>https://repo.b3p.nl/nexus/repository/public/</url>
-        </repository>
-    </repositories>
-    <licenses>
-        <license>
-            <name>MIT-License</name>
-            <distribution>repo</distribution>
-            <url>https://raw.githubusercontent.com/B3Partners/jdbc-util/master/LICENSE</url>
-        </license>
-    </licenses>
 </project>

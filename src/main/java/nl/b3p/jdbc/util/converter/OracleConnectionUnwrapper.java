@@ -23,43 +23,47 @@ import java.sql.SQLException;
 import oracle.jdbc.OracleConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.postgresql.PGConnection;
 
 /**
- *
  * @author Matthijs Laan
  */
 public class OracleConnectionUnwrapper {
-    private static final Log LOG = LogFactory.getLog(OracleConnectionUnwrapper.class);
+  private static final Log LOG = LogFactory.getLog(OracleConnectionUnwrapper.class);
 
-    public static OracleConnection unwrap(Connection c) throws SQLException {
-        LOG.trace("Unwrapping Oracle connection, isWrapperFor(OracleConnection.class): " + c.isWrapperFor(OracleConnection.class));
-        LOG.trace("Connection class: " + c.getClass().getName());
-        // Sometimes isWrapperFor() does not work for certain JDBC drivers. The
-        // MetaData connection is always unwrapped, trick learned from Spring's
-        // org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor
-        Connection mdC = c.getMetaData().getConnection();
-        LOG.trace("MetaData connection class: " + mdC.getClass().getName());
+  public static OracleConnection unwrap(Connection c) throws SQLException {
+    LOG.trace(
+        "Unwrapping Oracle connection, isWrapperFor(OracleConnection.class): "
+            + c.isWrapperFor(OracleConnection.class));
+    LOG.trace("Connection class: " + c.getClass().getName());
+    // Sometimes isWrapperFor() does not work for certain JDBC drivers. The
+    // MetaData connection is always unwrapped, trick learned from Spring's
+    // org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor
+    Connection mdC = c.getMetaData().getConnection();
+    LOG.trace("MetaData connection class: " + mdC.getClass().getName());
 
-        if(c.isWrapperFor(OracleConnection.class)) {
-            LOG.trace("Unwrap Connection voor OracleConnection");
-            return c.unwrap(OracleConnection.class);
-        } else if(mdC instanceof OracleConnection) {
-            LOG.trace("Cast MetaData Connection naar OracleConnection");
-            return (OracleConnection)mdC;
-        } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {
-            LOG.trace("Cast naar OracleConnection via cast naar tomcat DelegatingConnection");
-            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) mdC).getDelegate();
-        } else if (org.apache.tomcat.dbcp.dbcp2.DelegatingConnection.class.isAssignableFrom(c.getClass())) {
-            //org.apache.tomcat.dbcp.dbcp2.PoolingDataSource.PoolGuardConnectionWrapper is private maar extends DelegatingConnection
-            LOG.trace("Cast InnermostDelegate van DelegatingConnection connection");
-            return (OracleConnection) ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) c).getInnermostDelegate();
-        } else {
-            throw new SQLException(
-                    "Kan connectie niet unwrappen naar OracleConnection van meta connectie: "
-                            + mdC.getClass().getName()
-                            + ", connection: " + c.getClass().getName()
-            );
-        }
+    if (c.isWrapperFor(OracleConnection.class)) {
+      LOG.trace("Unwrap Connection voor OracleConnection");
+      return c.unwrap(OracleConnection.class);
+    } else if (mdC instanceof OracleConnection) {
+      LOG.trace("Cast MetaData Connection naar OracleConnection");
+      return (OracleConnection) mdC;
+    } else if (mdC instanceof org.apache.tomcat.dbcp.dbcp2.PoolableConnection) {
+      LOG.trace("Cast naar OracleConnection via cast naar tomcat DelegatingConnection");
+      return (OracleConnection)
+          ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) mdC).getDelegate();
+    } else if (org.apache.tomcat.dbcp.dbcp2.DelegatingConnection.class.isAssignableFrom(
+        c.getClass())) {
+      // org.apache.tomcat.dbcp.dbcp2.PoolingDataSource.PoolGuardConnectionWrapper is private maar
+      // extends DelegatingConnection
+      LOG.trace("Cast InnermostDelegate van DelegatingConnection connection");
+      return (OracleConnection)
+          ((org.apache.tomcat.dbcp.dbcp2.DelegatingConnection<?>) c).getInnermostDelegate();
+    } else {
+      throw new SQLException(
+          "Kan connectie niet unwrappen naar OracleConnection van meta connectie: "
+              + mdC.getClass().getName()
+              + ", connection: "
+              + c.getClass().getName());
     }
+  }
 }

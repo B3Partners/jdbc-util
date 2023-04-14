@@ -39,40 +39,39 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 5
-      - uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-
-      - name: Set up JDK for build
+
+      - name: 'Set up JDK'
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
           distribution: ${{ matrix.java_dist }}
+          cache: 'maven'
 
-      - name: Set up PostGIS database
+      - name: 'QA build with Maven'
+        run: mvn -B -V -fae -DskipQA=false -Dfmt.action=check -Dpom.fmt.action=verify -Ddocker.skip=true -Dtest.onlyITs= -Dmaven.test.skip=true clean package
+
+      - name: 'Set up PostGIS database'
         if: ${{ matrix.profile == 'postgresql' }}
         run: |
           psql --version
           psql -U postgres -h localhost -c 'SELECT version();'
           .build/ci/pgsql-setup.sh
 
-      - name: Priming build
+      - name: 'Priming build'
         run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -P${{ matrix.profile }}
 
-      - name: Test
+      - name: 'Test'
         run: mvn -e test -B -P${{ matrix.profile }}
 
-      - name: Verify
+      - name: 'Verify'
         run: mvn -e verify -B -P${{ matrix.profile }} -T1 -Dtest.onlyITs=true
 
-      - name: Javadoc
+      - name: 'Javadoc'
         run: |
           mvn javadoc:javadoc
           mvn javadoc:test-javadoc
 
-      - name: Upload codecoverage
+      - name: 'Upload codecoverage'
         uses: codecov/codecov-action@v3
 
 
@@ -87,18 +86,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-
 
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: 11
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Build and Push
         # no need to run any QC or tests

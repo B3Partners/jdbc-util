@@ -17,25 +17,26 @@
  *
  */
 module nl.b3p.jdbc.util {
-    requires java.sql;
-    requires commons.logging;
-    // requires org.apache.commons.logging;
-    requires commons.dbutils;
-    // requires org.apache.commons.dbutils;
-    requires org.apache.commons.io;
-    requires static org.apache.tomcat.dbcp;
-    requires org.apache.commons.lang3;
-    requires org.locationtech.jts;
-    requires static com.oracle.database.jdbc;
-    requires static org.hsqldb;
-    requires static org.postgresql.jdbc;
-    requires static net.postgis.jdbc;
-    requires static net.postgis.jdbc.geometry;
-    requires static com.microsoft.sqlserver.jdbc;
-    requires org.geotools.jdbc.jdbc_oracle;
-    exports nl.b3p.jdbc.util.converter;
-    exports nl.b3p.jdbc.util.dbutils;
-    // for integration tests
-    opens nl.b3p.jdbc.util.converter;
-    // opens nl.b3p.jdbc.util.dbutils;
+  requires java.sql;
+  requires commons.logging;
+  // requires org.apache.commons.logging;
+  requires commons.dbutils;
+  // requires org.apache.commons.dbutils;
+  requires org.apache.commons.io;
+  requires static org.apache.tomcat.dbcp;
+  requires org.apache.commons.lang3;
+  requires org.locationtech.jts;
+  requires static com.oracle.database.jdbc;
+  requires static org.hsqldb;
+  requires static org.postgresql.jdbc;
+  requires static net.postgis.jdbc;
+  requires static net.postgis.jdbc.geometry;
+  requires static com.microsoft.sqlserver.jdbc;
+  requires org.geotools.jdbc.jdbc_oracle;
+
+  exports nl.b3p.jdbc.util.converter;
+  exports nl.b3p.jdbc.util.dbutils;
+  // for integration tests
+  opens nl.b3p.jdbc.util.converter;
+// opens nl.b3p.jdbc.util.dbutils;
 }

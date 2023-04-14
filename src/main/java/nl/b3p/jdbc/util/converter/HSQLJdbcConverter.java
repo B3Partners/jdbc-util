@@ -18,9 +18,6 @@
  */
 package nl.b3p.jdbc.util.converter;
 
-import org.hsqldb.jdbc.JDBCClob;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.ParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -30,108 +27,110 @@ import java.sql.SQLException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hsqldb.jdbc.JDBCClob;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 
 /**
- *
  * @author Meine Toonen meinetoonen@b3partners.nl
  */
-public class HSQLJdbcConverter  extends GeometryJdbcConverter {
+public class HSQLJdbcConverter extends GeometryJdbcConverter {
 
-    protected final static Log LOG = LogFactory.getLog(HSQLJdbcConverter.class);
-    
-    @Override
-    public Object convertToNativeGeometryObject(Geometry param) throws SQLException, ParseException {
-        return convertToNativeGeometryObject(param, 28992);
-    }
+  protected static final Log LOG = LogFactory.getLog(HSQLJdbcConverter.class);
 
-    @Override
-    public String getGeomTypeName() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+  @Override
+  public Object convertToNativeGeometryObject(Geometry param) throws SQLException, ParseException {
+    return convertToNativeGeometryObject(param, 28992);
+  }
 
-    @Override
-    public Geometry convertToJTSGeometryObject(Object nativeObj) {
+  @Override
+  public String getGeomTypeName() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
-        try {
-            Clob c = (Clob) nativeObj;
-            if(c == null){
-                return null;
-            }
-            InputStream in = c.getAsciiStream();
-            StringWriter w = new StringWriter();
-            IOUtils.copy(in, w, Charset.defaultCharset());
-            Geometry g;
-            
-            g = wkt.read(w.toString());
-            
-            return g;
-        } catch (IOException | ParseException | SQLException ex) {
-            LOG.error("Error parsing clob to geometry", ex);
-            return null;
-        }
-    }
+  @Override
+  public Geometry convertToJTSGeometryObject(Object nativeObj) {
 
-    @Override
-    public boolean isPmdKnownBroken() {
-        return false;
-    }
-
-    @Override
-    public String getSchema() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isDuplicateKeyViolationMessage(String message) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isFKConstraintViolationMessage(String message) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String buildPaginationSql(String sql, int offset, int limit) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean useSavepoints() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getMViewsSQL() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getMViewRefreshSQL(String mview) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getSelectNextValueFromSequenceSQL(String seqName) {
-        return "CALL NEXT VALUE FOR " + seqName;
-    }
-
-    @Override
-    public String getGeotoolsDBTypeName() {
-        // no hsqldb datastore in geotools
+    try {
+      Clob c = (Clob) nativeObj;
+      if (c == null) {
         return null;
-    }
+      }
+      InputStream in = c.getAsciiStream();
+      StringWriter w = new StringWriter();
+      IOUtils.copy(in, w, Charset.defaultCharset());
+      Geometry g;
 
-    @Override
-    public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException {
-        if(param == null){
-            return null;
-        }
-        return new JDBCClob(param.toText());
+      g = wkt.read(w.toString());
+
+      return g;
+    } catch (IOException | ParseException | SQLException ex) {
+      LOG.error("Error parsing clob to geometry", ex);
+      return null;
     }
+  }
+
+  @Override
+  public boolean isPmdKnownBroken() {
+    return false;
+  }
+
+  @Override
+  public String getSchema() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public boolean isDuplicateKeyViolationMessage(String message) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public boolean isFKConstraintViolationMessage(String message) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String buildPaginationSql(String sql, int offset, int limit) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public StringBuilder buildLimitSql(StringBuilder sql, int limit) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public boolean useSavepoints() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String getMViewsSQL() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String getMViewRefreshSQL(String mview) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String getSelectNextValueFromSequenceSQL(String seqName) {
+    return "CALL NEXT VALUE FOR " + seqName;
+  }
+
+  @Override
+  public String getGeotoolsDBTypeName() {
+    // no hsqldb datastore in geotools
+    return null;
+  }
+
+  @Override
+  public Object convertToNativeGeometryObject(Geometry param, int srid) throws SQLException {
+    if (param == null) {
+      return null;
+    }
+    return new JDBCClob(param.toText());
+  }
 }

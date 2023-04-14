@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: Ubuntu-latest
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
@@ -27,13 +27,12 @@ jobs:
           # a pull request then we can checkout the head.
           fetch-depth: 10
 
-      - name: Restore Maven repository
-        uses: actions/cache@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
         with:
-          path: ~/.m2/repository
-          key: maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-
+          distribution: 'temurin'
+          java-version: 11
+          cache: 'maven'
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL

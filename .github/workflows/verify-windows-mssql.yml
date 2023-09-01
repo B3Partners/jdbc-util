@@ -13,12 +13,13 @@ jobs:
     name: MS SQL 2019 / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
-          - os: 'windows-2019'
-            tag: 'ltsc2019-sql2019'
           - os: 'windows-2022'
             tag: 'ltsc2022-sql2019'
+          - os: 'windows-2019'
+            tag: 'ltsc2019-sql2019'
 
     steps:
       - uses: actions/checkout@v3

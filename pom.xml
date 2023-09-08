@@ -118,8 +118,7 @@
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
-            <!-- bij upgrade: ook de module-info.java aanpassen -->
-            <version>1.8.0</version>
+            <version>1.8.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

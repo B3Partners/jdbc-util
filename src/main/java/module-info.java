@@ -20,8 +20,7 @@ module nl.b3p.jdbc.util {
   requires java.sql;
   requires commons.logging;
   // requires org.apache.commons.logging;
-  requires commons.dbutils;
-  // requires org.apache.commons.dbutils;
+  requires org.apache.commons.dbutils;
   requires org.apache.commons.io;
   requires static org.apache.tomcat.dbcp;
   requires org.apache.commons.lang3;

@@ -23,7 +23,7 @@ jobs:
         java: [ 11 ]
         java_dist: [ 'temurin' ]
         profile: [ hsqldb,  postgresql ]
-        postgis: [ 16-3.3-alpine ]
+        postgis: [ 16-3.4-alpine ]
 
     services:
       postgis:

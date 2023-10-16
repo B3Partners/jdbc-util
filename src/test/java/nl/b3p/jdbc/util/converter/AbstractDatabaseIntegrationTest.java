@@ -41,18 +41,23 @@ import org.junit.jupiter.api.TestInfo;
 public abstract class AbstractDatabaseIntegrationTest {
 
   private static final Log LOG = LogFactory.getLog(AbstractDatabaseIntegrationTest.class);
+
   /**
    * properties uit {@code <DB smaak>.properties} en {@code local.<DB smaak>.properties}.
    *
    * @see #loadProps()
    */
   protected final Properties params = new Properties();
+
   /** {@code true} als we met een Oracle database bezig zijn. */
   protected boolean isOracle;
+
   /** {@code true} als we met een MS SQL Server database bezig zijn. */
   protected boolean isMsSQL;
+
   /** {@code true} als we met een Postgis database bezig zijn. */
   protected boolean isPostgis;
+
   /** {@code true} als we met een HSQLDB database bezig zijn. */
   protected boolean isHSQLDB;
 

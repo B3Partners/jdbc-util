@@ -35,6 +35,7 @@ module nl.b3p.jdbc.util {
 
   exports nl.b3p.jdbc.util.converter;
   exports nl.b3p.jdbc.util.dbutils;
+
   // for integration tests
   opens nl.b3p.jdbc.util.converter;
 // opens nl.b3p.jdbc.util.dbutils;

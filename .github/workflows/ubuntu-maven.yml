@@ -92,7 +92,7 @@ jobs:
     permissions:
       packages: write
       contents: read
-    if: ${{ (github.ref == 'refs/heads/master' || contains(github.ref, 'refs/heads/GeoTools-30-RC')) && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' ) }}
+    if: ${{ (github.ref == 'refs/heads/master' || contains(github.ref, 'refs/heads/geotools-30.1')) && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' ) }}
     steps:
       - uses: actions/checkout@v4
 

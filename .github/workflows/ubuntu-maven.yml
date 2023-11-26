@@ -113,7 +113,7 @@ jobs:
           mvn -B -V -fae -Dmaven.test.skip=true clean deploy --settings .github/maven-settings.xml
 
       - name: 'Deploy SBOM'
-        uses: DependencyTrack/gh-upload-sbom@v2
+        uses: DependencyTrack/gh-upload-sbom@v3
         with:
           serverhostname: ${{ secrets.DEPENDENCY_TRACK_HOSTNAME }}
           apikey: ${{ secrets.DEPENDENCY_TRACK_APIKEY }}

@@ -64,7 +64,7 @@
         <test.junit-jupiter.version>5.10.1</test.junit-jupiter.version>
         <sqlserver.jdbc.version>12.4.2.jre11</sqlserver.jdbc.version>
         <postgresql.jdbc.version>42.7.1</postgresql.jdbc.version>
-        <postgresql.postgis-jdbc.version>2021.1.0</postgresql.postgis-jdbc.version>
+        <postgresql.postgis-jdbc.version>2023.1.0</postgresql.postgis-jdbc.version>
         <maven.surefire.version>3.2.2</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>

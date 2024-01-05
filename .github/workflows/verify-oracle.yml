@@ -13,10 +13,15 @@ jobs:
     name: Oracle ${{ matrix.oracle }} / Java ${{ matrix.java }}
     runs-on: [ ubuntu-latest ]
     strategy:
+      fail-fast: false
       matrix:
         java: [ 11 ]
         java_dist: [ 'temurin' ]
-        oracle: [ '21.3.0-full' ]
+        oracle: [ 'oracle-xe:21.3.0-full', 'oracle-free:23.3-full' ]
+        include:
+          - java: 17
+            java_dist: 'temurin'
+            oracle: 'oracle-free:23.3-full'
 
     steps:
       - uses: actions/checkout@v4

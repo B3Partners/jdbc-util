@@ -82,7 +82,7 @@ public class OracleJdbcConverter extends GeometryJdbcConverter {
 
   @Override
   public String getGeomTypeName() {
-    return "Method.SDO_GEOMETRY";
+    return "MDSYS.SDO_GEOMETRY";
   }
 
   /*

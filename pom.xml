@@ -215,6 +215,7 @@
                         </retirejs>
                         <suppressionFile>${project.basedir}/.mvn/owasp-suppression.xml</suppressionFile>
                         <format>ALL</format>
+                        <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
                     </configuration>
                 </plugin>
                 <plugin>

@@ -1,4 +1,4 @@
-name: Oracle tests
+name: 'Oracle tests'
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: [ ubuntu-latest ]
     strategy:
       matrix:
-        java: [ 11, 17 ]
+        java: [ 11, 17, 21 ]
         java_dist: [ 'temurin' ]
         oracle: [ 'oracle-xe:21.3.0-full', 'oracle-free:23.3-full' ]
 
@@ -29,7 +29,7 @@ jobs:
           distribution: ${{ matrix.java_dist }}
           cache: 'maven'
 
-      - name: Free up diskspace
+      - name: 'Free up diskspace'
         run: |
           docker container prune --force
           docker image prune -a --force
@@ -37,22 +37,22 @@ jobs:
           sudo rm -rf /usr/share/dotnet 
           df -h
 
-      - name: Setup test environment for Oracle
+      - name: 'Setup test environment for Oracle'
         run: |
           ./.build/ci/oracle-start.sh ${{ matrix.oracle }}
           ./.build/ci/oracle-setup.sh
 
-      - name: Priming build
+      - name: 'Priming build'
         run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Poracle
 
-      - name: Test
+      - name: 'Test'
         run: mvn -e test -B -Poracle
 
-      - name: Verify
+      - name: 'Verify'
         run: mvn -e verify -B -Poracle -T1 -Dtest.onlyITs=true
 
-      - name: Clean artifacts from repository
+      - name: 'Clean artifacts from repository'
         run: mvn clean build-helper:remove-project-artifact
 
-      - name: Upload codecoverage
+      - name: 'Upload codecoverage'
         uses: codecov/codecov-action@v4

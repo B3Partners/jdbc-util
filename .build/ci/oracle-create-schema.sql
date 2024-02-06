@@ -1,144 +1,156 @@
-create table automatisch_proces (
-    dtype varchar2(255 char) not null,
-    id number(19,0) not null,
-    cron_expressie varchar2(255 char),
-    lastrun timestamp,
-    logfile clob,
-    samenvatting clob,
-    status varchar2(255 char),
-    primary key (id)
+CREATE TABLE AUTOMATISCH_PROCES
+(
+    DTYPE          VARCHAR2(255 CHAR) NOT NULL,
+    ID             NUMBER(19, 0)      NOT NULL,
+    CRON_EXPRESSIE VARCHAR2(255 CHAR),
+    LASTRUN        TIMESTAMP,
+    LOGFILE        CLOB,
+    SAMENVATTING   CLOB,
+    STATUS         VARCHAR2(255 CHAR),
+    PRIMARY KEY (ID)
 );
 
-create table automatisch_proces_config (
-    proces_id number(19,0) not null,
-    value clob,
-    config_key varchar2(255 char),
-    primary key (proces_id, config_key)
+CREATE TABLE AUTOMATISCH_PROCES_CONFIG
+(
+    PROCES_ID  NUMBER(19, 0) NOT NULL,
+    VALUE      CLOB,
+    CONFIG_KEY VARCHAR2(255 CHAR),
+    PRIMARY KEY (PROCES_ID, CONFIG_KEY)
 );
 
-create table bericht (
-    id number(19,0) not null,
-    br_orgineel_xml clob,
-    br_xml clob,
-    datum timestamp,
-    db_xml clob,
-    job_id varchar2(255 char),
-    object_ref varchar2(255 char),
-    opmerking clob,
-    soort varchar2(255 char),
-    status varchar2(255 char),
-    status_datum timestamp,
-    volgordenummer number(10,0),
-    xsl_version varchar2(255 char),
-    laadprocesid number(19,0),
-    primary key (id)
+CREATE TABLE BERICHT
+(
+    ID              NUMBER(19, 0) NOT NULL,
+    BR_ORGINEEL_XML CLOB,
+    BR_XML          CLOB,
+    DATUM           TIMESTAMP,
+    DB_XML          CLOB,
+    JOB_ID          VARCHAR2(255 CHAR),
+    OBJECT_REF      VARCHAR2(255 CHAR),
+    OPMERKING       CLOB,
+    SOORT           VARCHAR2(255 CHAR),
+    STATUS          VARCHAR2(255 CHAR),
+    STATUS_DATUM    TIMESTAMP,
+    VOLGORDENUMMER  NUMBER(10, 0),
+    XSL_VERSION     VARCHAR2(255 CHAR),
+    LAADPROCESID    NUMBER(19, 0),
+    PRIMARY KEY (ID)
 );
 
-create table gebruiker_ (
-    gebruikersnaam varchar2(255 char) not null,
-    wachtwoord varchar2(255 char),
-    primary key (gebruikersnaam)
+CREATE TABLE GEBRUIKER_
+(
+    GEBRUIKERSNAAM VARCHAR2(255 CHAR) NOT NULL,
+    WACHTWOORD     VARCHAR2(255 CHAR),
+    PRIMARY KEY (GEBRUIKERSNAAM)
 );
 
-create table gebruiker_groepen (
-    gebruikersnaam varchar2(255 char) not null,
-    groep_ varchar2(255 char) not null,
-    primary key (gebruikersnaam, groep_)
+CREATE TABLE GEBRUIKER_GROEPEN
+(
+    GEBRUIKERSNAAM VARCHAR2(255 CHAR) NOT NULL,
+    GROEP_         VARCHAR2(255 CHAR) NOT NULL,
+    PRIMARY KEY (GEBRUIKERSNAAM, GROEP_)
 );
 
-create table groep_ (
-    naam varchar2(255 char) not null,
-    beschrijving clob,
-    primary key (naam)
+CREATE TABLE GROEP_
+(
+    NAAM         VARCHAR2(255 CHAR) NOT NULL,
+    BESCHRIJVING CLOB,
+    PRIMARY KEY (NAAM)
 );
 
-create table laadproces (
-    id number(19,0) not null,
-    bestand_datum timestamp,
-    bestand_naam varchar2(255 char),
-    contact_email varchar2(255 char),
-    gebied varchar2(255 char),
-    opmerking clob,
-    soort varchar2(255 char),
-    status varchar2(255 char),
-    status_datum timestamp,
-    automatisch_proces number(19,0),
-    primary key (id)
+CREATE TABLE LAADPROCES
+(
+    ID                 NUMBER(19, 0) NOT NULL,
+    BESTAND_DATUM      TIMESTAMP,
+    BESTAND_NAAM       VARCHAR2(255 CHAR),
+    CONTACT_EMAIL      VARCHAR2(255 CHAR),
+    GEBIED             VARCHAR2(255 CHAR),
+    OPMERKING          CLOB,
+    SOORT              VARCHAR2(255 CHAR),
+    STATUS             VARCHAR2(255 CHAR),
+    STATUS_DATUM       TIMESTAMP,
+    AUTOMATISCH_PROCES NUMBER(19, 0),
+    PRIMARY KEY (ID)
 );
 
-alter table automatisch_proces_config
-    add constraint FK39F3573E561B9F9B
-    foreign key (proces_id)
-    references automatisch_proces;
+ALTER TABLE AUTOMATISCH_PROCES_CONFIG
+    ADD CONSTRAINT FK39F3573E561B9F9B
+        FOREIGN KEY (PROCES_ID)
+            REFERENCES AUTOMATISCH_PROCES;
 
-alter table bericht
-    add constraint bericht_laadprocesid_fkey
-    foreign key (laadprocesid)
-    references laadproces;
+ALTER TABLE BERICHT
+    ADD CONSTRAINT BERICHT_LAADPROCESID_FKEY
+        FOREIGN KEY (LAADPROCESID)
+            REFERENCES LAADPROCES;
 
-alter table gebruiker_groepen
-    add constraint FKD875A48FD741C965
-    foreign key (groep_)
-    references groep_;
+ALTER TABLE GEBRUIKER_GROEPEN
+    ADD CONSTRAINT FKD875A48FD741C965
+        FOREIGN KEY (GROEP_)
+            REFERENCES GROEP_;
 
-alter table gebruiker_groepen
-    add constraint FKD875A48F49E041F8
-    foreign key (gebruikersnaam)
-    references gebruiker_;
+ALTER TABLE GEBRUIKER_GROEPEN
+    ADD CONSTRAINT FKD875A48F49E041F8
+        FOREIGN KEY (GEBRUIKERSNAAM)
+            REFERENCES GEBRUIKER_;
 
-alter table laadproces
-    add constraint FK8C420DCE3DA16A8
-    foreign key (automatisch_proces)
-    references automatisch_proces;
+ALTER TABLE LAADPROCES
+    ADD CONSTRAINT FK8C420DCE3DA16A8
+        FOREIGN KEY (AUTOMATISCH_PROCES)
+            REFERENCES AUTOMATISCH_PROCES;
 
-create sequence automatischproces_id_seq;
+CREATE SEQUENCE AUTOMATISCHPROCES_ID_SEQ;
 
-create sequence bericht_id_seq;
+CREATE SEQUENCE BERICHT_ID_SEQ;
 
-create sequence laadproces_id_seq;
+CREATE SEQUENCE LAADPROCES_ID_SEQ;
 
-CREATE TABLE  job  (
-    jid number(19,0) NOT NULL,
-    id number(19,0),
-    br_xml clob,
-    datum timestamp,
-    object_ref varchar2(255 char),
-    soort varchar2(255 char),
-    volgordenummer number(10,0),
-    primary key (jid)
+CREATE TABLE JOB
+(
+    JID            NUMBER(19, 0) NOT NULL,
+    ID             NUMBER(19, 0),
+    BR_XML         CLOB,
+    DATUM          TIMESTAMP,
+    OBJECT_REF     VARCHAR2(255 CHAR),
+    SOORT          VARCHAR2(255 CHAR),
+    VOLGORDENUMMER NUMBER(10, 0),
+    PRIMARY KEY (JID)
 );
 
-create sequence JOB_JID_SEQ;
+CREATE SEQUENCE JOB_JID_SEQ;
 
-create table geometries (
-    id number(19,0) not null,
-    datum timestamp,
-    naam varchar2(255 char),
-    geom sdo_geometry,
-    primary key (id)
+CREATE TABLE GEOMETRIES
+(
+    ID    NUMBER(19, 0) NOT NULL,
+    DATUM TIMESTAMP,
+    NAAM  VARCHAR2(255 CHAR),
+    GEOM  MDSYS.SDO_GEOMETRY,
+    PRIMARY KEY (ID)
 );
 
-create sequence geometries_id_seq;
+CREATE SEQUENCE GEOMETRIES_ID_SEQ;
 
-CREATE OR REPLACE TRIGGER geom_insert_trigger
-        BEFORE INSERT ON geometries
-        FOR EACH ROW
+CREATE OR REPLACE TRIGGER GEOM_INSERT_TRIGGER
+    BEFORE INSERT
+    ON GEOMETRIES
+    FOR EACH ROW
 BEGIN
-    IF :new.id IS NULL THEN
-                SELECT geometries_id_seq.nextval INTO :new.id FROM dual;
+    IF :NEW.ID IS NULL THEN
+        SELECT GEOMETRIES_ID_SEQ.NEXTVAL INTO :NEW.ID FROM DUAL;
     END IF;
 END;
 /
 
-insert into user_sdo_geom_metadata values('geometries', 'geom', MDSYS.SDO_DIM_ARRAY(
-	MDSYS.SDO_DIM_ELEMENT('X', 12000, 280000, .1),
-	MDSYS.SDO_DIM_ELEMENT('Y', 304000, 620000, .1)),
-	28992
-);
+INSERT INTO USER_SDO_GEOM_METADATA
+VALUES ('GEOMETRIES', 'GEOM', MDSYS.SDO_DIM_ARRAY(
+        MDSYS.SDO_DIM_ELEMENT('X', 12000, 280000, .1),
+        MDSYS.SDO_DIM_ELEMENT('Y', 304000, 620000, .1)),
+        28992);
 
-CREATE SEQUENCE testing_seq MINVALUE 1;
+CREATE SEQUENCE TESTING_SEQ MINVALUE 1;
 
-create table booleantable (
-    id number GENERATED ALWAYS AS IDENTITY,
-    ishetwaar NUMBER(1,0) DEFAULT 0 NOT NULL CHECK(ishetwaar IN (0,1))
+-- NOTE THAT ORACLE 23 ACTUALLY HAS A BOOLEAN TYPE, BUT WE'RE USING A NUMBER(1,0) INSTEAD FOR COMPATIBILITY WITH ORACLE 19
+CREATE TABLE BOOLEANTABLE
+(
+    ID        NUMBER GENERATED ALWAYS AS IDENTITY,
+    ISHETWAAR NUMBER(1, 0) DEFAULT 0 NOT NULL CHECK (ISHETWAAR IN (0, 1))
 );

@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"m":"nl.b3p.jdbc.util","l":"nl.b3p.jdbc.util.converter"},{"m":"nl.b3p.jdbc.util","l":"nl.b3p.jdbc.util.dbutils"}]
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"nl.b3p.jdbc.util","l":"nl.b3p.jdbc.util.converter"},{"m":"nl.b3p.jdbc.util","l":"nl.b3p.jdbc.util.dbutils"}];updateSearchResults();

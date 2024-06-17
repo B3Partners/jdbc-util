@@ -65,7 +65,7 @@
         <sqlserver.jdbc.version>12.6.1.jre11</sqlserver.jdbc.version>
         <postgresql.jdbc.version>42.7.3</postgresql.jdbc.version>
         <postgresql.postgis-jdbc.version>2023.1.0</postgresql.postgis-jdbc.version>
-        <maven.surefire.version>3.2.5</maven.surefire.version>
+        <maven.surefire.version>3.3.0</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
         <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>

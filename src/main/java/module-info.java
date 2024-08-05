@@ -21,7 +21,7 @@ module nl.b3p.jdbc.util {
   requires org.apache.commons.logging;
   requires org.apache.commons.dbutils;
   requires org.apache.commons.io;
-  requires static org.apache.tomcat.dbcp;
+  requires org.apache.tomcat.dbcp;
   requires org.apache.commons.lang3;
   requires org.locationtech.jts;
   requires static com.oracle.database.jdbc;
@@ -37,5 +37,4 @@ module nl.b3p.jdbc.util {
 
   // for integration tests
   opens nl.b3p.jdbc.util.converter;
-// opens nl.b3p.jdbc.util.dbutils;
 }

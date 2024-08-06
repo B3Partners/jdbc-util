@@ -1,0 +1,31 @@
+--class-path
+'/home/mark/.m2/repository/org/geotools/gt-cql/31.3/gt-cql-31.3.jar:/home/mark/.m2/repository/org/geotools/gt-main/31.3/gt-main-31.3.jar:/home/mark/.m2/repository/org/geotools/gt-referencing/31.3/gt-referencing-31.3.jar:/home/mark/.m2/repository/org/geotools/gt-metadata/31.3/gt-metadata-31.3.jar:/home/mark/.m2/repository/org/geotools/gt-api/31.3/gt-api-31.3.jar:/home/mark/.m2/repository/systems/uom/systems-common/2.1/systems-common-2.1.jar:/home/mark/.m2/repository/javax/measure/unit-api/2.1.2/unit-api-2.1.2.jar:/home/mark/.m2/repository/si/uom/si-quantity/2.1/si-quantity-2.1.jar:/home/mark/.m2/repository/si/uom/si-units/2.1/si-units-2.1.jar:/home/mark/.m2/repository/jakarta/annotation/jakarta.annotation-api/1.3.4/jakarta.annotation-api-1.3.4.jar:/home/mark/.m2/repository/tech/units/indriya/2.1.3/indriya-2.1.3.jar:/home/mark/.m2/repository/tech/uom/lib/uom-lib-common/2.1/uom-lib-common-2.1.jar:/home/mark/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/home/mark/.m2/repository/org/geotools/ogc/net.opengis.ows/31.3/net.opengis.ows-31.3.jar:/home/mark/.m2/repository/org/geotools/ogc/org.w3.xlink/31.3/org.w3.xlink-31.3.jar:/home/mark/.m2/repository/org/eclipse/emf/org.eclipse.emf.common/2.15.0/org.eclipse.emf.common-2.15.0.jar:/home/mark/.m2/repository/org/eclipse/emf/org.eclipse.emf.ecore/2.15.0/org.eclipse.emf.ecore-2.15.0.jar:/home/mark/.m2/repository/org/eclipse/emf/org.eclipse.emf.ecore.xmi/2.15.0/org.eclipse.emf.ecore.xmi-2.15.0.jar:/home/mark/.m2/repository/it/geosolutions/jgridshift/jgridshift-core/1.3/jgridshift-core-1.3.jar:/home/mark/.m2/repository/net/sf/geographiclib/GeographicLib-Java/1.49/GeographicLib-Java-1.49.jar:/home/mark/.m2/repository/org/geotools/gt-http/31.3/gt-http-31.3.jar:/home/mark/.m2/repository/org/apache/commons/commons-text/1.12.0/commons-text-1.12.0.jar:/home/mark/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar:/home/mark/.m2/repository/com/google/re2j/re2j/1.6/re2j-1.6.jar:/home/mark/.m2/repository/org/ejml/ejml-ddense/0.41/ejml-ddense-0.41.jar:/home/mark/.m2/repository/org/ejml/ejml-core/0.41/ejml-core-0.41.jar:/home/mark/.m2/repository/org/geotools/gt-jdbc/31.3/gt-jdbc-31.3.jar:/home/mark/.m2/repository/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.jar:/home/mark/.m2/repository/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.jar:/home/mark/.m2/repository/javax/media/jai_core/1.1.3/jai_core-1.1.3.jar:/home/mark/.m2/repository/org/checkerframework/checker-qual/3.42.0/checker-qual-3.42.0.jar:/home/mark/.m2/repository/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar:/home/mark/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.3/junit-jupiter-engine-5.10.3.jar:/home/mark/.m2/repository/org/junit/platform/junit-platform-engine/1.10.3/junit-platform-engine-1.10.3.jar:/home/mark/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/mark/.m2/repository/org/junit/platform/junit-platform-commons/1.10.3/junit-platform-commons-1.10.3.jar:/home/mark/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.3/junit-jupiter-api-5.10.3.jar:/home/mark/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/mark/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.3/junit-jupiter-params-5.10.3.jar:/home/mark/.m2/repository/org/hamcrest/hamcrest/3.0/hamcrest-3.0.jar'
+--module-path
+'/home/mark/.m2/repository/net/postgis/postgis-jdbc/2024.1.0/postgis-jdbc-2024.1.0.jar:/home/mark/.m2/repository/commons-logging/commons-logging/1.3.3/commons-logging-1.3.3.jar:/home/mark/.m2/repository/net/postgis/postgis-geometry/2024.1.0/postgis-geometry-2024.1.0.jar:/home/mark/.m2/repository/org/hsqldb/hsqldb/2.7.3/hsqldb-2.7.3.jar:/home/mark/.m2/repository/org/apache/commons/commons-lang3/3.15.0/commons-lang3-3.15.0.jar:/home/mark/.m2/repository/org/geotools/jdbc/gt-jdbc-oracle/31.3/gt-jdbc-oracle-31.3.jar:/home/mark/.m2/repository/commons-dbutils/commons-dbutils/1.8.1/commons-dbutils-1.8.1.jar:/home/mark/.m2/repository/org/apache/tomcat/tomcat-juli/9.0.90/tomcat-juli-9.0.90.jar:/home/mark/.m2/repository/commons-io/commons-io/2.16.1/commons-io-2.16.1.jar:/home/mark/.m2/repository/org/locationtech/jts/jts-core/1.19.0/jts-core-1.19.0.jar:/home/mark/.m2/repository/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar:/home/mark/.m2/repository/com/oracle/database/jdbc/ojdbc11/23.5.0.24.07/ojdbc11-23.5.0.24.07.jar:/home/mark/.m2/repository/org/apache/tomcat/tomcat-dbcp/9.0.90/tomcat-dbcp-9.0.90.jar:/home/mark/.m2/repository/com/microsoft/sqlserver/mssql-jdbc/12.8.0.jre11/mssql-jdbc-12.8.0.jre11.jar:/home/mark/dev/projects/jdbc-util/target/checkout/target/classes'
+--patch-module
+nl.b3p.jdbc.util='/home/mark/dev/projects/jdbc-util/target/checkout/src/main/java'
+-encoding
+'UTF-8'
+-protected
+-source
+'11'
+--module-source-path
+'/home/mark/dev/projects/jdbc-util/target/checkout/target/site/apidocs/src'
+-author
+-bottom
+'Copyright &#169; 2017&#x2013;2024 <a href="https://www.b3partners.nl/">B3Partners B.V.</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/mark/dev/projects/jdbc-util/target/checkout/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'JDBC Util 17.3 API'
+-linkoffline
+'https://docs.oracle.com/en/java/javase/11/docs/api' '/home/mark/dev/projects/jdbc-util/target/checkout/target/javadoc-bundle-options'
+-notimestamp
+-use
+-version
+-windowtitle
+'JDBC Util 17.3 API'

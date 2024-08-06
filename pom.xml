@@ -3,11 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.b3p</groupId>
     <artifactId>jdbc-util</artifactId>
-    <version>17.4-SNAPSHOT</version>
+    <version>17.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDBC Util</name>
     <description>JDBC utilities: Converter for geometries and other useful things</description>
-    <url>https://b3partners.github.io/jdbc-util/</url>
     <inceptionYear>2017</inceptionYear>
     <organization>
         <name>B3Partners B.V.</name>
@@ -51,7 +50,7 @@
         <java.version>11</java.version>
         <project.build.sourceVersion>${java.version}</project.build.sourceVersion>
         <project.build.targetVersion>${java.version}</project.build.targetVersion>
-        <project.build.outputTimestamp>2024-08-05T08:35:59Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-06-17T07:46:49Z</project.build.outputTimestamp>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -168,7 +167,7 @@
             <!-- kan gebruikt worden in de OracleConnectionUnwrapper -->
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-dbcp</artifactId>
-            <version>9.0.91</version>
+            <version>9.0.90</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>

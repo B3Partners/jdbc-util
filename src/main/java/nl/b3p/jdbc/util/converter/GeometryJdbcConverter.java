@@ -103,18 +103,18 @@ public abstract class GeometryJdbcConverter {
       case java.sql.Types.BIT:
         param = Boolean.parseBoolean(stringValue);
         break;
-        //            case java.sql.Types.BIT:
-        //                PostgreSQL boolean kolom komt uit de JDBC drivar als BIT / -7 en niet als
-        // BOOLEAN / 16
-        //                // try to convert to 1/0 for MSSQL boolean
-        //                if ("true".equalsIgnoreCase(stringValue)) {
-        //                    param = 1;
-        //                } else if ("false".equalsIgnoreCase(stringValue)) {
-        //                    param = 0;
-        //                } else {
-        //                    param = Integer.parseInt(stringValue);
-        //                }
-        //                break;
+      //            case java.sql.Types.BIT:
+      //                PostgreSQL boolean kolom komt uit de JDBC drivar als BIT / -7 en niet als
+      // BOOLEAN / 16
+      //                // try to convert to 1/0 for MSSQL boolean
+      //                if ("true".equalsIgnoreCase(stringValue)) {
+      //                    param = 1;
+      //                } else if ("false".equalsIgnoreCase(stringValue)) {
+      //                    param = 0;
+      //                } else {
+      //                    param = Integer.parseInt(stringValue);
+      //                }
+      //                break;
       default:
         throw new UnsupportedOperationException(
             String.format(

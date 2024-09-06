@@ -26,8 +26,8 @@
         <url>https://github.com/B3Partners/jdbc-util/</url>
     </scm>
     <issueManagement>
-        <system>Github</system>
-        <url>https://github.com/B3Partners/jdbc-util/issues</url>
+        <system>Jira</system>
+        <url>https://b3partners.atlassian.net/jira/software/c/projects/BRMO/issues/</url>
     </issueManagement>
     <distributionManagement>
         <repository>
@@ -53,6 +53,7 @@
         <project.build.outputTimestamp>2024-08-06T09:18:13Z</project.build.outputTimestamp>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <test.onlyITs>false</test.onlyITs>

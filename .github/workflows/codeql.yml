@@ -24,7 +24,7 @@ jobs:
       matrix:
         include:
           - language: java-kotlin
-          - build-mode: none
+            build-mode: none
 
     steps:
       - name: 'Checkout repository'

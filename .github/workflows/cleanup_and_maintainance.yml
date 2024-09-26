@@ -1,4 +1,4 @@
-name: "Cleanup and Maintainance"
+name: 'Cleanup and Maintainance'
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
 jobs:
   stale:
     runs-on: ubuntu-latest
-    name: Close Stale PRs
+    name: 'Close Stale PRs'
     permissions:
       pull-requests: write
     steps:
@@ -21,7 +21,7 @@ jobs:
 
   workflows:
     runs-on: ubuntu-latest
-    name: Cleanup old workflow runs
+    name: 'Cleanup old workflow runs'
     steps:
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2

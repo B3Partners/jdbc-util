@@ -1,18 +1,17 @@
-name: MS SQL Server Linux tests
+name: 'MS SQL Server Linux tests'
 
 on:
   push:
     branches: [ master ]
   pull_request:
 
-concurrency: # cancel on PR pushes
-  # More info: https://stackoverflow.com/a/68422069/253468
+concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' ) && format('ci-master-{0}', github.sha) || format('ci-master-{0}', github.ref) }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: MS SQL ${{ matrix.mssql }} / Java ${{ matrix.java }}
+    name: "MS SQL ${{ matrix.mssql }} / Java ${{ matrix.java }}"
     runs-on: [ ubuntu-latest ]
     strategy:
       matrix:
@@ -32,22 +31,22 @@ jobs:
           distribution: ${{ matrix.java_dist }}
           cache: 'maven'
 
-      - name: Setup test environment for MS SQL ${{ matrix.mssql }}
+      - name: "Setup test environment for MS SQL ${{ matrix.mssql }}"
         run: |
           ./.build/ci/mssql-start.sh ${{ matrix.mssql }}
           ./.build/ci/mssql-setup.sh
 
-      - name: Priming build
+      - name: 'Priming build'
         run: mvn install -Dmaven.test.skip=true -B -V -e -fae -q -Pmssql
 
-      - name: Test ${{ matrix.mssql }}
+      - name: "Test ${{ matrix.mssql }}"
         run: mvn -e test -B -Pmssql
 
-      - name: Verify ${{ matrix.mssql }}
+      - name: "Verify ${{ matrix.mssql }}"
         run: mvn -e verify -B -Pmssql -T1 -Dtest.onlyITs=true
 
-      - name: Clean artifacts from repository
+      - name: 'Clean artifacts from repository'
         run: mvn clean build-helper:remove-project-artifact
 
-      - name: Upload codecoverage
+      - name: 'Upload codecoverage'
         uses: codecov/codecov-action@v4

@@ -1,11 +1,10 @@
-name: Maven build
+name: 'Maven build'
 
 on:
   push:
   pull_request:
 
-concurrency: # cancel on PR pushes
-  # More info: https://stackoverflow.com/a/68422069/253468
+concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' ) && format('ci-master-{0}', github.sha) || format('ci-master-{0}', github.ref) }}
   cancel-in-progress: true
 
@@ -16,8 +15,8 @@ env:
 
 jobs:
   build:
-    name: Java ${{ matrix.java }} / ${{ matrix.profile }} / PostGIS ${{ matrix.postgis }} build
-    runs-on: ubuntu-22.04
+    name: "Java ${{ matrix.java }} / ${{ matrix.profile }} / PostGIS ${{ matrix.postgis }} build"
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         java: [ 11 ]
@@ -29,7 +28,7 @@ jobs:
             java_dist: 'temurin'
             postgis: 16-3.4-alpine
             profile: 'postgresql'
-  
+
           - java: 21
             java_dist: 'zulu'
             postgis: 16-3.4-alpine
@@ -92,19 +91,19 @@ jobs:
     permissions:
       packages: write
       contents: read
-    if: ${{ (github.ref == 'refs/heads/master' || contains(github.ref, 'refs/heads/geotools_32')) && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' ) }}
+    if: ${{ ( github.ref == 'refs/heads/master' ) && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' ) }}
     steps:
       - uses: actions/checkout@v4
 
 
-      - name: Set up JDK
+      - name: 'Set up JDK'
         uses: actions/setup-java@v4
         with:
           java-version: 11
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Build and Push
+      - name: 'Build and Push'
         # no need to run any QC or tests
         env:
           B3P_DEPLOY_ACTOR: ${{ secrets.B3P_DEPLOY_ACTOR }}
@@ -122,7 +121,7 @@ jobs:
 
 
   cleanup:
-    name: Maven cache cleanup
+    name: 'Maven cache cleanup'
     if: ${{ always() }}
     needs: [ build, deploy ]
     runs-on: ubuntu-latest
@@ -134,6 +133,6 @@ jobs:
           restore-keys: |
             maven-
 
-      - name: Cleanup snapshot cache
+      - name: 'Cleanup snapshot cache'
         run: |
           find ~/.m2/repository -name "*SNAPSHOT*" -type d | xargs rm -rf {}

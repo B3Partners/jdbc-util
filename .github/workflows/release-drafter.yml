@@ -1,4 +1,4 @@
-name: Release Drafter
+name: 'Release Drafter'
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
-    steps: # Drafts your next Release notes as Pull Requests are merged into "master"
+    steps:
       - uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

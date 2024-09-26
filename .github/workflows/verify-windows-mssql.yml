@@ -1,16 +1,15 @@
-name: MSSQL Server Windows
+name: 'MSSQL Server Windows'
 
 on:
   pull_request:
 
-concurrency: # cancel on PR pushes
-  # More info: https://stackoverflow.com/a/68422069/253468
+concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' ) && format('ci-master-{0}', github.sha) || format('ci-master-{0}', github.ref) }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: MS SQL 2019 / ${{ matrix.os }}
+    name: "MS SQL 2019 / ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -24,7 +23,7 @@ jobs:
         with:
           fetch-depth: 5
 
-      - name: Set up JDK for build
+      - name: 'Set up JDK for build'
         uses: actions/setup-java@v4
         with:
           java-version: 11
@@ -38,20 +37,20 @@ jobs:
           username: ${{ secrets.DOCKER_B3P_PULL_ACTOR }}
           password: ${{ secrets.DOCKER_B3P_PULL_TOKEN }}
 
-      - name: Setup database engine for MS SQL
+      - name: 'Setup database engine for MS SQL'
         run: .\.build\ci\mssql-start.ps1 -tag ${{ matrix.tag }}
 
-      - name: Setup test environment for MS SQL
+      - name: 'Setup test environment for MS SQL'
         run: .\.build\ci\mssql-setup.ps1
 
-      - name: Priming build
+      - name: 'Priming build'
         run: mvn --% install -Dmaven.test.skip=true -B -V -e -fae -q -Pmssql
 
-      - name: Verify ${{ matrix.mssql }}
+      - name: "Verify ${{ matrix.mssql }}"
         run: mvn --% -e verify -B -Pmssql -T1 -Dtest.onlyITs=true
 
-      - name: Clean artifacts from repository
+      - name: 'Clean artifacts from repository'
         run: mvn --% clean build-helper:remove-project-artifact
 
-      - name: Upload codecoverage
+      - name: 'Upload codecoverage'
         uses: codecov/codecov-action@v4

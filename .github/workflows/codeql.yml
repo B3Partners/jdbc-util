@@ -16,14 +16,15 @@ jobs:
       security-events: write
       packages: read
       # only required for workflows in private repositories
-      # actions: read
-      # contents: read
+      #   actions: read
+      #   contents: read
 
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'java' ]
-        build-mode: none
+        include:
+          - language: java-kotlin
+          - build-mode: none
 
     steps:
       - name: 'Checkout repository'

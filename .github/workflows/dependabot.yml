@@ -24,7 +24,7 @@ jobs:
             contains(steps.metadata.outputs.dependency-names, 'junit') || 
             contains(steps.metadata.outputs.dependency-names, 'mockito') ||
             contains(steps.metadata.outputs.dependency-names, 'log4j') ||
-            contains(steps.metadata.outputs.dependency-names, 'commons-') ||
+            contains(steps.metadata.outputs.dependency-names, 'commons') ||
             contains(steps.metadata.outputs.dependency-names, 'jackson') ||
             contains(steps.metadata.outputs.dependency-names, 'temurin') ||
             contains(steps.metadata.outputs.dependency-names, 'tomcat')
@@ -33,7 +33,7 @@ jobs:
             steps.metadata.outputs.update-type == 'version-update:semver-minor'
           )
         run: |
-          gh pr edit --remove-label "bouw- en testinfrastuctuur" "$PR_URL"
+          gh pr edit --remove-label "build infrastructure" "$PR_URL"
           gh pr merge --auto --squash "$PR_URL"
       - name: 'Enable auto-merge for Dependabot PRs on Maven plugins and GH actions for patch and minor version updates'
         env:
@@ -41,7 +41,7 @@ jobs:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         if: |
           (
-            contains(steps.metadata.outputs.dependency-names, 'maven-') ||
+            contains(steps.metadata.outputs.dependency-names, 'maven') ||
             contains(steps.metadata.outputs.dependency-names, 'action') ||
             contains(steps.metadata.outputs.dependency-names, 'error_prone_core')
           ) && (
@@ -49,5 +49,5 @@ jobs:
             steps.metadata.outputs.update-type == 'version-update:semver-minor'
           )
         run: |
-          gh pr edit --remove-label "dependency update" "$PR_URL"
+          gh pr edit --remove-label "dependencies" "$PR_URL"
           gh pr merge --auto --squash "$PR_URL"

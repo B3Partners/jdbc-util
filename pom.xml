@@ -69,7 +69,7 @@
         <maven-javadoc-plugin.version>3.11.1</maven-javadoc-plugin.version>
         <versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-        <maven-fluido-skin.version>2.0.0-M11</maven-fluido-skin.version>
+        <maven-fluido-skin.version>2.0.0</maven-fluido-skin.version>
         <fmt.action>format</fmt.action>
         <pom.fmt.action>sort</pom.fmt.action>
     </properties>

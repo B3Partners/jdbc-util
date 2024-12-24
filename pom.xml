@@ -47,7 +47,7 @@
         </site>
     </distributionManagement>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <project.build.sourceVersion>${java.version}</project.build.sourceVersion>
         <project.build.targetVersion>${java.version}</project.build.targetVersion>
         <project.build.outputTimestamp>2024-11-19T08:26:30Z</project.build.outputTimestamp>

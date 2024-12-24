@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 11 ]
+        java: [ 17 ]
         java_dist: [ 'temurin' ]
         profile: [ hsqldb,  postgresql ]
         postgis: [ 16-3.4-alpine ]
@@ -99,7 +99,7 @@ jobs:
       - name: 'Set up JDK'
         uses: actions/setup-java@v4
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'temurin'
           cache: 'maven'
 

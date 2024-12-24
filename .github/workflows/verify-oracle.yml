@@ -13,7 +13,7 @@ jobs:
     runs-on: [ ubuntu-latest ]
     strategy:
       matrix:
-        java: [ 11, 17, 21 ]
+        java: [ 17, 21 ]
         java_dist: [ 'temurin' ]
         oracle: [ 'oracle-xe:21.3.0-full', 'oracle-free:23.5-full' ]
 

@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 JDBC Util,nl.b3p.jdbc.util.converter,OracleJdbcConverter,179,0,12,0,42,0,25,0,19,0
-JDBC Util,nl.b3p.jdbc.util.converter,MssqlJdbcConverter,172,0,20,0,47,0,28,0,18,0
+JDBC Util,nl.b3p.jdbc.util.converter,MssqlJdbcConverter,173,0,20,0,47,0,28,0,18,0
 JDBC Util,nl.b3p.jdbc.util.converter,ColumnMetadata,268,0,24,0,63,0,36,0,24,0
 JDBC Util,nl.b3p.jdbc.util.converter,GeometryJdbcConverter,200,0,19,0,48,0,18,0,7,0
 JDBC Util,nl.b3p.jdbc.util.converter,HSQLJdbcConverter,107,0,4,0,29,0,19,0,17,0

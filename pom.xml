@@ -193,11 +193,6 @@
     </dependencies>
     <repositories>
         <repository>
-            <id>repo.b3p.nl</id>
-            <name>B3P Repository</name>
-            <url>https://repo.b3p.nl/nexus/repository/public/</url>
-        </repository>
-        <repository>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>

@@ -26,8 +26,9 @@ jobs:
             contains(steps.metadata.outputs.dependency-names, 'log4j') ||
             contains(steps.metadata.outputs.dependency-names, 'commons') ||
             contains(steps.metadata.outputs.dependency-names, 'jackson') ||
+            contains(steps.metadata.outputs.dependency-names, 'org.postgresql') ||
             contains(steps.metadata.outputs.dependency-names, 'temurin') ||
-            contains(steps.metadata.outputs.dependency-names, 'tomcat')
+            contains(steps.metadata.outputs.dependency-names, 'tomcat')            
           ) && (
             steps.metadata.outputs.update-type == 'version-update:semver-patch' || 
             steps.metadata.outputs.update-type == 'version-update:semver-minor'

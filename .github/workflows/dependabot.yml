@@ -27,6 +27,7 @@ jobs:
             contains(steps.metadata.outputs.dependency-names, 'commons') ||
             contains(steps.metadata.outputs.dependency-names, 'jackson') ||
             contains(steps.metadata.outputs.dependency-names, 'org.postgresql') ||
+            contains(steps.metadata.outputs.dependency-names, 'postgis') ||
             contains(steps.metadata.outputs.dependency-names, 'temurin') ||
             contains(steps.metadata.outputs.dependency-names, 'tomcat')            
           ) && (

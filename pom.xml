@@ -111,6 +111,10 @@
                     <groupId>com.oracle.database.jdbc</groupId>
                     <artifactId>ojdbc11</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.oracle.database.jdbc</groupId>
+                    <artifactId>ojdbc17</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -130,10 +134,7 @@
         </dependency>
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <!-- ojdbc11_g heeft debugging symbols -->
-            <!-- <groupId>com.oracle.database.jdbc.debug</groupId>-->
-            <!-- <artifactId>ojdbc11_g</artifactId>-->
+            <artifactId>ojdbc17</artifactId>
             <version>${oracle.jdbc.version}</version>
             <scope>provided</scope>
         </dependency>

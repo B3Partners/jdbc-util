@@ -23,8 +23,8 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monday"
-      day: saturday
+      interval: "weekly"
+      day: "monday"
       timezone: Europe/Amsterdam
     labels:
       - "build infrastructure"

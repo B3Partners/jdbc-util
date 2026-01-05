@@ -31,7 +31,7 @@ jobs:
         include:
           - java: 21
             java_dist: 'zulu'
-            postgis: 17-3.5-alpine
+            postgis: 18-3.6-alpine
             profile: 'postgresql'
 
     services:

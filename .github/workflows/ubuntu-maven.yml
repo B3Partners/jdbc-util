@@ -6,6 +6,8 @@ on:
       - 'master'
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: 15 0 * * 1 
 
 concurrency:
   group: ${{ github.workflow }}-${{ ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' ) && format('ci-master-{0}', github.sha) || format('ci-master-{0}', github.ref) }}

@@ -62,7 +62,7 @@
         <jaxb.impl.version>2.3.3</jaxb.impl.version>
         <test.junit-jupiter.version>6.0.2</test.junit-jupiter.version>
         <sqlserver.jdbc.version>13.2.1.jre11</sqlserver.jdbc.version>
-        <postgresql.jdbc.version>42.7.9</postgresql.jdbc.version>
+        <postgresql.jdbc.version>42.7.10</postgresql.jdbc.version>
         <postgresql.postgis-jdbc.version>2025.1.1</postgresql.postgis-jdbc.version>
         <maven.surefire.version>3.5.4</maven.surefire.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

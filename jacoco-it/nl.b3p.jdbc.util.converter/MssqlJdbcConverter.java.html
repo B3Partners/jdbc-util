@@ -22,7 +22,7 @@ package nl.b3p.jdbc.util.converter;
 import com.microsoft.sqlserver.jdbc.Geometry;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.SQLException;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.locationtech.jts.io.ParseException;
@@ -63,7 +63,7 @@ import org.locationtech.jts.io.ParseException;
     // import org.geotools.geometry.jts.WKTWriter2;
     // import org.locationtech.jts.io.WKTWriter;
     // String param = (new WKTWriter2(2)).write(g);
-<span class="nc bnc" id="L66" title="All 4 branches missed.">    if (param == null || param.trim().length() == 0) {</span>
+<span class="nc bnc" id="L66" title="All 4 branches missed.">    if (param == null || param.trim().isEmpty()) {</span>
 <span class="nc" id="L67">      return null;</span>
     }
 <span class="nc" id="L69">    LOG.trace(&quot;Converted geom WKT: &quot; + param + &quot;, SRID: &quot; + srid);</span>
@@ -120,7 +120,7 @@ import org.locationtech.jts.io.ParseException;
   @Override
   public String buildPaginationSql(String sql, int offset, int limit) {
 <span class="nc" id="L122">    StringBuilder builder = new StringBuilder(sql);</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">    if (!StringUtils.containsIgnoreCase(sql, &quot;ORDER BY&quot;)) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">    if (!Strings.CI.contains(sql, &quot;ORDER BY&quot;)) {</span>
       // OFFSET ... FETCH queries require order by,
       // see https://msdn.microsoft.com/en-us/library/gg699618.aspx?f=255&amp;MSPPError=-2147217396
 <span class="nc" id="L126">      builder.append(&quot; ORDER BY id &quot;);</span>

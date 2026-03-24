@@ -22,7 +22,7 @@ package nl.b3p.jdbc.util.converter;
 import com.microsoft.sqlserver.jdbc.Geometry;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.SQLException;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.locationtech.jts.io.ParseException;
@@ -63,7 +63,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
     // import org.geotools.geometry.jts.WKTWriter2;
     // import org.locationtech.jts.io.WKTWriter;
     // String param = (new WKTWriter2(2)).write(g);
-    if (param == null || param.trim().length() == 0) {
+    if (param == null || param.trim().isEmpty()) {
       return null;
     }
     LOG.trace("Converted geom WKT: " + param + ", SRID: " + srid);
@@ -120,7 +120,7 @@ public class MssqlJdbcConverter extends GeometryJdbcConverter {
   @Override
   public String buildPaginationSql(String sql, int offset, int limit) {
     StringBuilder builder = new StringBuilder(sql);
-    if (!StringUtils.containsIgnoreCase(sql, "ORDER BY")) {
+    if (!Strings.CI.contains(sql, "ORDER BY")) {
       // OFFSET ... FETCH queries require order by,
       // see https://msdn.microsoft.com/en-us/library/gg699618.aspx?f=255&MSPPError=-2147217396
       builder.append(" ORDER BY id ");

@@ -15,8 +15,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: 'windows-2022'
-            tag: 'ltsc2022-sql2019'
+          - os: 'windows-2025'
+            tag: 'ltsc2025-sql2019'
 
     steps:
       - uses: actions/checkout@v6

@@ -27,7 +27,7 @@ jobs:
         java: [ 17 ]
         java_dist: [ 'temurin' ]
         profile: [ hsqldb,  postgresql ]
-        postgis: [ 17-3.5-alpine ]
+        postgis: [ 17-3.6-alpine ]
         include:
           - java: 21
             java_dist: 'zulu'

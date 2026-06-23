@@ -45,7 +45,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 15s --health-timeout 5s --health-retries 5
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 5
 
@@ -93,7 +93,7 @@ jobs:
       contents: read
     if: ${{ ( github.ref == 'refs/heads/master' || contains(github.ref, 'geotools-34.x') ) && ( github.event_name == 'push' || github.event_name == 'workflow_dispatch' ) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
 
       - name: 'Set up JDK'

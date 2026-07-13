@@ -10,28 +10,35 @@ template: |
 
 categories:
   - title: 🚨 Removed
-    label: removed
+    when:
+      label: removed
   - title: ⚠️ Deprecated
-    label: deprecated
+    when:
+      label: deprecated
   - title: 🚀 New features and improvements
-    labels:
-      - enhancement
-      - feature
+    when:
+      labels:
+        - enhancement
+        - feature
   - title: 🐛 Bug Fixes
-    labels:
-      - bug
-      - fix
-      - bugfix
-      - regression
-      - security
+    when:
+      labels:
+        - bug
+        - fix
+        - bugfix
+        - regression
+        - security
   - title: 📖 Documentation updates
-    label: documentation
+    when:
+      label: documentation
   - title: 🔨 Dependency updates
-    label: dependencies
+    when:
+      label: dependencies
   - title: 🚦 Tests and Infrastructure
-    labels:
-      - tests
-      - 'build infrastructure'
+    when:
+      labels:
+        - tests
+        - 'build infrastructure'
 
 replacers:
   - search: '/CVE-(\d{4})-(\d+)/g'

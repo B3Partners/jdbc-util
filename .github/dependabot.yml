@@ -15,10 +15,10 @@ updates:
     ignore:
       - dependency-name: org.apache.tomcat:tomcat-dbcp
         versions:
-          - ">= 10.a"
+          - ">= 10"
       - dependency-name: com.microsoft.sqlserver:mssql-jdbc
         versions:
-          - "12.3.x"
+          - "13.7.x"
 
   - package-ecosystem: "github-actions"
     directory: "/"
